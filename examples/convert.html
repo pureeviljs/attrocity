@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Convert</title>
+    <script type="module">
+        import Convert from '../convert.js';
+
+        const el = document.querySelector('div');
+
+        // convert to object, type convert values, ignore typical HTML attributes
+        console.log(Convert.fromAttrs(el));
+
+        // convert to object, DO NOT type convert values, ignore typical HTML attributes
+        console.log(Convert.fromAttrs(el, { typeConvert: false }));
+
+        // convert to object, DO NOT type convert values, allow all attributes
+        console.log(Convert.fromAttrs(el, { typeConvert: false, allowAllAttributes: true }));
+
+        // convert to object, DO NOT type convert values, ignore specific attributes
+        console.log(Convert.fromAttrs(el, { typeConvert: false, ignore: ['two'] }));
+
+        // convert element to object, but then convert THAT object to attribute string
+        console.log(Convert.toAttrString( Convert.fromAttrs(el) ));
+
+        // convert element direct to attribute string
+        console.log(Convert.toAttrString(el));
+
+        const newSpan = document.createElement('span');
+        console.log(Convert.setAttrs(newSpan, Convert.fromAttrs(el) ));
+
+        const newLabel= document.createElement('label');
+        console.log(Convert.setAttrs(newLabel, el, { allowAllAttributes: true }));
+
+    </script>
+</head>
+<body>
+    <div one="1" two="2.3" three="3" class="someclass"></div>
+</body>
+</html>

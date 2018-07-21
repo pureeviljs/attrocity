@@ -1,0 +1,17 @@
+{
+  "name": "attrocity",
+  "version": "0.0.1",
+  "dependencies": {},
+  "devDependencies": {
+    "jsdom": "^11.11.0",
+    "rollup": "^0.63.4",
+    "tape": "^4.9.1"
+  },
+  "bin": {
+    "rollup": "./node_modules/bin/rollup"
+  },
+  "scripts": {
+    "test": "tap tests/*.js",
+    "build-cjs": "rollup main.js --format cjs --file attrocity-cjs.js"
+  }
+}
