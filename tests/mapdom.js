@@ -1,4 +1,4 @@
-const MapDOM = require('../attrocity-cjs.js').MapDOM;
+const MapDOM = require('../attrocity.js').MapDOM;
 const test = require('tape');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;

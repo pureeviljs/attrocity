@@ -1,0 +1,1026 @@
+[
+  {
+    "__docId__": 1,
+    "kind": "external",
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Infinity",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 2,
+    "kind": "external",
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~NaN",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 3,
+    "kind": "external",
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~undefined",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 4,
+    "kind": "external",
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~null",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 5,
+    "kind": "external",
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Object",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 6,
+    "kind": "external",
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~object",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 7,
+    "kind": "external",
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Function",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 8,
+    "kind": "external",
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~function",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 9,
+    "kind": "external",
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Boolean",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 10,
+    "kind": "external",
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~boolean",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 11,
+    "kind": "external",
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Symbol",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 12,
+    "kind": "external",
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Error",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 13,
+    "kind": "external",
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~EvalError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 14,
+    "kind": "external",
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~InternalError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 15,
+    "kind": "external",
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~RangeError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 16,
+    "kind": "external",
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~ReferenceError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 17,
+    "kind": "external",
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~SyntaxError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 18,
+    "kind": "external",
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~TypeError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 19,
+    "kind": "external",
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~URIError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 20,
+    "kind": "external",
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Number",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 21,
+    "kind": "external",
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~number",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 22,
+    "kind": "external",
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Date",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 23,
+    "kind": "external",
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~String",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 24,
+    "kind": "external",
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~string",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 25,
+    "kind": "external",
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~RegExp",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 26,
+    "kind": "external",
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 27,
+    "kind": "external",
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Int8Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 28,
+    "kind": "external",
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint8Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 29,
+    "kind": "external",
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint8ClampedArray",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 30,
+    "kind": "external",
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Int16Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 31,
+    "kind": "external",
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint16Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 32,
+    "kind": "external",
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Int32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 33,
+    "kind": "external",
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 34,
+    "kind": "external",
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Float32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 35,
+    "kind": "external",
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Float64Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 36,
+    "kind": "external",
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Map",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 37,
+    "kind": "external",
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Set",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 38,
+    "kind": "external",
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~WeakMap",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 39,
+    "kind": "external",
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~WeakSet",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 40,
+    "kind": "external",
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~ArrayBuffer",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 41,
+    "kind": "external",
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~DataView",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 42,
+    "kind": "external",
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~JSON",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 43,
+    "kind": "external",
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Promise",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 44,
+    "kind": "external",
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Generator",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 45,
+    "kind": "external",
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~GeneratorFunction",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 46,
+    "kind": "external",
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Reflect",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 47,
+    "kind": "external",
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Proxy",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 48,
+    "kind": "file",
+    "name": "src/convert.js",
+    "content": "/**\n * Conversion between Objects, Elements, Attributes, and Strings\n */\nexport default class Convert {\n    /**\n     * default ignore list for attributes\n     * @returns {string[]}\n     */\n    static get ignore() { return [ 'class' ]; };\n\n    /**\n     * default settings for most methods in module\n     * @returns {{allowAllAttributes: boolean, typeConvert: boolean, ignore: *}}\n     */\n    static get defaults() {\n        return {\n            allowAllAttributes: false,\n            typeConvert: true,\n            ignore: this.ignore\n        }\n    };\n\n    /**\n     * object from element attribtues\n     * @param {Object} el element\n     * @param {Object} opts options {\n     *          allowAllAttributes: boolean to allow all attributes to come through, default false\n     *          typeConvert: boolean to allow conversion of numbers from strings\n     *          ignore: Array of attributes to ignore default [class]\n     * @return object/dictionary\n     */\n    static fromAttrs(el, opts) {\n        opts = Object.assign(this.defaults, opts ? opts : {} );\n        const o = {};\n        const attributes = el.attributes;\n        for (let c = 0; c < attributes.length; c++) {\n            if (opts.ignore.indexOf(attributes[c].nodeName) === -1 || opts.allowAllAttributes) {\n                let val = attributes[c].nodeValue;\n                if (!isNaN(parseFloat(val)) && opts.typeConvert) {\n                    val = parseFloat(val);\n                }\n                o[attributes[c].nodeName] = val;\n            }\n        }\n        return o;\n    };\n\n    /**\n     * set attributes of an element sourced from an object\n     * @param {Object} el element to accept object mapping\n     * @param {Object} obj object to map to element\n     * @param {Object} opts options {\n     *          allowAllAttributes: boolean to allow all attributes to come through, default false\n     *          typeConvert: boolean to allow conversion of numbers from strings\n     *          ignore: Array of attributes to ignore default [class]\n     * @returns {*} element\n     */\n    static setAttrs(el, obj, opts) {\n        opts = Object.assign(this.defaults, opts ? opts : {} );\n        if (obj instanceof Element) {\n            obj = this.fromAttrs(obj, opts);\n        }\n        const keys = Object.keys(obj);\n        for (let c = 0; c < keys.length; c++) {\n            if (opts.ignore.indexOf(keys[c]) === -1 || opts.allowAllAttributes) {\n                if (typeof obj[keys[c]] === 'string' || typeof obj[keys[c]] === 'number') {\n                    el.setAttribute(keys[c], obj[keys[c]]);\n                }\n            }\n        }\n        return el;\n    };\n\n    /**\n     * convert to string of attributes (myattr=\"value\" anotherattr=\"value\")\n     * @param {Object} obj simple flat obj or element\n     * @param {Object} opts options {\n     *          allowAllAttributes: boolean to allow all attributes to come through, default false\n     *          typeConvert: boolean to allow conversion of numbers from strings\n     *          ignore: Array of attributes to ignore default [class]\n     * @returns {string}\n     */\n    static toAttrString(obj, opts) {\n        opts = Object.assign(this.defaults, opts ? opts : {} );\n\n        if (obj instanceof Element) {\n            obj = this.fromAttrs(obj, opts);\n        }\n\n        const keys = Object.keys(obj);\n        let str = '';\n        for (let c = 0; c < keys.length; c++) {\n            if (opts.ignore.indexOf(keys[c]) === -1 || opts.allowAllAttributes) {\n                if (typeof obj[keys[c]] === 'string' || typeof obj[keys[c]] === 'number') {\n                    str += keys[c] + '=\"' + obj[keys[c]] + '\" ';\n                }\n            }\n        }\n        return str.trimRight();\n    }\n}\n",
+    "static": true,
+    "longname": "/Users/farrell/Documents/attrocity/src/convert.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 49,
+    "kind": "class",
+    "name": "Convert",
+    "memberof": "src/convert.js",
+    "static": true,
+    "longname": "src/convert.js~Convert",
+    "access": "public",
+    "export": true,
+    "importPath": "attrocity/src/convert.js",
+    "importStyle": "Convert",
+    "description": "Conversion between Objects, Elements, Attributes, and Strings",
+    "lineNumber": 4,
+    "interface": false
+  },
+  {
+    "__docId__": 50,
+    "kind": "get",
+    "name": "ignore",
+    "memberof": "src/convert.js~Convert",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/convert.js~Convert.ignore",
+    "access": "public",
+    "description": "default ignore list for attributes",
+    "lineNumber": 9,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{string[]}"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "string[]"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "type": {
+      "types": [
+        "string[]"
+      ]
+    }
+  },
+  {
+    "__docId__": 51,
+    "kind": "get",
+    "name": "defaults",
+    "memberof": "src/convert.js~Convert",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/convert.js~Convert.defaults",
+    "access": "public",
+    "description": "default settings for most methods in module",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{{allowAllAttributes: boolean, typeConvert: boolean, ignore: *}}"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "{allowAllAttributes: boolean, typeConvert: boolean, ignore: *}"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "type": {
+      "types": [
+        "{\"allowAllAttributes\": *, \"typeConvert\": boolean, \"ignore\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 52,
+    "kind": "method",
+    "name": "fromAttrs",
+    "memberof": "src/convert.js~Convert",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/convert.js~Convert.fromAttrs",
+    "access": "public",
+    "description": "object from element attribtues",
+    "lineNumber": 32,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "el",
+        "description": "element"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts",
+        "description": "options {\n         allowAllAttributes: boolean to allow all attributes to come through, default false\n         typeConvert: boolean to allow conversion of numbers from strings\n         ignore: Array of attributes to ignore default [class]"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "object/dictionary"
+    }
+  },
+  {
+    "__docId__": 53,
+    "kind": "method",
+    "name": "setAttrs",
+    "memberof": "src/convert.js~Convert",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/convert.js~Convert.setAttrs",
+    "access": "public",
+    "description": "set attributes of an element sourced from an object",
+    "lineNumber": 58,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{*} element"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "el",
+        "description": "element to accept object mapping"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "obj",
+        "description": "object to map to element"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts",
+        "description": "options {\n         allowAllAttributes: boolean to allow all attributes to come through, default false\n         typeConvert: boolean to allow conversion of numbers from strings\n         ignore: Array of attributes to ignore default [class]"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "element"
+    }
+  },
+  {
+    "__docId__": 54,
+    "kind": "method",
+    "name": "toAttrString",
+    "memberof": "src/convert.js~Convert",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/convert.js~Convert.toAttrString",
+    "access": "public",
+    "description": "convert to string of attributes (myattr=\"value\" anotherattr=\"value\")",
+    "lineNumber": 83,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{string}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "obj",
+        "description": "simple flat obj or element"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts",
+        "description": "options {\n         allowAllAttributes: boolean to allow all attributes to come through, default false\n         typeConvert: boolean to allow conversion of numbers from strings\n         ignore: Array of attributes to ignore default [class]"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": ""
+    }
+  },
+  {
+    "__docId__": 55,
+    "kind": "file",
+    "name": "src/main.js",
+    "content": "import Convert from './convert.js';\nimport MapDOM from './mapdom.js';\n\nexport default class Main {\n    static get Convert() { return Convert; }\n    static get MapDOM() { return MapDOM; }\n}\n",
+    "static": true,
+    "longname": "/Users/farrell/Documents/attrocity/src/main.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 56,
+    "kind": "class",
+    "name": "Main",
+    "memberof": "src/main.js",
+    "static": true,
+    "longname": "src/main.js~Main",
+    "access": "public",
+    "export": true,
+    "importPath": "attrocity/src/main.js",
+    "importStyle": "Main",
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "interface": false
+  },
+  {
+    "__docId__": 57,
+    "kind": "get",
+    "name": "Convert",
+    "memberof": "src/main.js~Main",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/main.js~Main.Convert",
+    "access": "public",
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 58,
+    "kind": "get",
+    "name": "MapDOM",
+    "memberof": "src/main.js~Main",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/main.js~Main.MapDOM",
+    "access": "public",
+    "description": null,
+    "lineNumber": 6,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 59,
+    "kind": "file",
+    "name": "src/mapdom.js",
+    "content": "export default class MapDOM {\n    /**\n     * defaults\n     * @returns {{attribute: string, root: string}}\n     */\n    static get defaults() {\n        return {\n            attribute: 'cache',\n            root: 'cacheroot'\n        }\n    };\n\n    /**\n     * generate attribute selector for query selection\n     * @param name\n     * @returns {string}\n     */\n    static attributeSelector(name) { return '[' + name + ']'; };\n\n    /**\n     * map dom elements with desired attribute to object\n     * @param node\n     * @param opts\n     */\n    static map(node, opts) {\n        opts = Object.assign(this.defaults, opts ? opts : {} );\n        const selector = this.attributeSelector(opts.attribute);\n\n        let domcache = {};\n        let els = node.querySelectorAll(selector);\n        let rootlevelEls = node.querySelectorAll(this.attributeSelector(opts.root));\n\n        let nondeepEls = [];\n        // weed out selections past the desired root\n        for (let e = 0; e < els.length; e++) {\n            let elIsContainedByRoot = false;\n            for (let d = 0; d < rootlevelEls.length; d++) {\n                if (rootlevelEls[d] !== els[e] && rootlevelEls[d].contains(els[e])) {\n                    elIsContainedByRoot = true;\n                }\n            }\n            if (!elIsContainedByRoot) {\n                nondeepEls.push(els[e]);\n            }\n        };\n\n        // map to object\n        for (let c = 0; c < nondeepEls.length; c++) {\n            let props = nondeepEls[c].getAttribute(opts.attribute);\n            let level = domcache;\n            props = props.split('.');\n            props = props.reverse();\n\n            while (props.length > 0) {\n                let prop = props.pop();\n\n                if (!level[prop]) {\n                    if (props.length === 0) {\n                        level[prop] = nondeepEls[c];\n                    } else {\n                        level[prop] = {}\n                    }\n                }\n                level = level[prop];\n            }\n        }\n        return domcache;\n    };\n}\n",
+    "static": true,
+    "longname": "/Users/farrell/Documents/attrocity/src/mapdom.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 60,
+    "kind": "class",
+    "name": "MapDOM",
+    "memberof": "src/mapdom.js",
+    "static": true,
+    "longname": "src/mapdom.js~MapDOM",
+    "access": "public",
+    "export": true,
+    "importPath": "attrocity/src/mapdom.js",
+    "importStyle": "MapDOM",
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "interface": false
+  },
+  {
+    "__docId__": 61,
+    "kind": "get",
+    "name": "defaults",
+    "memberof": "src/mapdom.js~MapDOM",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/mapdom.js~MapDOM.defaults",
+    "access": "public",
+    "description": "defaults",
+    "lineNumber": 6,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{{attribute: string, root: string}}"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "{attribute: string, root: string}"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "type": {
+      "types": [
+        "{\"attribute\": string, \"root\": string}"
+      ]
+    }
+  },
+  {
+    "__docId__": 62,
+    "kind": "method",
+    "name": "attributeSelector",
+    "memberof": "src/mapdom.js~MapDOM",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/mapdom.js~MapDOM.attributeSelector",
+    "access": "public",
+    "description": "generate attribute selector for query selection",
+    "lineNumber": 18,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{string}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": ""
+    }
+  },
+  {
+    "__docId__": 63,
+    "kind": "method",
+    "name": "map",
+    "memberof": "src/mapdom.js~MapDOM",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/mapdom.js~MapDOM.map",
+    "access": "public",
+    "description": "map dom elements with desired attribute to object",
+    "lineNumber": 25,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "node",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts",
+        "description": ""
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "index",
+    "content": "",
+    "longname": "/Users/farrell/Documents/attrocity/README.md",
+    "name": "./README.md",
+    "static": true,
+    "access": "public"
+  },
+  {
+    "kind": "packageJSON",
+    "content": "{\n  \"name\": \"attrocity\",\n  \"version\": \"0.0.1\",\n  \"dependencies\": {},\n  \"devDependencies\": {\n    \"esdoc\": \"^1.1.0\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"jsdoc\": \"^3.5.5\",\n    \"jsdom\": \"^11.11.0\",\n    \"rollup\": \"^0.63.4\",\n    \"tap\": \"^12.0.1\",\n    \"tape\": \"^4.9.1\"\n  },\n  \"bin\": {\n    \"rollup\": \"./node_modules/bin/rollup\"\n  },\n  \"scripts\": {\n    \"test\": \"tap tests/*.js\",\n    \"build\": \"rollup src/main.js --file attrocity.js --format umd --name attrocity\",\n    \"doc\": \"./node_modules/.bin/esdoc -c esdoc.json\"\n  }\n}\n",
+    "longname": "/Users/farrell/Documents/attrocity/package.json",
+    "name": "package.json",
+    "static": true,
+    "access": "public"
+  }
+]

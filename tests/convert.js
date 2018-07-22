@@ -1,4 +1,4 @@
-const Convert = require('../attrocity-cjs.js').Convert;
+const Convert = require('../attrocity.js').Convert;
 const test = require('tape');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;

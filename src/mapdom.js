@@ -1,28 +1,28 @@
-export default {
+export default class MapDOM {
     /**
      * defaults
      * @returns {{attribute: string, root: string}}
      */
-    get defaults() {
+    static get defaults() {
         return {
             attribute: 'cache',
             root: 'cacheroot'
         }
-    },
+    };
 
     /**
      * generate attribute selector for query selection
      * @param name
      * @returns {string}
      */
-    attributeSelector(name) { return '[' + name + ']'; },
+    static attributeSelector(name) { return '[' + name + ']'; };
 
     /**
      * map dom elements with desired attribute to object
      * @param node
      * @param opts
      */
-    map(node, opts) {
+    static map(node, opts) {
         opts = Object.assign(this.defaults, opts ? opts : {} );
         const selector = this.attributeSelector(opts.attribute);
 
@@ -42,7 +42,7 @@ export default {
             if (!elIsContainedByRoot) {
                 nondeepEls.push(els[e]);
             }
-        }
+        };
 
         // map to object
         for (let c = 0; c < nondeepEls.length; c++) {
@@ -65,5 +65,5 @@ export default {
             }
         }
         return domcache;
-    },
+    };
 }
