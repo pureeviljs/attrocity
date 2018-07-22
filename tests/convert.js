@@ -43,7 +43,7 @@ test('attributes to string', function (t) {
     t.equal(Convert.toAttrString(Convert.fromAttrs(el, { typeConvert: false, ignore: ['two'] }), { allowAllAttributes: true }), 'one="1" three="3" class="someclass"');
 });
 
-test('attributes to string', function (t) {
+test('set attributes', function (t) {
     t.plan(8);
 
     const newSpan = dom.window.document.createElement('span');

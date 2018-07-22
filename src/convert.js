@@ -1,6 +1,14 @@
 export default {
+    /**
+     * default ignore list for attributes
+     * @returns {string[]}
+     */
     get ignore() { return [ 'class' ]; },
 
+    /**
+     * default settings for most methods in module
+     * @returns {{allowAllAttributes: boolean, typeConvert: boolean, ignore: *}}
+     */
     get defaults() {
         return {
             allowAllAttributes: false,

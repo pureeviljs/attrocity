@@ -12,6 +12,6 @@
   },
   "scripts": {
     "test": "tap tests/*.js",
-    "build-cjs": "rollup main.js --format cjs --file attrocity-cjs.js"
+    "build-cjs": "rollup src/main.js --format cjs --file attrocity-cjs.js"
   }
 }
