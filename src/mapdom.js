@@ -42,7 +42,7 @@ export default class MapDOM {
             if (!elIsContainedByRoot) {
                 nondeepEls.push(els[e]);
             }
-        };
+        }
 
         // map to object
         for (let c = 0; c < nondeepEls.length; c++) {

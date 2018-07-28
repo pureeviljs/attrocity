@@ -29,9 +29,13 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/convert.js~Convert.html">Convert</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/bind.js~Binding.html">Binding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/convert.js~Convert.html">Convert</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Main.html">Main</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/mapdom.js~MapDOM.html">MapDOM</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#observables">observables</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/abstractobservable.js~AbstractObservable.html">AbstractObservable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/element.js~ObservableElement.html">ObservableElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/object.js~ObservableObject.html">ObservableObject</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -81,7 +85,7 @@
             if (!elIsContainedByRoot) {
                 nondeepEls.push(els[e]);
             }
-        };
+        }
 
         // map to object
         for (let c = 0; c &lt; nondeepEls.length; c++) {

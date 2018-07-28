@@ -566,6 +566,198 @@
   {
     "__docId__": 48,
     "kind": "file",
+    "name": "src/bind.js",
+    "content": "import AbstractObservable from './observables/abstractobservable.js';\n\nexport default class Binding {\n    /**\n     * constructor\n     */\n    constructor() {\n        this._destinations = new Map();\n        this._sources = new Map();\n    }\n\n    /**\n     * add binding\n     * @param {AbstractObservable} obj\n     * @param {Boolean} isSrc is a binding source\n     * @param {Boolean} isDest is a binding destination\n     */\n    add(obj, isSrc, isDest) {\n        if (!obj instanceof AbstractObservable) {\n            console.error('Adding binding for non-observable object', obj);\n            return;\n        }\n\n        if (isSrc) {\n            const cbID = obj.addCallback( (obj, key, value) => this._onDataChange(obj, key, value));\n            this._sources.set(obj.id, { observable: obj, callback: cbID });\n        }\n        if (isDest) {\n            this._destinations.set(obj.id, { observable: obj });\n        }\n    }\n\n    /**\n     * remove binding for object\n     * @param {AbstractObservable} obj\n     */\n    remove(obj) {\n        const dest = this._destinations.get(obj.id);\n        dest.observable.removeCallback(dest.observable.callback);\n        this._destinations.delete(obj.id);\n        this._sources.delete(obj.id);\n    }\n\n    /**\n     * on data changed from source\n     * @param {AbstractObservable} obj\n     * @param {String} key name of changed attribute\n     * @param value value of changed attribute\n     * @private\n     */\n    _onDataChange(obj, key, value) {\n        for (const dest of this._destinations.entries()){\n            if (obj.id !== dest[1].observable.id) {\n                dest[1].observable.setKey(key, value, true);\n            }\n        }\n    }\n}\n",
+    "static": true,
+    "longname": "/Users/farrell/Documents/attrocity/src/bind.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 49,
+    "kind": "class",
+    "name": "Binding",
+    "memberof": "src/bind.js",
+    "static": true,
+    "longname": "src/bind.js~Binding",
+    "access": "public",
+    "export": true,
+    "importPath": "attrocity/src/bind.js",
+    "importStyle": "Binding",
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "interface": false
+  },
+  {
+    "__docId__": 50,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/bind.js~Binding",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/bind.js~Binding#constructor",
+    "access": "public",
+    "description": "constructor",
+    "lineNumber": 7
+  },
+  {
+    "__docId__": 51,
+    "kind": "member",
+    "name": "_destinations",
+    "memberof": "src/bind.js~Binding",
+    "static": false,
+    "longname": "src/bind.js~Binding#_destinations",
+    "access": "private",
+    "description": null,
+    "lineNumber": 8,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 52,
+    "kind": "member",
+    "name": "_sources",
+    "memberof": "src/bind.js~Binding",
+    "static": false,
+    "longname": "src/bind.js~Binding#_sources",
+    "access": "private",
+    "description": null,
+    "lineNumber": 9,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 53,
+    "kind": "method",
+    "name": "add",
+    "memberof": "src/bind.js~Binding",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/bind.js~Binding#add",
+    "access": "public",
+    "description": "add binding",
+    "lineNumber": 18,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "AbstractObservable"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "obj",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "isSrc",
+        "description": "is a binding source"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "isDest",
+        "description": "is a binding destination"
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 54,
+    "kind": "method",
+    "name": "remove",
+    "memberof": "src/bind.js~Binding",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/bind.js~Binding#remove",
+    "access": "public",
+    "description": "remove binding for object",
+    "lineNumber": 37,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "AbstractObservable"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "obj",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 55,
+    "kind": "method",
+    "name": "_onDataChange",
+    "memberof": "src/bind.js~Binding",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/bind.js~Binding#_onDataChange",
+    "access": "private",
+    "description": "on data changed from source",
+    "lineNumber": 51,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "AbstractObservable"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "obj",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "key",
+        "description": "name of changed attribute"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": "value of changed attribute"
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 56,
+    "kind": "file",
     "name": "src/convert.js",
     "content": "/**\n * Conversion between Objects, Elements, Attributes, and Strings\n */\nexport default class Convert {\n    /**\n     * default ignore list for attributes\n     * @returns {string[]}\n     */\n    static get ignore() { return [ 'class' ]; };\n\n    /**\n     * default settings for most methods in module\n     * @returns {{allowAllAttributes: boolean, typeConvert: boolean, ignore: *}}\n     */\n    static get defaults() {\n        return {\n            allowAllAttributes: false,\n            typeConvert: true,\n            ignore: this.ignore\n        }\n    };\n\n    /**\n     * object from element attribtues\n     * @param {Object} el element\n     * @param {Object} opts options {\n     *          allowAllAttributes: boolean to allow all attributes to come through, default false\n     *          typeConvert: boolean to allow conversion of numbers from strings\n     *          ignore: Array of attributes to ignore default [class]\n     * @return object/dictionary\n     */\n    static fromAttrs(el, opts) {\n        opts = Object.assign(this.defaults, opts ? opts : {} );\n        const o = {};\n        const attributes = el.attributes;\n        for (let c = 0; c < attributes.length; c++) {\n            if (opts.ignore.indexOf(attributes[c].nodeName) === -1 || opts.allowAllAttributes) {\n                let val = attributes[c].nodeValue;\n                if (!isNaN(parseFloat(val)) && opts.typeConvert) {\n                    val = parseFloat(val);\n                }\n                o[attributes[c].nodeName] = val;\n            }\n        }\n        return o;\n    };\n\n    /**\n     * set attributes of an element sourced from an object\n     * @param {Object} el element to accept object mapping\n     * @param {Object} obj object to map to element\n     * @param {Object} opts options {\n     *          allowAllAttributes: boolean to allow all attributes to come through, default false\n     *          typeConvert: boolean to allow conversion of numbers from strings\n     *          ignore: Array of attributes to ignore default [class]\n     * @returns {*} element\n     */\n    static setAttrs(el, obj, opts) {\n        opts = Object.assign(this.defaults, opts ? opts : {} );\n        if (obj instanceof Element) {\n            obj = this.fromAttrs(obj, opts);\n        }\n        const keys = Object.keys(obj);\n        for (let c = 0; c < keys.length; c++) {\n            if (opts.ignore.indexOf(keys[c]) === -1 || opts.allowAllAttributes) {\n                if (typeof obj[keys[c]] === 'string' || typeof obj[keys[c]] === 'number') {\n                    el.setAttribute(keys[c], obj[keys[c]]);\n                }\n            }\n        }\n        return el;\n    };\n\n    /**\n     * convert to string of attributes (myattr=\"value\" anotherattr=\"value\")\n     * @param {Object} obj simple flat obj or element\n     * @param {Object} opts options {\n     *          allowAllAttributes: boolean to allow all attributes to come through, default false\n     *          typeConvert: boolean to allow conversion of numbers from strings\n     *          ignore: Array of attributes to ignore default [class]\n     * @returns {string}\n     */\n    static toAttrString(obj, opts) {\n        opts = Object.assign(this.defaults, opts ? opts : {} );\n\n        if (obj instanceof Element) {\n            obj = this.fromAttrs(obj, opts);\n        }\n\n        const keys = Object.keys(obj);\n        let str = '';\n        for (let c = 0; c < keys.length; c++) {\n            if (opts.ignore.indexOf(keys[c]) === -1 || opts.allowAllAttributes) {\n                if (typeof obj[keys[c]] === 'string' || typeof obj[keys[c]] === 'number') {\n                    str += keys[c] + '=\"' + obj[keys[c]] + '\" ';\n                }\n            }\n        }\n        return str.trimRight();\n    }\n}\n",
     "static": true,
@@ -575,7 +767,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 49,
+    "__docId__": 57,
     "kind": "class",
     "name": "Convert",
     "memberof": "src/convert.js",
@@ -590,7 +782,7 @@
     "interface": false
   },
   {
-    "__docId__": 50,
+    "__docId__": 58,
     "kind": "get",
     "name": "ignore",
     "memberof": "src/convert.js~Convert",
@@ -622,7 +814,7 @@
     }
   },
   {
-    "__docId__": 51,
+    "__docId__": 59,
     "kind": "get",
     "name": "defaults",
     "memberof": "src/convert.js~Convert",
@@ -654,7 +846,7 @@
     }
   },
   {
-    "__docId__": 52,
+    "__docId__": 60,
     "kind": "method",
     "name": "fromAttrs",
     "memberof": "src/convert.js~Convert",
@@ -697,7 +889,7 @@
     }
   },
   {
-    "__docId__": 53,
+    "__docId__": 61,
     "kind": "method",
     "name": "setAttrs",
     "memberof": "src/convert.js~Convert",
@@ -756,7 +948,7 @@
     }
   },
   {
-    "__docId__": 54,
+    "__docId__": 62,
     "kind": "method",
     "name": "toAttrString",
     "memberof": "src/convert.js~Convert",
@@ -805,10 +997,10 @@
     }
   },
   {
-    "__docId__": 55,
+    "__docId__": 63,
     "kind": "file",
     "name": "src/main.js",
-    "content": "import Convert from './convert.js';\nimport MapDOM from './mapdom.js';\n\nexport default class Main {\n    static get Convert() { return Convert; }\n    static get MapDOM() { return MapDOM; }\n}\n",
+    "content": "import Convert from './convert.js';\nimport MapDOM from './mapdom.js';\nimport ObservableAttributes from \"./observables/element.js\";\nimport ObservableObject from \"./observables/object.js\";\n\nexport default class Main {\n\n    /**\n     * Convert\n     * @returns {Convert}\n     * @constructor\n     */\n    static get Convert() { return Convert; }\n\n    /**\n     * MapDOM\n     * @returns {MapDOM}\n     * @constructor\n     */\n    static get MapDOM() { return MapDOM; }\n\n    /**\n     * Observables\n     * @returns {{Element: ObservableElement, Object: ObservableObject}}\n     * @constructor\n     */\n    static get Observables() {\n        return {\n            Element: ObservableElement,\n            Object: ObservableObject\n        }\n    }\n}\n",
     "static": true,
     "longname": "/Users/farrell/Documents/attrocity/src/main.js",
     "access": "public",
@@ -816,7 +1008,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 56,
+    "__docId__": 64,
     "kind": "class",
     "name": "Main",
     "memberof": "src/main.js",
@@ -827,12 +1019,12 @@
     "importPath": "attrocity/src/main.js",
     "importStyle": "Main",
     "description": null,
-    "lineNumber": 4,
+    "lineNumber": 6,
     "undocument": true,
     "interface": false
   },
   {
-    "__docId__": 57,
+    "__docId__": 65,
     "kind": "get",
     "name": "Convert",
     "memberof": "src/main.js~Main",
@@ -841,9 +1033,26 @@
     "static": true,
     "longname": "src/main.js~Main.Convert",
     "access": "public",
-    "description": null,
-    "lineNumber": 5,
-    "undocument": true,
+    "description": "Convert",
+    "lineNumber": 13,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Convert}"
+      },
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Convert"
+      ],
+      "spread": false,
+      "description": ""
+    },
     "type": {
       "types": [
         "*"
@@ -851,7 +1060,7 @@
     }
   },
   {
-    "__docId__": 58,
+    "__docId__": 66,
     "kind": "get",
     "name": "MapDOM",
     "memberof": "src/main.js~Main",
@@ -860,9 +1069,26 @@
     "static": true,
     "longname": "src/main.js~Main.MapDOM",
     "access": "public",
-    "description": null,
-    "lineNumber": 6,
-    "undocument": true,
+    "description": "MapDOM",
+    "lineNumber": 20,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{MapDOM}"
+      },
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "MapDOM"
+      ],
+      "spread": false,
+      "description": ""
+    },
     "type": {
       "types": [
         "*"
@@ -870,10 +1096,46 @@
     }
   },
   {
-    "__docId__": 59,
+    "__docId__": 67,
+    "kind": "get",
+    "name": "Observables",
+    "memberof": "src/main.js~Main",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/main.js~Main.Observables",
+    "access": "public",
+    "description": "Observables",
+    "lineNumber": 27,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{{Element: ObservableElement, Object: ObservableObject}}"
+      },
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "{Element: ObservableElement, Object: ObservableObject}"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "type": {
+      "types": [
+        "{\"Element\": *, \"Object\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 68,
     "kind": "file",
     "name": "src/mapdom.js",
-    "content": "export default class MapDOM {\n    /**\n     * defaults\n     * @returns {{attribute: string, root: string}}\n     */\n    static get defaults() {\n        return {\n            attribute: 'cache',\n            root: 'cacheroot'\n        }\n    };\n\n    /**\n     * generate attribute selector for query selection\n     * @param name\n     * @returns {string}\n     */\n    static attributeSelector(name) { return '[' + name + ']'; };\n\n    /**\n     * map dom elements with desired attribute to object\n     * @param node\n     * @param opts\n     */\n    static map(node, opts) {\n        opts = Object.assign(this.defaults, opts ? opts : {} );\n        const selector = this.attributeSelector(opts.attribute);\n\n        let domcache = {};\n        let els = node.querySelectorAll(selector);\n        let rootlevelEls = node.querySelectorAll(this.attributeSelector(opts.root));\n\n        let nondeepEls = [];\n        // weed out selections past the desired root\n        for (let e = 0; e < els.length; e++) {\n            let elIsContainedByRoot = false;\n            for (let d = 0; d < rootlevelEls.length; d++) {\n                if (rootlevelEls[d] !== els[e] && rootlevelEls[d].contains(els[e])) {\n                    elIsContainedByRoot = true;\n                }\n            }\n            if (!elIsContainedByRoot) {\n                nondeepEls.push(els[e]);\n            }\n        };\n\n        // map to object\n        for (let c = 0; c < nondeepEls.length; c++) {\n            let props = nondeepEls[c].getAttribute(opts.attribute);\n            let level = domcache;\n            props = props.split('.');\n            props = props.reverse();\n\n            while (props.length > 0) {\n                let prop = props.pop();\n\n                if (!level[prop]) {\n                    if (props.length === 0) {\n                        level[prop] = nondeepEls[c];\n                    } else {\n                        level[prop] = {}\n                    }\n                }\n                level = level[prop];\n            }\n        }\n        return domcache;\n    };\n}\n",
+    "content": "export default class MapDOM {\n    /**\n     * defaults\n     * @returns {{attribute: string, root: string}}\n     */\n    static get defaults() {\n        return {\n            attribute: 'cache',\n            root: 'cacheroot'\n        }\n    };\n\n    /**\n     * generate attribute selector for query selection\n     * @param name\n     * @returns {string}\n     */\n    static attributeSelector(name) { return '[' + name + ']'; };\n\n    /**\n     * map dom elements with desired attribute to object\n     * @param node\n     * @param opts\n     */\n    static map(node, opts) {\n        opts = Object.assign(this.defaults, opts ? opts : {} );\n        const selector = this.attributeSelector(opts.attribute);\n\n        let domcache = {};\n        let els = node.querySelectorAll(selector);\n        let rootlevelEls = node.querySelectorAll(this.attributeSelector(opts.root));\n\n        let nondeepEls = [];\n        // weed out selections past the desired root\n        for (let e = 0; e < els.length; e++) {\n            let elIsContainedByRoot = false;\n            for (let d = 0; d < rootlevelEls.length; d++) {\n                if (rootlevelEls[d] !== els[e] && rootlevelEls[d].contains(els[e])) {\n                    elIsContainedByRoot = true;\n                }\n            }\n            if (!elIsContainedByRoot) {\n                nondeepEls.push(els[e]);\n            }\n        }\n\n        // map to object\n        for (let c = 0; c < nondeepEls.length; c++) {\n            let props = nondeepEls[c].getAttribute(opts.attribute);\n            let level = domcache;\n            props = props.split('.');\n            props = props.reverse();\n\n            while (props.length > 0) {\n                let prop = props.pop();\n\n                if (!level[prop]) {\n                    if (props.length === 0) {\n                        level[prop] = nondeepEls[c];\n                    } else {\n                        level[prop] = {}\n                    }\n                }\n                level = level[prop];\n            }\n        }\n        return domcache;\n    };\n}\n",
     "static": true,
     "longname": "/Users/farrell/Documents/attrocity/src/mapdom.js",
     "access": "public",
@@ -881,7 +1143,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 60,
+    "__docId__": 69,
     "kind": "class",
     "name": "MapDOM",
     "memberof": "src/mapdom.js",
@@ -897,7 +1159,7 @@
     "interface": false
   },
   {
-    "__docId__": 61,
+    "__docId__": 70,
     "kind": "get",
     "name": "defaults",
     "memberof": "src/mapdom.js~MapDOM",
@@ -929,7 +1191,7 @@
     }
   },
   {
-    "__docId__": 62,
+    "__docId__": 71,
     "kind": "method",
     "name": "attributeSelector",
     "memberof": "src/mapdom.js~MapDOM",
@@ -968,7 +1230,7 @@
     }
   },
   {
-    "__docId__": 63,
+    "__docId__": 72,
     "kind": "method",
     "name": "map",
     "memberof": "src/mapdom.js~MapDOM",
@@ -1008,6 +1270,742 @@
     }
   },
   {
+    "__docId__": 73,
+    "kind": "file",
+    "name": "src/observables/abstractobservable.js",
+    "content": "export default class AbstractObservable {\n    /**\n     * constructor\n     * @param obj\n     * @param {Function} cb\n     */\n    constructor(obj, cb) {\n        this._model = obj;\n        this._id = Symbol();\n        this._callbacks = new Map();\n\n        if (cb) {\n            this.addCallback(cb);\n        }\n    }\n\n    /**\n     * get ID\n     * @returns {symbol | *}\n     */\n    get id() { return this._id; }\n\n    /**\n     * get data\n     * @returns {*}\n     */\n    get data() { return this._model; }\n\n    /**\n     * add multiple callbacks\n     * @param cb\n     */\n    addCallbacks(cb) { this.addCallback(cb); }\n\n    /**\n     * add callback\n     * @param cb\n     * @returns {symbol}\n     */\n    addCallback(cb) {\n        if (Array.isArray(cb)) {\n            for (let c = 0; c < cb.length; c++) {\n                this.addCallback(cb[c]);\n            }\n            return;\n        }\n        const id = Symbol();\n        this._callbacks.set(id, cb);\n        return id;\n    }\n\n    /**\n     * remove callback\n     * @param id\n     */\n    removeCallback(id) {\n        this._callbacks.delete(id);\n    }\n\n    /**\n     * dispatch change\n     * @param obj\n     * @param name\n     * @param value\n     */\n    dispatchChange(obj, name, value) {\n        this._callbacks.forEach(cb => {\n            cb.apply(this, [obj, name, value]);\n        });\n    }\n}\n",
+    "static": true,
+    "longname": "/Users/farrell/Documents/attrocity/src/observables/abstractobservable.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 74,
+    "kind": "class",
+    "name": "AbstractObservable",
+    "memberof": "src/observables/abstractobservable.js",
+    "static": true,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable",
+    "access": "public",
+    "export": true,
+    "importPath": "attrocity/src/observables/abstractobservable.js",
+    "importStyle": "AbstractObservable",
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "interface": false
+  },
+  {
+    "__docId__": 75,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/observables/abstractobservable.js~AbstractObservable",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable#constructor",
+    "access": "public",
+    "description": "constructor",
+    "lineNumber": 7,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "obj",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cb",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "__docId__": 76,
+    "kind": "member",
+    "name": "_model",
+    "memberof": "src/observables/abstractobservable.js~AbstractObservable",
+    "static": false,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable#_model",
+    "access": "private",
+    "description": null,
+    "lineNumber": 8,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 77,
+    "kind": "member",
+    "name": "_id",
+    "memberof": "src/observables/abstractobservable.js~AbstractObservable",
+    "static": false,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable#_id",
+    "access": "private",
+    "description": null,
+    "lineNumber": 9,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 78,
+    "kind": "member",
+    "name": "_callbacks",
+    "memberof": "src/observables/abstractobservable.js~AbstractObservable",
+    "static": false,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable#_callbacks",
+    "access": "private",
+    "description": null,
+    "lineNumber": 10,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 79,
+    "kind": "get",
+    "name": "id",
+    "memberof": "src/observables/abstractobservable.js~AbstractObservable",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable#id",
+    "access": "public",
+    "description": "get ID",
+    "lineNumber": 21,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{symbol | *}"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "symbol ",
+        " *"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 80,
+    "kind": "get",
+    "name": "data",
+    "memberof": "src/observables/abstractobservable.js~AbstractObservable",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable#data",
+    "access": "public",
+    "description": "get data",
+    "lineNumber": 27,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{*}"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 81,
+    "kind": "method",
+    "name": "addCallbacks",
+    "memberof": "src/observables/abstractobservable.js~AbstractObservable",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable#addCallbacks",
+    "access": "public",
+    "description": "add multiple callbacks",
+    "lineNumber": 33,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cb",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 82,
+    "kind": "method",
+    "name": "addCallback",
+    "memberof": "src/observables/abstractobservable.js~AbstractObservable",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable#addCallback",
+    "access": "public",
+    "description": "add callback",
+    "lineNumber": 40,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{symbol}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cb",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "symbol"
+      ],
+      "spread": false,
+      "description": ""
+    }
+  },
+  {
+    "__docId__": 83,
+    "kind": "method",
+    "name": "removeCallback",
+    "memberof": "src/observables/abstractobservable.js~AbstractObservable",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable#removeCallback",
+    "access": "public",
+    "description": "remove callback",
+    "lineNumber": 56,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "id",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 84,
+    "kind": "method",
+    "name": "dispatchChange",
+    "memberof": "src/observables/abstractobservable.js~AbstractObservable",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/abstractobservable.js~AbstractObservable#dispatchChange",
+    "access": "public",
+    "description": "dispatch change",
+    "lineNumber": 66,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "obj",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 85,
+    "kind": "file",
+    "name": "src/observables/element.js",
+    "content": "import AbstractObservable from \"./abstractobservable.js\";\n\nexport default class ObservableElement extends AbstractObservable {\n    /**\n     * constructor\n     * @param {HTMLElement} el element to watch\n     * @param {Function} cb callback\n     * @param {Array} watchlist list of attributes to watch on element (if null, watch them all)\n     */\n    constructor(el, cb, watchlist) {\n        super(el, cb);\n        const observer = new MutationObserver(e => this.onMutationChange(e));\n        observer.observe(el, { attributes: true });\n        this._watchlist = watchlist;\n    }\n\n    /**\n     * set attribute value by name\n     * @param attr\n     * @param value\n     * @param donotdispatch\n     */\n    setKey(attr, value, donotdispatch) {\n        if (donotdispatch) {\n            this._ignoreNextMutationChange = true;\n        }\n        this.data.setAttribute(attr, value);\n    }\n\n    /**\n     * get attribute value for key/name\n     * @param attr\n     * @returns {*}\n     */\n    getKey(attr) {\n        return this._data.getAttribute(attr);\n    }\n\n    /**\n     * mutation change handler\n     * @param e\n     */\n    onMutationChange(e) {\n        if (this._ignoreNextMutationChange) {\n            this._ignoreNextMutationChange = false;\n            return;\n        }\n\n        if (this._watchlist && this._watchlist.indexOf(e[c].attributeName) !== -1) {\n            return;\n        }\n\n        for (let c = 0; c < e.length; c++) {\n            this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName));\n        }\n    }\n}\n",
+    "static": true,
+    "longname": "/Users/farrell/Documents/attrocity/src/observables/element.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 86,
+    "kind": "class",
+    "name": "ObservableElement",
+    "memberof": "src/observables/element.js",
+    "static": true,
+    "longname": "src/observables/element.js~ObservableElement",
+    "access": "public",
+    "export": true,
+    "importPath": "attrocity/src/observables/element.js",
+    "importStyle": "ObservableElement",
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "interface": false,
+    "extends": [
+      "src/observables/abstractobservable.js~AbstractObservable"
+    ]
+  },
+  {
+    "__docId__": 87,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/observables/element.js~ObservableElement",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/element.js~ObservableElement#constructor",
+    "access": "public",
+    "description": "constructor",
+    "lineNumber": 10,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "HTMLElement"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "el",
+        "description": "element to watch"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cb",
+        "description": "callback"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "watchlist",
+        "description": "list of attributes to watch on element (if null, watch them all)"
+      }
+    ]
+  },
+  {
+    "__docId__": 88,
+    "kind": "member",
+    "name": "_watchlist",
+    "memberof": "src/observables/element.js~ObservableElement",
+    "static": false,
+    "longname": "src/observables/element.js~ObservableElement#_watchlist",
+    "access": "private",
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 89,
+    "kind": "method",
+    "name": "setKey",
+    "memberof": "src/observables/element.js~ObservableElement",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/element.js~ObservableElement#setKey",
+    "access": "public",
+    "description": "set attribute value by name",
+    "lineNumber": 23,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "attr",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "donotdispatch",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 90,
+    "kind": "member",
+    "name": "_ignoreNextMutationChange",
+    "memberof": "src/observables/element.js~ObservableElement",
+    "static": false,
+    "longname": "src/observables/element.js~ObservableElement#_ignoreNextMutationChange",
+    "access": "private",
+    "description": null,
+    "lineNumber": 25,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 91,
+    "kind": "method",
+    "name": "getKey",
+    "memberof": "src/observables/element.js~ObservableElement",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/element.js~ObservableElement#getKey",
+    "access": "public",
+    "description": "get attribute value for key/name",
+    "lineNumber": 35,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{*}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "attr",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": ""
+    }
+  },
+  {
+    "__docId__": 92,
+    "kind": "method",
+    "name": "onMutationChange",
+    "memberof": "src/observables/element.js~ObservableElement",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/element.js~ObservableElement#onMutationChange",
+    "access": "public",
+    "description": "mutation change handler",
+    "lineNumber": 43,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "e",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 94,
+    "kind": "file",
+    "name": "src/observables/object.js",
+    "content": "import AbstractObservable from \"./abstractobservable.js\";\n\nexport default class ObservableObject extends AbstractObservable {\n    /**\n     * constructor\n     * @param object to watch\n     * @param {Function} cb callback\n     * @param {Array} watchlist list of attributes to watch on element (if null, watch them all)\n     */\n    constructor(obj, cb, watchlist) {\n        super(obj, cb);\n        if (!watchlist) {\n            this.autoWire();\n        } else {\n            for (let c = 0; c < watchlist.length; c++) {\n                this.addProperty(watchlist[c]);\n            }\n        }\n    }\n\n    /**\n     * automatically detect all property keys and add listeners\n     */\n    autoWire() {\n        const keys = Object.keys(this._model);\n        for (let c = 0; c < keys.length; c++) {\n            this.addProperty(keys[c]);\n        }\n    }\n\n    /**\n     * set key value by name\n     * @param {String} name\n     * @param value to set\n     * @param {Boolean} donotdispatch - set key, but don't cause change event\n     */\n    setKey(name, value, donotdispatch) {\n        this._model[name] = value;\n        if (!donotdispatch) {\n            this.dispatchChange(this, name, value);\n        }\n    }\n\n    /**\n     * get value for key\n     * @param {String} name\n     * @returns {*}\n     */\n    getKey(name) {\n        return this._model[name];\n    }\n\n    /**\n     * add listener for property\n     * @param {String} name\n     */\n    addProperty(name) {\n        Object.defineProperty(this, name, {\n            configurable: false, // don't allow it to be deleted\n            enumerable: true,\n            set: function (v) {\n                this.setKey(name, v);\n            },\n            get: function () {\n                return this.getKey(name);\n            }\n        });\n    }\n}\n",
+    "static": true,
+    "longname": "/Users/farrell/Documents/attrocity/src/observables/object.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 95,
+    "kind": "class",
+    "name": "ObservableObject",
+    "memberof": "src/observables/object.js",
+    "static": true,
+    "longname": "src/observables/object.js~ObservableObject",
+    "access": "public",
+    "export": true,
+    "importPath": "attrocity/src/observables/object.js",
+    "importStyle": "ObservableObject",
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "interface": false,
+    "extends": [
+      "src/observables/abstractobservable.js~AbstractObservable"
+    ]
+  },
+  {
+    "__docId__": 96,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/observables/object.js~ObservableObject",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/object.js~ObservableObject#constructor",
+    "access": "public",
+    "description": "constructor",
+    "lineNumber": 10,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "object",
+        "description": "to watch"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cb",
+        "description": "callback"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "watchlist",
+        "description": "list of attributes to watch on element (if null, watch them all)"
+      }
+    ]
+  },
+  {
+    "__docId__": 97,
+    "kind": "method",
+    "name": "autoWire",
+    "memberof": "src/observables/object.js~ObservableObject",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/object.js~ObservableObject#autoWire",
+    "access": "public",
+    "description": "automatically detect all property keys and add listeners",
+    "lineNumber": 24,
+    "params": [],
+    "return": null
+  },
+  {
+    "__docId__": 98,
+    "kind": "method",
+    "name": "setKey",
+    "memberof": "src/observables/object.js~ObservableObject",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/object.js~ObservableObject#setKey",
+    "access": "public",
+    "description": "set key value by name",
+    "lineNumber": 37,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": "to set"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "donotdispatch",
+        "description": "set key, but don't cause change event"
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 99,
+    "kind": "method",
+    "name": "getKey",
+    "memberof": "src/observables/object.js~ObservableObject",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/object.js~ObservableObject#getKey",
+    "access": "public",
+    "description": "get value for key",
+    "lineNumber": 49,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{*}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": ""
+    }
+  },
+  {
+    "__docId__": 100,
+    "kind": "method",
+    "name": "addProperty",
+    "memberof": "src/observables/object.js~ObservableObject",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/observables/object.js~ObservableObject#addProperty",
+    "access": "public",
+    "description": "add listener for property",
+    "lineNumber": 57,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": ""
+      }
+    ],
+    "return": null
+  },
+  {
     "kind": "index",
     "content": "",
     "longname": "/Users/farrell/Documents/attrocity/README.md",
@@ -1017,7 +2015,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\n  \"name\": \"attrocity\",\n  \"version\": \"0.0.1\",\n  \"dependencies\": {},\n  \"devDependencies\": {\n    \"esdoc\": \"^1.1.0\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"jsdoc\": \"^3.5.5\",\n    \"jsdom\": \"^11.11.0\",\n    \"rollup\": \"^0.63.4\",\n    \"tap\": \"^12.0.1\",\n    \"tape\": \"^4.9.1\"\n  },\n  \"bin\": {\n    \"rollup\": \"./node_modules/bin/rollup\"\n  },\n  \"scripts\": {\n    \"test\": \"tap tests/*.js\",\n    \"build\": \"rollup src/main.js --file attrocity.js --format umd --name attrocity\",\n    \"doc\": \"./node_modules/.bin/esdoc -c esdoc.json\"\n  }\n}\n",
+    "content": "{\n  \"name\": \"attrocity\",\n  \"version\": \"0.0.1\",\n  \"dependencies\": {},\n  \"devDependencies\": {\n    \"esdoc\": \"^1.1.0\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"jsdom\": \"^11.11.0\",\n    \"rollup\": \"^0.63.4\",\n    \"tap\": \"^12.0.1\",\n    \"tape\": \"^4.9.1\"\n  },\n  \"bin\": {\n    \"rollup\": \"./node_modules/bin/rollup\"\n  },\n  \"scripts\": {\n    \"test\": \"tap tests/*.js\",\n    \"build\": \"rollup src/main.js --file attrocity.js --format umd --name attrocity\",\n    \"doc\": \"./node_modules/.bin/esdoc -c esdoc.json\"\n  }\n}\n",
     "longname": "/Users/farrell/Documents/attrocity/package.json",
     "name": "package.json",
     "static": true,

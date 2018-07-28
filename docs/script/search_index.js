@@ -1,5 +1,17 @@
 window.esdocSearchIndex = [
   [
+    "attrocity/src/observables/abstractobservable.js~abstractobservable",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html",
+    "<span>AbstractObservable</span> <span class=\"search-result-import-path\">attrocity/src/observables/abstractobservable.js</span>",
+    "class"
+  ],
+  [
+    "attrocity/src/bind.js~binding",
+    "class/src/bind.js~Binding.html",
+    "<span>Binding</span> <span class=\"search-result-import-path\">attrocity/src/bind.js</span>",
+    "class"
+  ],
+  [
     "attrocity/src/convert.js~convert",
     "class/src/convert.js~Convert.html",
     "<span>Convert</span> <span class=\"search-result-import-path\">attrocity/src/convert.js</span>",
@@ -15,6 +27,18 @@ window.esdocSearchIndex = [
     "attrocity/src/mapdom.js~mapdom",
     "class/src/mapdom.js~MapDOM.html",
     "<span>MapDOM</span> <span class=\"search-result-import-path\">attrocity/src/mapdom.js</span>",
+    "class"
+  ],
+  [
+    "attrocity/src/observables/element.js~observableelement",
+    "class/src/observables/element.js~ObservableElement.html",
+    "<span>ObservableElement</span> <span class=\"search-result-import-path\">attrocity/src/observables/element.js</span>",
+    "class"
+  ],
+  [
+    "attrocity/src/observables/object.js~observableobject",
+    "class/src/observables/object.js~ObservableObject.html",
+    "<span>ObservableObject</span> <span class=\"search-result-import-path\">attrocity/src/observables/object.js</span>",
     "class"
   ],
   [
@@ -300,6 +324,48 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
+    "src/bind.js",
+    "file/src/bind.js.html",
+    "src/bind.js",
+    "file"
+  ],
+  [
+    "src/bind.js~binding#_destinations",
+    "class/src/bind.js~Binding.html#instance-member-_destinations",
+    "src/bind.js~Binding#_destinations",
+    "member"
+  ],
+  [
+    "src/bind.js~binding#_ondatachange",
+    "class/src/bind.js~Binding.html#instance-method-_onDataChange",
+    "src/bind.js~Binding#_onDataChange",
+    "method"
+  ],
+  [
+    "src/bind.js~binding#_sources",
+    "class/src/bind.js~Binding.html#instance-member-_sources",
+    "src/bind.js~Binding#_sources",
+    "member"
+  ],
+  [
+    "src/bind.js~binding#add",
+    "class/src/bind.js~Binding.html#instance-method-add",
+    "src/bind.js~Binding#add",
+    "method"
+  ],
+  [
+    "src/bind.js~binding#constructor",
+    "class/src/bind.js~Binding.html#instance-constructor-constructor",
+    "src/bind.js~Binding#constructor",
+    "method"
+  ],
+  [
+    "src/bind.js~binding#remove",
+    "class/src/bind.js~Binding.html#instance-method-remove",
+    "src/bind.js~Binding#remove",
+    "method"
+  ],
+  [
     "src/convert.js",
     "file/src/convert.js.html",
     "src/convert.js",
@@ -354,6 +420,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/main.js~main.observables",
+    "class/src/main.js~Main.html#static-get-Observables",
+    "src/main.js~Main.Observables",
+    "member"
+  ],
+  [
     "src/mapdom.js",
     "file/src/mapdom.js.html",
     "src/mapdom.js",
@@ -375,6 +447,150 @@ window.esdocSearchIndex = [
     "src/mapdom.js~mapdom.map",
     "class/src/mapdom.js~MapDOM.html#static-method-map",
     "src/mapdom.js~MapDOM.map",
+    "method"
+  ],
+  [
+    "src/observables/abstractobservable.js",
+    "file/src/observables/abstractobservable.js.html",
+    "src/observables/abstractobservable.js",
+    "file"
+  ],
+  [
+    "src/observables/abstractobservable.js~abstractobservable#_callbacks",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-member-_callbacks",
+    "src/observables/abstractobservable.js~AbstractObservable#_callbacks",
+    "member"
+  ],
+  [
+    "src/observables/abstractobservable.js~abstractobservable#_id",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-member-_id",
+    "src/observables/abstractobservable.js~AbstractObservable#_id",
+    "member"
+  ],
+  [
+    "src/observables/abstractobservable.js~abstractobservable#_model",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-member-_model",
+    "src/observables/abstractobservable.js~AbstractObservable#_model",
+    "member"
+  ],
+  [
+    "src/observables/abstractobservable.js~abstractobservable#addcallback",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-method-addCallback",
+    "src/observables/abstractobservable.js~AbstractObservable#addCallback",
+    "method"
+  ],
+  [
+    "src/observables/abstractobservable.js~abstractobservable#addcallbacks",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-method-addCallbacks",
+    "src/observables/abstractobservable.js~AbstractObservable#addCallbacks",
+    "method"
+  ],
+  [
+    "src/observables/abstractobservable.js~abstractobservable#constructor",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-constructor-constructor",
+    "src/observables/abstractobservable.js~AbstractObservable#constructor",
+    "method"
+  ],
+  [
+    "src/observables/abstractobservable.js~abstractobservable#data",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-get-data",
+    "src/observables/abstractobservable.js~AbstractObservable#data",
+    "member"
+  ],
+  [
+    "src/observables/abstractobservable.js~abstractobservable#dispatchchange",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-method-dispatchChange",
+    "src/observables/abstractobservable.js~AbstractObservable#dispatchChange",
+    "method"
+  ],
+  [
+    "src/observables/abstractobservable.js~abstractobservable#id",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-get-id",
+    "src/observables/abstractobservable.js~AbstractObservable#id",
+    "member"
+  ],
+  [
+    "src/observables/abstractobservable.js~abstractobservable#removecallback",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-method-removeCallback",
+    "src/observables/abstractobservable.js~AbstractObservable#removeCallback",
+    "method"
+  ],
+  [
+    "src/observables/element.js",
+    "file/src/observables/element.js.html",
+    "src/observables/element.js",
+    "file"
+  ],
+  [
+    "src/observables/element.js~observableelement#_ignorenextmutationchange",
+    "class/src/observables/element.js~ObservableElement.html#instance-member-_ignoreNextMutationChange",
+    "src/observables/element.js~ObservableElement#_ignoreNextMutationChange",
+    "member"
+  ],
+  [
+    "src/observables/element.js~observableelement#_watchlist",
+    "class/src/observables/element.js~ObservableElement.html#instance-member-_watchlist",
+    "src/observables/element.js~ObservableElement#_watchlist",
+    "member"
+  ],
+  [
+    "src/observables/element.js~observableelement#constructor",
+    "class/src/observables/element.js~ObservableElement.html#instance-constructor-constructor",
+    "src/observables/element.js~ObservableElement#constructor",
+    "method"
+  ],
+  [
+    "src/observables/element.js~observableelement#getkey",
+    "class/src/observables/element.js~ObservableElement.html#instance-method-getKey",
+    "src/observables/element.js~ObservableElement#getKey",
+    "method"
+  ],
+  [
+    "src/observables/element.js~observableelement#onmutationchange",
+    "class/src/observables/element.js~ObservableElement.html#instance-method-onMutationChange",
+    "src/observables/element.js~ObservableElement#onMutationChange",
+    "method"
+  ],
+  [
+    "src/observables/element.js~observableelement#setkey",
+    "class/src/observables/element.js~ObservableElement.html#instance-method-setKey",
+    "src/observables/element.js~ObservableElement#setKey",
+    "method"
+  ],
+  [
+    "src/observables/object.js",
+    "file/src/observables/object.js.html",
+    "src/observables/object.js",
+    "file"
+  ],
+  [
+    "src/observables/object.js~observableobject#addproperty",
+    "class/src/observables/object.js~ObservableObject.html#instance-method-addProperty",
+    "src/observables/object.js~ObservableObject#addProperty",
+    "method"
+  ],
+  [
+    "src/observables/object.js~observableobject#autowire",
+    "class/src/observables/object.js~ObservableObject.html#instance-method-autoWire",
+    "src/observables/object.js~ObservableObject#autoWire",
+    "method"
+  ],
+  [
+    "src/observables/object.js~observableobject#constructor",
+    "class/src/observables/object.js~ObservableObject.html#instance-constructor-constructor",
+    "src/observables/object.js~ObservableObject#constructor",
+    "method"
+  ],
+  [
+    "src/observables/object.js~observableobject#getkey",
+    "class/src/observables/object.js~ObservableObject.html#instance-method-getKey",
+    "src/observables/object.js~ObservableObject#getKey",
+    "method"
+  ],
+  [
+    "src/observables/object.js~observableobject#setkey",
+    "class/src/observables/object.js~ObservableObject.html#instance-method-setKey",
+    "src/observables/object.js~ObservableObject#setKey",
     "method"
   ]
 ]

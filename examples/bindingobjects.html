@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Binding Objects</title>
+
+    <script type="module">
+        import Bind from '../src/bind.js';
+        import ObservableObject from '../src/observables/object.js';
+
+        const model1 = new ObservableObject({
+            property1: 'test1',
+            property2: 'test2',
+            property3: 'test3',
+            property4: 'test4',
+        });
+
+        const model2 = new ObservableObject({
+            property1: '',
+            property2: '',
+            property3: '',
+            property4: '',
+        });
+
+
+        const bind = new Bind();
+        bind.add(model1, true, true);
+        bind.add(model2, true, true);
+
+        model1.property1 = 'test5';
+        console.log(model1.data);
+        console.log(model2.data);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,19 +1,26 @@
 {
-  "coverage": "69.23%",
-  "expectCount": 13,
-  "actualCount": 9,
+  "coverage": "71.11%",
+  "expectCount": 45,
+  "actualCount": 32,
   "files": {
+    "src/bind.js": {
+      "expectCount": 7,
+      "actualCount": 4,
+      "undocumentLines": [
+        3,
+        8,
+        9
+      ]
+    },
     "src/convert.js": {
       "expectCount": 6,
       "actualCount": 6,
       "undocumentLines": []
     },
     "src/main.js": {
-      "expectCount": 3,
-      "actualCount": 0,
+      "expectCount": 4,
+      "actualCount": 3,
       "undocumentLines": [
-        4,
-        5,
         6
       ]
     },
@@ -22,6 +29,32 @@
       "actualCount": 3,
       "undocumentLines": [
         1
+      ]
+    },
+    "src/observables/abstractobservable.js": {
+      "expectCount": 11,
+      "actualCount": 7,
+      "undocumentLines": [
+        1,
+        8,
+        9,
+        10
+      ]
+    },
+    "src/observables/element.js": {
+      "expectCount": 7,
+      "actualCount": 4,
+      "undocumentLines": [
+        3,
+        14,
+        25
+      ]
+    },
+    "src/observables/object.js": {
+      "expectCount": 6,
+      "actualCount": 5,
+      "undocumentLines": [
+        3
       ]
     }
   }

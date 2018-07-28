@@ -29,9 +29,13 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/convert.js~Convert.html">Convert</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/bind.js~Binding.html">Binding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/convert.js~Convert.html">Convert</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Main.html">Main</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/mapdom.js~MapDOM.html">MapDOM</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#observables">observables</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/abstractobservable.js~AbstractObservable.html">AbstractObservable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/element.js~ObservableElement.html">ObservableElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/object.js~ObservableObject.html">ObservableObject</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -39,10 +43,36 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/main.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Convert from &apos;./convert.js&apos;;
 import MapDOM from &apos;./mapdom.js&apos;;
+import ObservableAttributes from &quot;./observables/element.js&quot;;
+import ObservableObject from &quot;./observables/object.js&quot;;
 
 export default class Main {
+
+    /**
+     * Convert
+     * @returns {Convert}
+     * @constructor
+     */
     static get Convert() { return Convert; }
+
+    /**
+     * MapDOM
+     * @returns {MapDOM}
+     * @constructor
+     */
     static get MapDOM() { return MapDOM; }
+
+    /**
+     * Observables
+     * @returns {{Element: ObservableElement, Object: ObservableObject}}
+     * @constructor
+     */
+    static get Observables() {
+        return {
+            Element: ObservableElement,
+            Object: ObservableObject
+        }
+    }
 }
 </code></pre>
 
