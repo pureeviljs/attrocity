@@ -9,6 +9,7 @@ export default class ObservableObject extends AbstractObservable {
      */
     constructor(obj, cb, watchlist) {
         super(obj, cb);
+        this._propertyAccessors = {};
         if (!watchlist) {
             this.autoWire();
         } else {
@@ -17,6 +18,15 @@ export default class ObservableObject extends AbstractObservable {
             }
         }
     }
+
+    /**
+     * get data
+     * @returns {*}
+     */
+    get data() {
+        return this._propertyAccessors;
+    }
+
 
     /**
      * automatically detect all property keys and add listeners
@@ -55,14 +65,15 @@ export default class ObservableObject extends AbstractObservable {
      * @param {String} name
      */
     addProperty(name) {
-        Object.defineProperty(this, name, {
+        let scope = this;
+        Object.defineProperty(this._propertyAccessors, name, {
             configurable: false,
             enumerable: true,
             set: function (v) {
-                this.setKey(name, v);
+                scope.setKey(name, v);
             },
             get: function () {
-                return this.getKey(name);
+                return scope.getKey(name);
             }
         });
     }
