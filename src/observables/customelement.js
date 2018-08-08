@@ -7,9 +7,10 @@ export default class ObservableCustomElement extends AbstractObservable {
      * @param clazz
      * @param attributes
      * @param callback
+     * @param observableGetterName
      * @returns {*}
      */
-    static attach(clazz, attributes, callback) {
+    static attach(clazz, attributes, callback, observableGetterName) {
         clazz.prototype.attributeChangedCallback = function(name, oldValue, newValue) {
             if (!this.__$observable$) {
                 this.__$observable$ = new ObservableCustomElement(this, callback);
@@ -18,11 +19,24 @@ export default class ObservableCustomElement extends AbstractObservable {
             if (this.__$observable$._ignoreNextChange) {
                 return;
             }
+
             this.__$observable$.dispatchChange(this, name, newValue);
         }
 
         Object.defineProperty(clazz, 'observedAttributes', {
             get: function() { return [attributes]; }
+        });
+
+        if (!observableGetterName) {
+            observableGetterName = 'observable';
+        }
+        Object.defineProperty(clazz.prototype, observableGetterName, {
+            get: function() {
+                if (!this.__$observable$) {
+                    this.__$observable$ = new ObservableCustomElement(this, callback);
+                }
+                return this.__$observable$;
+            }
         });
 
         return clazz;

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Binding Objects</title>
+
+    <script type="module">
+        import Bind from '../src/bind.js';
+        import ObservableCustomElement from '../src/observables/customelement.js';
+        import ObservableObject from '../src/observables/object.js';
+
+        class SampleComponent extends HTMLElement {
+            connectedCallback() {
+                const model = new ObservableObject({test: 'test1'});
+
+                const bind = new Bind();
+                bind.add(model, true, true);
+                bind.add(this.observable, true, true);
+
+                model.data.test = 'brandnewvalue';
+            }
+        }
+
+        customElements.define('sample-component', ObservableCustomElement.attach(SampleComponent, ['test']));
+    </script>
+</head>
+<body>
+    <sample-component test="hi"></sample-component>
+</body>
+</html>
