@@ -4,23 +4,15 @@
     <meta charset="UTF-8">
     <title>Observable Web Component</title>
     <script type="module">
-        import ObservableCustomElement from "../src/observables/customelement.js";
+        import Observable from "../src/observables/customelement.js";
 
         class SampleComponent extends HTMLElement {
-            static get observedAttributes() { return ['test'] };
-
-            connectedCallback() {
-                const attrs = new ObservableCustomElement(this, (object, name, value) => this.onAttributeChanged(name, value));
-            }
-
-            attributeChangedCallback(name, oldval, newval) {
-                console.log(name);
-            }
-            onAttributeChanged(name, value) {
+            onAttributeChanged(target, name, value) {
                 console.log(name, value);
             }
         }
-        customElements.define('sample-component', SampleComponent);
+
+        customElements.define('sample-component', Observable.attach(SampleComponent, ['test'], SampleComponent.prototype.onAttributeChanged) );
     </script>
 </head>
 <body>
