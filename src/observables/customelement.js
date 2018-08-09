@@ -24,7 +24,7 @@ export default class ObservableCustomElement extends AbstractObservable {
         }
 
         Object.defineProperty(clazz, 'observedAttributes', {
-            get: function() { return [attributes]; }
+            get: function() { return attributes; }
         });
 
         if (!observableGetterName) {

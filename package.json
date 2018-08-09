@@ -14,7 +14,7 @@
     "rollup": "./node_modules/bin/rollup"
   },
   "scripts": {
-    "test": "tap tests/*.js",
+    "test": "tap tests/*.js tests/**/*.js",
     "build": "rollup src/main.js --file attrocity.js --format umd --name attrocity",
     "doc": "./node_modules/.bin/esdoc -c esdoc.json"
   }

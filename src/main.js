@@ -1,7 +1,8 @@
 import Convert from './convert.js';
 import MapDOM from './mapdom.js';
-import ObservableAttributes from "./observables/element.js";
-import ObservableObject from "./observables/object.js";
+import ObservableElement from './observables/element.js';
+import ObservableObject from './observables/object.js';
+import ObservableCustomElement from './observables/customelement.js';
 
 export default class Main {
 
@@ -27,6 +28,7 @@ export default class Main {
     static get Observables() {
         return {
             Element: ObservableElement,
+            CustomElement: ObservableCustomElement,
             Object: ObservableObject
         }
     }
