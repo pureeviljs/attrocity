@@ -12,48 +12,41 @@ export default class Reflect {
      * @returns {*}
      */
     static attach(clazz, attributes, callback, bindingGetterName) {
-        clazz.prototype.attributeChangedCallback = function(name, oldValue, newValue) {
-            this.__$instantiateBindings$();
-
-            if (this.__$bindings$._ignoreNextChange) {
-                return;
-            }
-            //this.__$bindings$.dispatchChange(this, name, newValue);
-        };
+        clazz.prototype.attributeChangedCallback = ObservableCustomElement.attachableMethods.attributeChangedCallback;
 
         Object.defineProperty(clazz, 'observedAttributes', {
             get: function() { return attributes; }
         });
 
-        clazz.prototype.__$instantiateBindings$ = function() {
-            if (!this.__$bindings$) {
-                this.__$bindings$ = {};
-                this.__$bindings$.customElement = new ObservableCustomElement(this, callback);
-                const obj = {};
-                for (let c = 0; c < attributes.length; c++) {
-                    obj[attributes[c]] = this.getAttribute(attributes[c]);
-                    Object.defineProperty(this, attributes[c], {
-                        set: function(val) { return this.__$bindings$.dataModel.setKey(attributes[c], val) },
-                        get: function() { return this.__$bindings$.dataModel.getKey(attributes[c]) }
-                    });
-                }
-                this.__$bindings$.dataModel = new ObservableObject(obj);
-                this.__$bindings$.binding = new Bind();
-                this.__$bindings$.binding.add(this.__$bindings$.dataModel, true, true);
-                this.__$bindings$.binding.add(this.__$bindings$.customElement, true, true);
-            }
-        };
-
-        if (!bindingGetterName) {
-            bindingGetterName = 'bindings';
-        }
-
+        if (!bindingGetterName) { bindingGetterName = 'binding'; }
         Object.defineProperty(clazz.prototype, bindingGetterName, {
             get: function() {
-                this.__$instantiateBindings$();
-                return this.__$bindings$;
+                if (!this.__attrocity.isInitialized) {
+                    this.__attrocity.init(this);
+                }
+                return this.__attrocity.observables.customElement;
             }
         });
+
+        Object.defineProperty(clazz.prototype, '__attrocity', ObservableCustomElement.attachableMethods.instanceRefs);
+
+        clazz.prototype.__attrocity.init = function(scope) {
+            const obj = {};
+            for (let c = 0; c < attributes.length; c++) {
+                obj[attributes[c]] = scope.getAttribute(attributes[c]);
+                Object.defineProperty(scope, attributes[c], {
+                    set: function(val) { return scope.__attrocity.observables.dataModel.setKey(attributes[c], val) },
+                    get: function() { return scope.__attrocity.observables.dataModel.getKey(attributes[c]) }
+                });
+            }
+
+            scope.__attrocity.observables.customElement = new ObservableCustomElement(scope, callback);
+            scope.__attrocity.observables.dataModel = new ObservableObject(obj);
+            scope.__attrocity.binding = new Bind();
+            scope.__attrocity.binding.add(scope.__attrocity.observables.dataModel, true, true);
+            scope.__attrocity.binding.add(scope.__attrocity.observables.customElement, true, true);
+            scope.__attrocity.isInitialized = true;
+        };
 
         return clazz;
     }

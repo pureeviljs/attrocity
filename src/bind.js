@@ -16,11 +16,10 @@ export default class Binding {
      * @param {Boolean} isDest is a binding destination
      */
     add(obj, isSrc, isDest) {
-        if (!obj instanceof AbstractObservable) {
+        if (obj instanceof AbstractObservable === false) {
             console.error('Adding binding for non-observable object', obj);
             return;
         }
-
         if (isSrc) {
             const cbID = obj.addCallback( (obj, key, value) => this._onDataChange(obj, key, value));
             this._sources.set(obj.id, { observable: obj, callback: cbID });
