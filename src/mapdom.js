@@ -60,6 +60,13 @@ export default class MapDOM {
                     } else {
                         level[prop] = {}
                     }
+                    level = level[prop];
+                } else {
+                    // already populated, turn key/value into key/array
+                    if (!Array.isArray(level[prop])) {
+                        level[prop] = [ level[prop] ];
+                    }
+                    level[prop].push(nondeepEls[c]);
                 }
                 level = level[prop];
             }
