@@ -168,6 +168,13 @@
                         } else {
                             level[prop] = {};
                         }
+                        level = level[prop];
+                    } else {
+                        // already populated, turn key/value into key/array
+                        if (!Array.isArray(level[prop])) {
+                            level[prop] = [ level[prop] ];
+                        }
+                        level[prop].push(nondeepEls[c]);
                     }
                     level = level[prop];
                 }
@@ -243,7 +250,7 @@
          */
         dispatchChange(obj, name, value) {
             this._callbacks.forEach(cb => {
-                cb.apply(this, [obj, name, value]);
+                cb.apply(obj, [name, value]);
             });
         }
     }
@@ -384,6 +391,29 @@
     }
 
     class ObservableCustomElement extends AbstractObservable {
+        static get attachableMethods() { return {
+                attributeChangedCallback: function (name, oldValue, newValue) {
+                    if (!this.__attrocity.isInitialized) {
+                        this.__attrocity.init(this);
+                    }
+
+                    if (this.__attrocity.observables.customElement.ignoreNextChange) {
+                        return;
+                    }
+
+                    this.__attrocity.observables.customElement.dispatchChange(this, name, newValue);
+                },
+
+                instanceRefs: {
+                    value: {
+                        init: function(scope) {},
+                        isInitialized: false,
+                        observables: {}
+                    },
+                    writable: false
+                }
+            }
+        };
 
         /**
          * attach class to web component as a mixin
@@ -394,33 +424,27 @@
          * @returns {*}
          */
         static attach(clazz, attributes, callback, observableGetterName) {
-            clazz.prototype.attributeChangedCallback = function(name, oldValue, newValue) {
-                if (!this.__$observable$) {
-                    this.__$observable$ = new ObservableCustomElement(this, callback);
-                }
-
-                if (this.__$observable$._ignoreNextChange) {
-                    return;
-                }
-
-                this.__$observable$.dispatchChange(this, name, newValue);
-            };
+            clazz.prototype.attributeChangedCallback = ObservableCustomElement.attachableMethods.attributeChangedCallback;
 
             Object.defineProperty(clazz, 'observedAttributes', {
-                get: function() { return [attributes]; }
+                get: function() { return attributes; }
             });
 
-            if (!observableGetterName) {
-                observableGetterName = 'observable';
-            }
+            if (!observableGetterName) { observableGetterName = 'observable'; }
             Object.defineProperty(clazz.prototype, observableGetterName, {
                 get: function() {
-                    if (!this.__$observable$) {
-                        this.__$observable$ = new ObservableCustomElement(this, callback);
+                    if (!this.__attrocity.isInitialized) {
+                        this.__attrocity.init(this);
                     }
-                    return this.__$observable$;
+                    return this.__attrocity.observables.customElement;
                 }
             });
+
+            Object.defineProperty(clazz.prototype, '__attrocity', ObservableCustomElement.attachableMethods.instanceRefs);
+            clazz.prototype.__attrocity.init = function(scope) {
+                scope.__attrocity.observables.customElement = new ObservableCustomElement(scope, callback);
+                scope.__attrocity.isInitialized = true;
+            };
 
             return clazz;
         }
@@ -442,7 +466,7 @@
          */
         setKey(attr, value, donotdispatch) {
             if (donotdispatch) {
-                this._ignoreNextChange = true;
+                this.ignoreNextChange = true;
             }
             this.data.setAttribute(attr, value);
         }

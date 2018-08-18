@@ -11,7 +11,7 @@
     "tape": "^4.9.1"
   },
   "bin": {
-    "rollup": "./node_modules/rollup/bin/rollup"
+    "rollup": "$(npm bin)/rollup/bin/rollup"
   },
   "scripts": {
     "test": "tap tests/*.js tests/**/*.js",
