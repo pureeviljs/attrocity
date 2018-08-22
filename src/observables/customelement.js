@@ -52,7 +52,9 @@ export default class ObservableCustomElement extends AbstractObservable {
 
         Object.defineProperty(clazz.prototype, '__attrocity', ObservableCustomElement.attachableMethods.instanceRefs);
         clazz.prototype.__attrocity.init = function(scope) {
-            scope.__attrocity.observables.customElement = new ObservableCustomElement(scope, callback);
+            scope.__attrocity.observables.customElement = new ObservableCustomElement(scope, function(obj, name, value) {
+                callback.apply(scope, [name, value]);
+            });
             scope.__attrocity.isInitialized = true;
         };
 

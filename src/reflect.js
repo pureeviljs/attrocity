@@ -40,7 +40,9 @@ export default class Reflect {
                 });
             }
 
-            scope.__attrocity.observables.customElement = new ObservableCustomElement(scope, callback);
+            scope.__attrocity.observables.customElement = new ObservableCustomElement(scope, function(obj, name, value) {
+                callback.apply(scope, [name, value]);
+            });
             scope.__attrocity.observables.dataModel = new ObservableObject(obj);
             scope.__attrocity.binding = new Bind();
             scope.__attrocity.binding.add(scope.__attrocity.observables.dataModel, true, true);

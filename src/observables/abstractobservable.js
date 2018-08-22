@@ -65,7 +65,7 @@ export default class AbstractObservable {
      */
     dispatchChange(obj, name, value) {
         this._callbacks.forEach(cb => {
-            cb.apply(obj, [name, value]);
+            cb.apply(this, [obj, name, value]);
         });
     }
 }
