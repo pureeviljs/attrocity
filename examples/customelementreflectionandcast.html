@@ -14,8 +14,11 @@
 
             connectedCallback() {
                 this.binding = Reflect.createBindings(this);
-                this.binding.addCallback( (scope, name, value) => {
-                    console.log(name, value)
+                this.binding.addRule(['test', 'anothertest'], function(val) {
+                    return val + ' is the message I have today';
+                });
+                this.binding.addCallback( (name, value) => {
+                    console.log('name', name, 'value', value)
                 });
                 console.log(this.test);
                 this.test = 'bye';

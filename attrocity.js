@@ -356,6 +356,9 @@
          * @param {Boolean} donotdispatch - set key, but don't cause change event
          */
         setKey(name, value, donotdispatch) {
+            if (this._model[name] === value) {
+                return;
+            }
             this._model[name] = value;
             if (!donotdispatch) {
                 this.dispatchChange(this, name, value);
@@ -390,66 +393,177 @@
         }
     }
 
-    class ObservableCustomElement extends AbstractObservable {
-        static get attachableMethods() { return {
-                attributeChangedCallback: function (name, oldValue, newValue) {
-                    if (!this.__attrocity.isInitialized) {
-                        this.__attrocity.init(this);
-                    }
+    class Binding {
+        /**
+         * constructor
+         */
+        constructor(callbacks) {
+            this._destinations = new Map();
+            this._sources = new Map();
 
-                    if (this.__attrocity.observables.customElement.ignoreNextChange) {
-                        return;
-                    }
+            if (!callbacks) {
+                this._callbacks = [];
+            }
+            if (callbacks && !Array.isArray(callbacks)) {
+                this._callbacks = [callbacks];
+            }
+        }
 
-                    this.__attrocity.observables.customElement.dispatchChange(this, name, newValue);
-                },
+        addCallback(cb) {
+            this._callbacks.push(cb);
+        }
 
-                instanceRefs: {
-                    value: {
-                        init: function(scope) {},
-                        isInitialized: false,
-                        observables: {}
-                    },
-                    writable: false
+        /**
+         * add binding
+         * @param {AbstractObservable} obj
+         * @param {Boolean} isSrc is a binding source
+         * @param {Boolean} isDest is a binding destination
+         */
+        add(obj, isSrc, isDest) {
+            if (obj instanceof AbstractObservable === false) {
+                console.error('Adding binding for non-observable object', obj);
+                return;
+            }
+            if (isSrc) {
+                const cbID = obj.addCallback( (obj, key, value) => this._onDataChange(obj, key, value));
+                this._sources.set(obj.id, { observable: obj, callback: cbID });
+            }
+            if (isDest) {
+                this._destinations.set(obj.id, { observable: obj });
+            }
+        }
+
+        /**
+         * remove binding for object
+         * @param {AbstractObservable} obj
+         */
+        remove(obj) {
+            const dest = this._destinations.get(obj.id);
+            dest.observable.removeCallback(dest.observable.callback);
+            this._destinations.delete(obj.id);
+            this._sources.delete(obj.id);
+        }
+
+        /**
+         * on data changed from source
+         * @param {AbstractObservable} obj
+         * @param {String} key name of changed attribute
+         * @param value value of changed attribute
+         * @private
+         */
+        _onDataChange(obj, key, value) {
+            for (const dest of this._destinations.entries()){
+                if (obj.id !== dest[1].observable.id) {
+                    dest[1].observable.setKey(key, value, true);
                 }
             }
-        };
+            for (let c = 0; c < this._callbacks.length; c++) {
+                this._callbacks[c].apply(this, [obj, key, value]);
+            }
+        }
+    }
 
+    class CastingRules {
+        static defaultRule(value) {
+            if (value === 'true') { return true; }
+            if (value === 'false') { return false; }
+            if (!isNaN(Number(value))) { return Number(value); }
+            return value;
+        }
+
+        constructor() {
+            this._rules = new Map();
+            this._rules.set('*', [ CastingRules.defaultRule ]);
+
+        }
+
+        addRule(key, rule) {
+            if (key === '*') {
+                this._rules.get(key).push(rule);
+            } else if (Array.isArray(key)) {
+                for (let c = 0; c < key.length; c++) {
+                    this.addRule(key[c], rule );
+                }
+            } else {
+                this._rules.set(key, rule);
+            }
+        }
+
+        cast(key, value) {
+            let val = value;
+            const genericRules = this._rules.get('*');
+            for (let c = 0; c < genericRules.length; c++) {
+                val = genericRules[c](val);
+            }
+
+            if (this._rules.has(key)) {
+                return this._rules.get(key)(val);
+            } else {
+                return value;
+            }
+        }
+
+    }
+
+    class CustomElementBindingManager {
+        constructor() {
+            this._observables = {};
+            this._binding = new Binding();
+            this._rules = new CastingRules();
+        }
+
+        get binding() {
+            return this._binding;
+        }
+
+        addRule(key, rule) {
+            this._rules.addRule(key, rule);
+        }
+
+        addCallback(cb) {
+            this.binding.addCallback( (object, name, value) => {
+                cb(name, this._rules.cast(name, value));
+            });
+        }
+
+        add(name, observable, isSrc, isDest) {
+            this._observables[name] = observable;
+            this._binding.add(observable, isSrc, isDest);
+        }
+
+        getObservable(name) {
+            return this._observables[name];
+        }
+    }
+
+    class ObservableCustomElement extends AbstractObservable {
         /**
          * attach class to web component as a mixin
          * @param clazz
-         * @param attributes
-         * @param callback
-         * @param observableGetterName
          * @returns {*}
          */
-        static attach(clazz, attributes, callback, observableGetterName) {
-            clazz.prototype.attributeChangedCallback = ObservableCustomElement.attachableMethods.attributeChangedCallback;
-
-            Object.defineProperty(clazz, 'observedAttributes', {
-                get: function() { return attributes; }
-            });
-
-            if (!observableGetterName) { observableGetterName = 'observable'; }
-            Object.defineProperty(clazz.prototype, observableGetterName, {
-                get: function() {
-                    if (!this.__attrocity.isInitialized) {
-                        this.__attrocity.init(this);
-                    }
-                    return this.__attrocity.observables.customElement;
+        static attach(clazz) {
+            clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
+                if (this.__attrocity) {
+                    if (this.__attrocity.getObservable('customelement').ignoreNextChange) { return; }
+                    this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
                 }
-            });
-
-            Object.defineProperty(clazz.prototype, '__attrocity', ObservableCustomElement.attachableMethods.instanceRefs);
-            clazz.prototype.__attrocity.init = function(scope) {
-                scope.__attrocity.observables.customElement = new ObservableCustomElement(scope, function(obj, name, value) {
-                    callback.apply(scope, [name, value]);
-                });
-                scope.__attrocity.isInitialized = true;
             };
-
             return clazz;
         }
+
+        /**
+         * create bindings on instance
+         * @param scope
+         * @param opts
+         * @returns {CustomElementBindingManager}
+         */
+        static createBindings(scope, opts) {
+            scope.__attrocity = new CustomElementBindingManager();
+            scope.__attrocity.add('customelement', new ObservableCustomElement(scope), true, true);
+            return scope.__attrocity;
+        }
+
 
         /**
          * constructor

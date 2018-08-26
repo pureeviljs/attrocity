@@ -45,6 +45,9 @@ export default class ObservableObject extends AbstractObservable {
      * @param {Boolean} donotdispatch - set key, but don't cause change event
      */
     setKey(name, value, donotdispatch) {
+        if (this._model[name] === value) {
+            return;
+        }
         this._model[name] = value;
         if (!donotdispatch) {
             this.dispatchChange(this, name, value);

@@ -1,65 +1,34 @@
-import AbstractObservable from "./abstractobservable.js";
+import AbstractObservable from './abstractobservable.js';
+import CustomElementBindingManager from '../customelementbindingmanager.js';
 
 export default class ObservableCustomElement extends AbstractObservable {
-    static get attachableMethods() { return {
-            attributeChangedCallback: function (name, oldValue, newValue) {
-                if (!this.__attrocity.isInitialized) {
-                    this.__attrocity.init(this);
-                }
-
-                if (this.__attrocity.observables.customElement.ignoreNextChange) {
-                    return;
-                }
-
-                this.__attrocity.observables.customElement.dispatchChange(this, name, newValue);
-            },
-
-            instanceRefs: {
-                value: {
-                    init: function(scope) {},
-                    isInitialized: false,
-                    observables: {}
-                },
-                writable: false
-            }
-        }
-    };
-
     /**
      * attach class to web component as a mixin
      * @param clazz
-     * @param attributes
-     * @param callback
-     * @param observableGetterName
      * @returns {*}
      */
-    static attach(clazz, attributes, callback, observableGetterName) {
-        clazz.prototype.attributeChangedCallback = ObservableCustomElement.attachableMethods.attributeChangedCallback;
-
-        Object.defineProperty(clazz, 'observedAttributes', {
-            get: function() { return attributes; }
-        });
-
-        if (!observableGetterName) { observableGetterName = 'observable'; }
-        Object.defineProperty(clazz.prototype, observableGetterName, {
-            get: function() {
-                if (!this.__attrocity.isInitialized) {
-                    this.__attrocity.init(this);
-                }
-                return this.__attrocity.observables.customElement;
+    static attach(clazz) {
+        clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
+            if (this.__attrocity) {
+                if (this.__attrocity.getObservable('customelement').ignoreNextChange) { return; }
+                this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
             }
-        });
-
-        Object.defineProperty(clazz.prototype, '__attrocity', ObservableCustomElement.attachableMethods.instanceRefs);
-        clazz.prototype.__attrocity.init = function(scope) {
-            scope.__attrocity.observables.customElement = new ObservableCustomElement(scope, function(obj, name, value) {
-                callback.apply(scope, [name, value]);
-            });
-            scope.__attrocity.isInitialized = true;
         };
-
         return clazz;
     }
+
+    /**
+     * create bindings on instance
+     * @param scope
+     * @param opts
+     * @returns {CustomElementBindingManager}
+     */
+    static createBindings(scope, opts) {
+        scope.__attrocity = new CustomElementBindingManager();
+        scope.__attrocity.add('customelement', new ObservableCustomElement(scope), true, true);
+        return scope.__attrocity;
+    }
+
 
     /**
      * constructor

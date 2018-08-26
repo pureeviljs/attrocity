@@ -7,12 +7,22 @@
         import Observable from "../src/observables/customelement.js";
 
         class SampleComponent extends HTMLElement {
-            onAttributeChanged(target, name, value) {
+            static get observedAttributes() {
+                return ['test'];
+            }
+
+            constructor() {
+                super();
+                this.binding = Observable.createBindings(this);
+                this.binding.addCallback((name, value) => this.onAttributeChanged(name, value))
+            }
+
+            onAttributeChanged(name, value) {
                 console.log(name, value);
             }
         }
 
-        customElements.define('sample-component', Observable.attach(SampleComponent, ['test'], SampleComponent.prototype.onAttributeChanged) );
+        customElements.define('sample-component', Observable.attach(SampleComponent) );
     </script>
 </head>
 <body>

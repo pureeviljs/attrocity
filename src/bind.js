@@ -4,9 +4,20 @@ export default class Binding {
     /**
      * constructor
      */
-    constructor() {
+    constructor(callbacks) {
         this._destinations = new Map();
         this._sources = new Map();
+
+        if (!callbacks) {
+            this._callbacks = [];
+        }
+        if (callbacks && !Array.isArray(callbacks)) {
+            this._callbacks = [callbacks];
+        }
+    }
+
+    addCallback(cb) {
+        this._callbacks.push(cb)
     }
 
     /**
@@ -52,6 +63,9 @@ export default class Binding {
             if (obj.id !== dest[1].observable.id) {
                 dest[1].observable.setKey(key, value, true);
             }
+        }
+        for (let c = 0; c < this._callbacks.length; c++) {
+            this._callbacks[c].apply(this, [obj, key, value]);
         }
     }
 }
