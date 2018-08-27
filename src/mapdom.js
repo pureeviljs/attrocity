@@ -6,7 +6,8 @@ export default class MapDOM {
     static get defaults() {
         return {
             attribute: 'cache',
-            root: 'cacheroot'
+            root: 'cacheroot',
+            type: 'cachetype'
         }
     };
 
@@ -47,6 +48,8 @@ export default class MapDOM {
         // map to object
         for (let c = 0; c < nondeepEls.length; c++) {
             let props = nondeepEls[c].getAttribute(opts.attribute);
+            let type = nondeepEls[c].getAttribute(opts.type);
+
             let level = domcache;
             props = props.split('.');
             props = props.reverse();
@@ -57,12 +60,17 @@ export default class MapDOM {
                 if (!level[prop]) {
                     if (props.length === 0) {
                         level[prop] = nondeepEls[c];
+                        if (type === 'array') {
+                            level[prop] = [ nondeepEls[c] ];
+                        } else {
+                            level[prop] = nondeepEls[c];
+                        }
                     } else {
                         level[prop] = {}
                     }
                     level = level[prop];
                 } else {
-                    // already populated, turn key/value into key/array
+                    // already populated and wasn't marked as cachetype=array, turn key/value into key/array
                     if (!Array.isArray(level[prop])) {
                         level[prop] = [ level[prop] ];
                     }

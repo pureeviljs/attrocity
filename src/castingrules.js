@@ -34,7 +34,7 @@ export default class CastingRules {
         if (this._rules.has(key)) {
             return this._rules.get(key)(val);
         } else {
-            return value;
+            return val;
         }
     }
 
