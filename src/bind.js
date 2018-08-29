@@ -7,6 +7,7 @@ export default class Binding {
     constructor(callbacks) {
         this._destinations = new Map();
         this._sources = new Map();
+        this._namedCallbacks = {};
 
         if (!callbacks) {
             this._callbacks = [];
@@ -16,8 +17,15 @@ export default class Binding {
         }
     }
 
-    addCallback(cb) {
-        this._callbacks.push(cb)
+    addCallback(cb, name) {
+        if (!name) {
+            this._callbacks.push(cb);
+        } else {
+            if (!this._namedCallbacks[name]) {
+                this._namedCallbacks[name] = [];
+            }
+            this._namedCallbacks[name].push(cb);
+        }
     }
 
     /**
@@ -66,6 +74,13 @@ export default class Binding {
         }
         for (let c = 0; c < this._callbacks.length; c++) {
             this._callbacks[c].apply(this, [obj, key, value]);
+        }
+
+        if (this._namedCallbacks[key]) {
+            for (let c = 0; c < this._namedCallbacks[key].length; c++) {
+                this._namedCallbacks[key][c].apply(this, [obj, key, value]);
+            }
+
         }
     }
 }

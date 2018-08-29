@@ -20,10 +20,16 @@ export default class CustomElementBindingManager {
         this._rules.addRule(key, rule);
     }
 
-    addCallback(cb) {
-        this.binding.addCallback( (object, name, value) => {
-            cb(name, this._rules.cast(name, value));
-        });
+    addCallback(cb, name) {
+        if (!name) {
+            this.binding.addCallback( (object, name, value) => {
+                cb(name, this._rules.cast(name, value));
+            });
+        } else {
+            this.binding.addCallback( (object, name, value) => {
+                cb(this._rules.cast(name, value));
+            }, name);
+        }
     }
 
     add(name, observable, isSrc, isDest) {
