@@ -10,6 +10,7 @@ export default class ObservableObject extends AbstractObservable {
     constructor(obj, cb, watchlist) {
         super(obj, cb);
         this._propertyAccessors = {};
+        this._observing = true;
         if (!watchlist) {
             this.autoWire();
         } else {
@@ -18,6 +19,14 @@ export default class ObservableObject extends AbstractObservable {
             }
         }
     }
+
+    /**
+     * stop observation
+     */
+    stop() {
+        this._observing = false;
+    }
+
 
     /**
      * get data
@@ -49,7 +58,7 @@ export default class ObservableObject extends AbstractObservable {
             return;
         }
         this._model[name] = value;
-        if (!donotdispatch) {
+        if (!donotdispatch && this._observing) {
             this.dispatchChange(this, name, value);
         }
     }

@@ -10,9 +10,11 @@ export default class ObservableCustomElement extends AbstractObservable {
     static attach(clazz) {
         clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
             if (this.__attrocity) {
-                if (this.__attrocity.getObservable('customelement').ignoreNextChange) { return; }
+                if (this.__attrocity.getObservable('customelement').ignoreNextChange
+                || !this.__attrocity.getObservable('customelement')._observing ) { return; }
                 this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
             }
+            this.__attrocity.getObservable('customelement').ignoreNextChange = false;
         };
         return clazz;
     }
@@ -37,6 +39,14 @@ export default class ObservableCustomElement extends AbstractObservable {
      */
     constructor(el, cb) {
         super(el, cb);
+        this._observing = true;
+    }
+
+    /**
+     * stop observation
+     */
+    stop() {
+        this._observing = false;
     }
 
     /**

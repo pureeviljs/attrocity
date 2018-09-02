@@ -14,7 +14,7 @@
             constructor() {
                 super();
                 this.binding = Observable.createBindings(this);
-                this.binding.addCallback((name, value) => this.onAttributeChanged(name, value))
+                this.binding.addCallback((name, value) => this.onAttributeChanged(name, value));
             }
 
             onAttributeChanged(name, value) {
@@ -29,7 +29,10 @@
     <sample-component test="hi"></sample-component>
 
     <script>
-        document.querySelector('sample-component').setAttribute('test', 'bye');
+        setTimeout(function() {
+            console.log('timeout')
+            document.querySelector('sample-component').setAttribute('test', 'bye');
+        },50);
     </script>
 </body>
 </html>

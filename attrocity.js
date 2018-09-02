@@ -114,7 +114,8 @@
         static get defaults() {
             return {
                 attribute: 'cache',
-                root: 'cacheroot'
+                root: 'cacheroot',
+                type: 'cachetype'
             }
         };
 
@@ -155,6 +156,8 @@
             // map to object
             for (let c = 0; c < nondeepEls.length; c++) {
                 let props = nondeepEls[c].getAttribute(opts.attribute);
+                let type = nondeepEls[c].getAttribute(opts.type);
+
                 let level = domcache;
                 props = props.split('.');
                 props = props.reverse();
@@ -165,12 +168,17 @@
                     if (!level[prop]) {
                         if (props.length === 0) {
                             level[prop] = nondeepEls[c];
+                            if (type === 'array') {
+                                level[prop] = [ nondeepEls[c] ];
+                            } else {
+                                level[prop] = nondeepEls[c];
+                            }
                         } else {
                             level[prop] = {};
                         }
                         level = level[prop];
                     } else {
-                        // already populated, turn key/value into key/array
+                        // already populated and wasn't marked as cachetype=array, turn key/value into key/array
                         if (!Array.isArray(level[prop])) {
                             level[prop] = [ level[prop] ];
                         }
@@ -198,6 +206,11 @@
                 this.addCallback(cb);
             }
         }
+
+        /**
+         * stop observation
+         */
+        stop() {}
 
         /**
          * get ID
@@ -264,9 +277,16 @@
          */
         constructor(el, cb, watchlist) {
             super(el, cb);
-            const observer = new MutationObserver(e => this.onMutationChange(e));
-            observer.observe(el, { attributes: true });
+            this.observer = new MutationObserver(e => this.onMutationChange(e));
+            this.observer.observe(el, { attributes: true });
             this._watchlist = watchlist;
+        }
+
+        /**
+         * stop observation
+         */
+        stop() {
+            this.observer.disconnect();
         }
 
         /**
@@ -321,6 +341,7 @@
         constructor(obj, cb, watchlist) {
             super(obj, cb);
             this._propertyAccessors = {};
+            this._observing = true;
             if (!watchlist) {
                 this.autoWire();
             } else {
@@ -329,6 +350,14 @@
                 }
             }
         }
+
+        /**
+         * stop observation
+         */
+        stop() {
+            this._observing = false;
+        }
+
 
         /**
          * get data
@@ -360,7 +389,7 @@
                 return;
             }
             this._model[name] = value;
-            if (!donotdispatch) {
+            if (!donotdispatch && this._observing) {
                 this.dispatchChange(this, name, value);
             }
         }
@@ -400,6 +429,7 @@
         constructor(callbacks) {
             this._destinations = new Map();
             this._sources = new Map();
+            this._namedCallbacks = {};
 
             if (!callbacks) {
                 this._callbacks = [];
@@ -409,8 +439,15 @@
             }
         }
 
-        addCallback(cb) {
-            this._callbacks.push(cb);
+        addCallback(cb, name) {
+            if (!name) {
+                this._callbacks.push(cb);
+            } else {
+                if (!this._namedCallbacks[name]) {
+                    this._namedCallbacks[name] = [];
+                }
+                this._namedCallbacks[name].push(cb);
+            }
         }
 
         /**
@@ -460,6 +497,13 @@
             for (let c = 0; c < this._callbacks.length; c++) {
                 this._callbacks[c].apply(this, [obj, key, value]);
             }
+
+            if (this._namedCallbacks[key]) {
+                for (let c = 0; c < this._namedCallbacks[key].length; c++) {
+                    this._namedCallbacks[key][c].apply(this, [obj, key, value]);
+                }
+
+            }
         }
     }
 
@@ -499,7 +543,7 @@
             if (this._rules.has(key)) {
                 return this._rules.get(key)(val);
             } else {
-                return value;
+                return val;
             }
         }
 
@@ -516,14 +560,24 @@
             return this._binding;
         }
 
+        get castingRules() {
+            return this._rules;
+        }
+
         addRule(key, rule) {
             this._rules.addRule(key, rule);
         }
 
-        addCallback(cb) {
-            this.binding.addCallback( (object, name, value) => {
-                cb(name, this._rules.cast(name, value));
-            });
+        addCallback(cb, name) {
+            if (!name) {
+                this.binding.addCallback( (object, name, value) => {
+                    cb(name, this._rules.cast(name, value));
+                });
+            } else {
+                this.binding.addCallback( (object, name, value) => {
+                    cb(this._rules.cast(name, value));
+                }, name);
+            }
         }
 
         add(name, observable, isSrc, isDest) {
@@ -545,7 +599,8 @@
         static attach(clazz) {
             clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
                 if (this.__attrocity) {
-                    if (this.__attrocity.getObservable('customelement').ignoreNextChange) { return; }
+                    if (this.__attrocity.getObservable('customelement').ignoreNextChange
+                    || !this.__attrocity.getObservable('customelement')._observing ) { return; }
                     this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
                 }
             };
@@ -572,6 +627,14 @@
          */
         constructor(el, cb) {
             super(el, cb);
+            this._observing = true;
+        }
+
+        /**
+         * stop observation
+         */
+        stop() {
+            this._observing = false;
         }
 
         /**

@@ -14,13 +14,9 @@
 
             connectedCallback() {
                 this.binding = Reflect.createBindings(this);
-                this.binding.addCallback( (scope, name, value) => {
+                this.binding.addCallback( (name, value) => {
                     console.log(name, value)
                 });
-                console.log(this.test);
-                this.test = 'bye';
-                this.anothertest = 'something';
-                console.log(this.test);
             }
         }
 
@@ -29,5 +25,10 @@
 </head>
 <body>
     <sample-component test="hi"></sample-component>
+
+    <script>
+        document.querySelector('sample-component').setAttribute('test', 'set from attribute');
+        console.log(document.querySelector('sample-component').getAttribute('test'))
+    </script>
 </body>
 </html>

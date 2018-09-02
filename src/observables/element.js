@@ -9,9 +9,16 @@ export default class ObservableElement extends AbstractObservable {
      */
     constructor(el, cb, watchlist) {
         super(el, cb);
-        const observer = new MutationObserver(e => this.onMutationChange(e));
-        observer.observe(el, { attributes: true });
+        this.observer = new MutationObserver(e => this.onMutationChange(e));
+        this.observer.observe(el, { attributes: true });
         this._watchlist = watchlist;
+    }
+
+    /**
+     * stop observation
+     */
+    stop() {
+        this.observer.disconnect();
     }
 
     /**

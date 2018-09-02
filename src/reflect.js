@@ -16,6 +16,7 @@ export default class Reflect {
                 if (this.__attrocity.getObservable('customelement').ignoreNextChange) { return; }
                 this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
             }
+            this.__attrocity.getObservable('customelement').ignoreNextChange = false;
         };
         return clazz;
     }

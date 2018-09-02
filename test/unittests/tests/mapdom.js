@@ -1,4 +1,4 @@
-const MapDOM = require('../attrocity.js').MapDOM;
+const MapDOM = require('../../../attrocity.js').MapDOM;
 const test = require('tape');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
@@ -17,8 +17,19 @@ const dom = new JSDOM(`<div class="example">
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="example2">
+                            <ul>
+                                <li cache="items" secondarycache="items"></li>
+                                <li cache="items" thirdcache="items" cachetype="array"></li>
+                                <li cache="items"></li>
+                                <li cache="items"></li>
+                                <li cache="items"></li>
+                            </ul>
                         </div>`);
 const el = dom.window.document.querySelector('.example');
+const el2 = dom.window.document.querySelector('.example2');
+
 
 test('map dom with default settings', function (t) {
     t.plan(4);
@@ -38,5 +49,31 @@ test('map dom with non-default settings', function (t) {
 
     const dom = MapDOM.map(el, { attribute: 'map', root: null });
     t.equal(dom['more-text-span'].getAttribute('cache'), 'shouldnotgetpickedup');
+
+});
+
+test('map dom with multiple named items being coerced to array', function (t) {
+    t.plan(2);
+
+    const dom = MapDOM.map(el2);
+    t.equal(Array.isArray(dom.items), true);
+    t.equal(dom.items.length, 5);
+
+});
+
+test('map dom with one named item not being coerced to array', function (t) {
+    t.plan(1);
+
+    const dom = MapDOM.map(el2, { attribute: 'secondarycache' });
+    t.equal(Array.isArray(dom.items), false);
+});
+
+
+test('map dom with one named item specified as array', function (t) {
+    t.plan(2);
+
+    const dom = MapDOM.map(el2, { attribute: 'thirdcache' });
+    t.equal(Array.isArray(dom.items), true);
+    t.equal(dom.items.length, 1);
 
 });

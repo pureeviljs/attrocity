@@ -1,4 +1,4 @@
-const ObservableObject = require('../../attrocity.js').Observables.Object;
+const ObservableObject = require('../../../../attrocity.js').Observables.Object;
 const test = require('tape');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;

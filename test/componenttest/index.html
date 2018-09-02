@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="../../node_modules/@webcomponents/custom-elements/custom-elements.min.js"></script>
+  <script src="../../node_modules/web-component-tester/browser.js"></script>
+  <script type="module" src="dummycomponent-attributeobserve.js"></script>
+  <script type="module" src="dummycomponent-reflection.js"></script>
+</head>
+<body>
+<dummy-component--attribute-observe id="fixture" test="hi"></dummy-component--attribute-observe>
+<dummy-component--reflection id="fixture2" test="hi"></dummy-component--reflection>
+<script>
+    suite('<dummy-component--attribute-observe>', function() {
+        test('can support change observation (from attribute', function () {
+            setTimeout(function () {
+                const el = document.getElementById('fixture');
+                el.setAttribute('test', 'bye');
+                el.setAttribute('anothertest', 'a value');
+
+                assert.equal(el.testvalue.join(','), 'test,hi,test,bye,anothertest,a value');
+                assert.equal(el.getAttribute('test'), 'bye');
+                assert.equal(el.getAttribute('anothertest'), 'a value');
+            }, 10);
+        });
+
+        test('can support change observation (from API)', function () {
+            setTimeout(function () {
+                const el = document.getElementById('fixture');
+                el.test = 'bye';
+                el.anothertest = 'a value';
+
+                assert.equal(el.testvalue.join(','), 'test,hi,test,bye,anothertest,a value');
+                assert.equal(el.getAttribute('test'), 'bye');
+                assert.equal(el.getAttribute('anothertest'), 'a value');
+            }, 10);
+        });
+    });
+
+   suite('<dummy-component--refelection>', function() {
+        test('can support reflection to attributes', function() {
+            setTimeout(function() {
+              const el = document.getElementById('fixture2');
+              el.test = 'bye';
+              el.anothertest = 'a value';
+
+              assert.equal(el.getAttribute('test'), 'bye');
+              assert.equal(el.getAttribute('anothertest'), 'a value');
+            }, 10);
+        });
+
+        test('can support reflection to properties', function() {
+                const el = document.getElementById('fixture2');
+                el.setAttribute('finaltest', 'reflect');
+
+            setTimeout(function() {
+                assert.equal(el.finaltest, 'reflect');
+            }, 10);
+        });
+    });
+</script>
+</body>
+</html>

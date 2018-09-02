@@ -15,6 +15,11 @@ export default class AbstractObservable {
     }
 
     /**
+     * stop observation
+     */
+    stop() {}
+
+    /**
      * get ID
      * @returns {symbol | *}
      */
