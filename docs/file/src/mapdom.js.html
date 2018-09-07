@@ -30,10 +30,14 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/bind.js~Binding.html">Binding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/castingrules.js~CastingRules.html">CastingRules</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/convert.js~Convert.html">Convert</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/customelementbindingmanager.js~CustomElementBindingManager.html">CustomElementBindingManager</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Main.html">Main</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/mapdom.js~MapDOM.html">MapDOM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/reflect.js~Reflect.html">Reflect</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#observables">observables</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/abstractobservable.js~AbstractObservable.html">AbstractObservable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/customelement.js~ObservableCustomElement.html">ObservableCustomElement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/element.js~ObservableElement.html">ObservableElement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/object.js~ObservableObject.html">ObservableObject</a></span></span></li>
 </ul>
@@ -49,7 +53,8 @@
     static get defaults() {
         return {
             attribute: &apos;cache&apos;,
-            root: &apos;cacheroot&apos;
+            root: &apos;cacheroot&apos;,
+            type: &apos;cachetype&apos;
         }
     };
 
@@ -90,6 +95,8 @@
         // map to object
         for (let c = 0; c &lt; nondeepEls.length; c++) {
             let props = nondeepEls[c].getAttribute(opts.attribute);
+            let type = nondeepEls[c].getAttribute(opts.type);
+
             let level = domcache;
             props = props.split(&apos;.&apos;);
             props = props.reverse();
@@ -100,9 +107,21 @@
                 if (!level[prop]) {
                     if (props.length === 0) {
                         level[prop] = nondeepEls[c];
+                        if (type === &apos;array&apos;) {
+                            level[prop] = [ nondeepEls[c] ];
+                        } else {
+                            level[prop] = nondeepEls[c];
+                        }
                     } else {
                         level[prop] = {}
                     }
+                    level = level[prop];
+                } else {
+                    // already populated and wasn&apos;t marked as cachetype=array, turn key/value into key/array
+                    if (!Array.isArray(level[prop])) {
+                        level[prop] = [ level[prop] ];
+                    }
+                    level[prop].push(nondeepEls[c]);
                 }
                 level = level[prop];
             }

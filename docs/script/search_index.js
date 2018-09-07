@@ -12,9 +12,21 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "attrocity/src/castingrules.js~castingrules",
+    "class/src/castingrules.js~CastingRules.html",
+    "<span>CastingRules</span> <span class=\"search-result-import-path\">attrocity/src/castingrules.js</span>",
+    "class"
+  ],
+  [
     "attrocity/src/convert.js~convert",
     "class/src/convert.js~Convert.html",
     "<span>Convert</span> <span class=\"search-result-import-path\">attrocity/src/convert.js</span>",
+    "class"
+  ],
+  [
+    "attrocity/src/customelementbindingmanager.js~customelementbindingmanager",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html",
+    "<span>CustomElementBindingManager</span> <span class=\"search-result-import-path\">attrocity/src/customelementbindingmanager.js</span>",
     "class"
   ],
   [
@@ -30,6 +42,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "attrocity/src/observables/customelement.js~observablecustomelement",
+    "class/src/observables/customelement.js~ObservableCustomElement.html",
+    "<span>ObservableCustomElement</span> <span class=\"search-result-import-path\">attrocity/src/observables/customelement.js</span>",
+    "class"
+  ],
+  [
     "attrocity/src/observables/element.js~observableelement",
     "class/src/observables/element.js~ObservableElement.html",
     "<span>ObservableElement</span> <span class=\"search-result-import-path\">attrocity/src/observables/element.js</span>",
@@ -39,6 +57,12 @@ window.esdocSearchIndex = [
     "attrocity/src/observables/object.js~observableobject",
     "class/src/observables/object.js~ObservableObject.html",
     "<span>ObservableObject</span> <span class=\"search-result-import-path\">attrocity/src/observables/object.js</span>",
+    "class"
+  ],
+  [
+    "attrocity/src/reflect.js~reflect",
+    "class/src/reflect.js~Reflect.html",
+    "<span>Reflect</span> <span class=\"search-result-import-path\">attrocity/src/reflect.js</span>",
     "class"
   ],
   [
@@ -330,9 +354,21 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/bind.js~binding#_callbacks",
+    "class/src/bind.js~Binding.html#instance-member-_callbacks",
+    "src/bind.js~Binding#_callbacks",
+    "member"
+  ],
+  [
     "src/bind.js~binding#_destinations",
     "class/src/bind.js~Binding.html#instance-member-_destinations",
     "src/bind.js~Binding#_destinations",
+    "member"
+  ],
+  [
+    "src/bind.js~binding#_namedcallbacks",
+    "class/src/bind.js~Binding.html#instance-member-_namedCallbacks",
+    "src/bind.js~Binding#_namedCallbacks",
     "member"
   ],
   [
@@ -354,6 +390,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/bind.js~binding#addcallback",
+    "class/src/bind.js~Binding.html#instance-method-addCallback",
+    "src/bind.js~Binding#addCallback",
+    "method"
+  ],
+  [
     "src/bind.js~binding#constructor",
     "class/src/bind.js~Binding.html#instance-constructor-constructor",
     "src/bind.js~Binding#constructor",
@@ -363,6 +405,42 @@ window.esdocSearchIndex = [
     "src/bind.js~binding#remove",
     "class/src/bind.js~Binding.html#instance-method-remove",
     "src/bind.js~Binding#remove",
+    "method"
+  ],
+  [
+    "src/castingrules.js",
+    "file/src/castingrules.js.html",
+    "src/castingrules.js",
+    "file"
+  ],
+  [
+    "src/castingrules.js~castingrules#_rules",
+    "class/src/castingrules.js~CastingRules.html#instance-member-_rules",
+    "src/castingrules.js~CastingRules#_rules",
+    "member"
+  ],
+  [
+    "src/castingrules.js~castingrules#addrule",
+    "class/src/castingrules.js~CastingRules.html#instance-method-addRule",
+    "src/castingrules.js~CastingRules#addRule",
+    "method"
+  ],
+  [
+    "src/castingrules.js~castingrules#cast",
+    "class/src/castingrules.js~CastingRules.html#instance-method-cast",
+    "src/castingrules.js~CastingRules#cast",
+    "method"
+  ],
+  [
+    "src/castingrules.js~castingrules#constructor",
+    "class/src/castingrules.js~CastingRules.html#instance-constructor-constructor",
+    "src/castingrules.js~CastingRules#constructor",
+    "method"
+  ],
+  [
+    "src/castingrules.js~castingrules.defaultrule",
+    "class/src/castingrules.js~CastingRules.html#static-method-defaultRule",
+    "src/castingrules.js~CastingRules.defaultRule",
     "method"
   ],
   [
@@ -399,6 +477,72 @@ window.esdocSearchIndex = [
     "src/convert.js~convert.toattrstring",
     "class/src/convert.js~Convert.html#static-method-toAttrString",
     "src/convert.js~Convert.toAttrString",
+    "method"
+  ],
+  [
+    "src/customelementbindingmanager.js",
+    "file/src/customelementbindingmanager.js.html",
+    "src/customelementbindingmanager.js",
+    "file"
+  ],
+  [
+    "src/customelementbindingmanager.js~customelementbindingmanager#_binding",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html#instance-member-_binding",
+    "src/customelementbindingmanager.js~CustomElementBindingManager#_binding",
+    "member"
+  ],
+  [
+    "src/customelementbindingmanager.js~customelementbindingmanager#_observables",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html#instance-member-_observables",
+    "src/customelementbindingmanager.js~CustomElementBindingManager#_observables",
+    "member"
+  ],
+  [
+    "src/customelementbindingmanager.js~customelementbindingmanager#_rules",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html#instance-member-_rules",
+    "src/customelementbindingmanager.js~CustomElementBindingManager#_rules",
+    "member"
+  ],
+  [
+    "src/customelementbindingmanager.js~customelementbindingmanager#add",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html#instance-method-add",
+    "src/customelementbindingmanager.js~CustomElementBindingManager#add",
+    "method"
+  ],
+  [
+    "src/customelementbindingmanager.js~customelementbindingmanager#addcallback",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html#instance-method-addCallback",
+    "src/customelementbindingmanager.js~CustomElementBindingManager#addCallback",
+    "method"
+  ],
+  [
+    "src/customelementbindingmanager.js~customelementbindingmanager#addrule",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html#instance-method-addRule",
+    "src/customelementbindingmanager.js~CustomElementBindingManager#addRule",
+    "method"
+  ],
+  [
+    "src/customelementbindingmanager.js~customelementbindingmanager#binding",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html#instance-get-binding",
+    "src/customelementbindingmanager.js~CustomElementBindingManager#binding",
+    "member"
+  ],
+  [
+    "src/customelementbindingmanager.js~customelementbindingmanager#castingrules",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html#instance-get-castingRules",
+    "src/customelementbindingmanager.js~CustomElementBindingManager#castingRules",
+    "member"
+  ],
+  [
+    "src/customelementbindingmanager.js~customelementbindingmanager#constructor",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html#instance-constructor-constructor",
+    "src/customelementbindingmanager.js~CustomElementBindingManager#constructor",
+    "method"
+  ],
+  [
+    "src/customelementbindingmanager.js~customelementbindingmanager#getobservable",
+    "class/src/customelementbindingmanager.js~CustomElementBindingManager.html#instance-method-getObservable",
+    "src/customelementbindingmanager.js~CustomElementBindingManager#getObservable",
     "method"
   ],
   [
@@ -516,6 +660,66 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/observables/abstractobservable.js~abstractobservable#stop",
+    "class/src/observables/abstractobservable.js~AbstractObservable.html#instance-method-stop",
+    "src/observables/abstractobservable.js~AbstractObservable#stop",
+    "method"
+  ],
+  [
+    "src/observables/customelement.js",
+    "file/src/observables/customelement.js.html",
+    "src/observables/customelement.js",
+    "file"
+  ],
+  [
+    "src/observables/customelement.js~observablecustomelement#_observing",
+    "class/src/observables/customelement.js~ObservableCustomElement.html#instance-member-_observing",
+    "src/observables/customelement.js~ObservableCustomElement#_observing",
+    "member"
+  ],
+  [
+    "src/observables/customelement.js~observablecustomelement#constructor",
+    "class/src/observables/customelement.js~ObservableCustomElement.html#instance-constructor-constructor",
+    "src/observables/customelement.js~ObservableCustomElement#constructor",
+    "method"
+  ],
+  [
+    "src/observables/customelement.js~observablecustomelement#getkey",
+    "class/src/observables/customelement.js~ObservableCustomElement.html#instance-method-getKey",
+    "src/observables/customelement.js~ObservableCustomElement#getKey",
+    "method"
+  ],
+  [
+    "src/observables/customelement.js~observablecustomelement#ignorenextchange",
+    "class/src/observables/customelement.js~ObservableCustomElement.html#instance-member-ignoreNextChange",
+    "src/observables/customelement.js~ObservableCustomElement#ignoreNextChange",
+    "member"
+  ],
+  [
+    "src/observables/customelement.js~observablecustomelement#setkey",
+    "class/src/observables/customelement.js~ObservableCustomElement.html#instance-method-setKey",
+    "src/observables/customelement.js~ObservableCustomElement#setKey",
+    "method"
+  ],
+  [
+    "src/observables/customelement.js~observablecustomelement#stop",
+    "class/src/observables/customelement.js~ObservableCustomElement.html#instance-method-stop",
+    "src/observables/customelement.js~ObservableCustomElement#stop",
+    "method"
+  ],
+  [
+    "src/observables/customelement.js~observablecustomelement.attach",
+    "class/src/observables/customelement.js~ObservableCustomElement.html#static-method-attach",
+    "src/observables/customelement.js~ObservableCustomElement.attach",
+    "method"
+  ],
+  [
+    "src/observables/customelement.js~observablecustomelement.createbindings",
+    "class/src/observables/customelement.js~ObservableCustomElement.html#static-method-createBindings",
+    "src/observables/customelement.js~ObservableCustomElement.createBindings",
+    "method"
+  ],
+  [
     "src/observables/element.js",
     "file/src/observables/element.js.html",
     "src/observables/element.js",
@@ -546,6 +750,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/observables/element.js~observableelement#observer",
+    "class/src/observables/element.js~ObservableElement.html#instance-member-observer",
+    "src/observables/element.js~ObservableElement#observer",
+    "member"
+  ],
+  [
     "src/observables/element.js~observableelement#onmutationchange",
     "class/src/observables/element.js~ObservableElement.html#instance-method-onMutationChange",
     "src/observables/element.js~ObservableElement#onMutationChange",
@@ -558,10 +768,28 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/observables/element.js~observableelement#stop",
+    "class/src/observables/element.js~ObservableElement.html#instance-method-stop",
+    "src/observables/element.js~ObservableElement#stop",
+    "method"
+  ],
+  [
     "src/observables/object.js",
     "file/src/observables/object.js.html",
     "src/observables/object.js",
     "file"
+  ],
+  [
+    "src/observables/object.js~observableobject#_observing",
+    "class/src/observables/object.js~ObservableObject.html#instance-member-_observing",
+    "src/observables/object.js~ObservableObject#_observing",
+    "member"
+  ],
+  [
+    "src/observables/object.js~observableobject#_propertyaccessors",
+    "class/src/observables/object.js~ObservableObject.html#instance-member-_propertyAccessors",
+    "src/observables/object.js~ObservableObject#_propertyAccessors",
+    "member"
   ],
   [
     "src/observables/object.js~observableobject#addproperty",
@@ -582,6 +810,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/observables/object.js~observableobject#data",
+    "class/src/observables/object.js~ObservableObject.html#instance-get-data",
+    "src/observables/object.js~ObservableObject#data",
+    "member"
+  ],
+  [
     "src/observables/object.js~observableobject#getkey",
     "class/src/observables/object.js~ObservableObject.html#instance-method-getKey",
     "src/observables/object.js~ObservableObject#getKey",
@@ -591,6 +825,30 @@ window.esdocSearchIndex = [
     "src/observables/object.js~observableobject#setkey",
     "class/src/observables/object.js~ObservableObject.html#instance-method-setKey",
     "src/observables/object.js~ObservableObject#setKey",
+    "method"
+  ],
+  [
+    "src/observables/object.js~observableobject#stop",
+    "class/src/observables/object.js~ObservableObject.html#instance-method-stop",
+    "src/observables/object.js~ObservableObject#stop",
+    "method"
+  ],
+  [
+    "src/reflect.js",
+    "file/src/reflect.js.html",
+    "src/reflect.js",
+    "file"
+  ],
+  [
+    "src/reflect.js~reflect.attach",
+    "class/src/reflect.js~Reflect.html#static-method-attach",
+    "src/reflect.js~Reflect.attach",
+    "method"
+  ],
+  [
+    "src/reflect.js~reflect.createbindings",
+    "class/src/reflect.js~Reflect.html#static-method-createBindings",
+    "src/reflect.js~Reflect.createBindings",
     "method"
   ]
 ]

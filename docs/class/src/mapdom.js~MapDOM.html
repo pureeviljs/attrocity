@@ -30,10 +30,14 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/bind.js~Binding.html">Binding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/castingrules.js~CastingRules.html">CastingRules</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/convert.js~Convert.html">Convert</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/customelementbindingmanager.js~CustomElementBindingManager.html">CustomElementBindingManager</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Main.html">Main</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/mapdom.js~MapDOM.html">MapDOM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/reflect.js~Reflect.html">Reflect</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#observables">observables</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/abstractobservable.js~AbstractObservable.html">AbstractObservable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/customelement.js~ObservableCustomElement.html">ObservableCustomElement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/element.js~ObservableElement.html">ObservableElement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/object.js~ObservableObject.html">ObservableObject</a></span></span></li>
 </ul>
@@ -97,7 +101,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/mapdom.js~MapDOM.html#static-get-defaults">defaults</a></span></span><span class="code" data-ice="signature">: {attribute: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, root: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>}: {&quot;attribute&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, &quot;root&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>}</span>
+          <span class="code" data-ice="name"><span><a href="class/src/mapdom.js~MapDOM.html#static-get-defaults">defaults</a></span></span><span class="code" data-ice="signature">: {attribute: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, root: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>}: {&quot;attribute&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, &quot;root&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, &quot;type&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>}</span>
         </p>
       </div>
       <div>
@@ -196,7 +200,7 @@
     
     
     
-    <span class="code" data-ice="name">defaults</span><span class="code" data-ice="signature">: {attribute: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, root: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>}: {&quot;attribute&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, &quot;root&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>}</span>
+    <span class="code" data-ice="name">defaults</span><span class="code" data-ice="signature">: {attribute: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, root: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>}: {&quot;attribute&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, &quot;root&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, &quot;type&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>}</span>
     <span class="right-info">
       
       
@@ -259,7 +263,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/mapdom.js.html#lineNumber18">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/mapdom.js.html#lineNumber19">source</a></span></span>
     </span>
   </h3>
 
@@ -331,7 +335,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/mapdom.js.html#lineNumber25">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/mapdom.js.html#lineNumber26">source</a></span></span>
     </span>
   </h3>
 

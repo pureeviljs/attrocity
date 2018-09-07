@@ -106,6 +106,168 @@
         }
     }
 
+    class AbstractObservable {
+        /**
+         * constructor
+         * @param obj
+         * @param {Function} cb
+         */
+        constructor(obj, cb) {
+            this._model = obj;
+            this._id = Symbol();
+            this._callbacks = new Map();
+
+            if (cb) {
+                this.addCallback(cb);
+            }
+        }
+
+        /**
+         * stop observation
+         */
+        stop() {}
+
+        /**
+         * get ID
+         * @returns {symbol | *}
+         */
+        get id() { return this._id; }
+
+        /**
+         * get data
+         * @returns {*}
+         */
+        get data() { return this._model; }
+
+        /**
+         * add multiple callbacks
+         * @param cb
+         */
+        addCallbacks(cb) { this.addCallback(cb); }
+
+        /**
+         * add callback
+         * @param cb
+         * @returns {symbol}
+         */
+        addCallback(cb) {
+            if (Array.isArray(cb)) {
+                for (let c = 0; c < cb.length; c++) {
+                    this.addCallback(cb[c]);
+                }
+                return;
+            }
+            const id = Symbol();
+            this._callbacks.set(id, cb);
+            return id;
+        }
+
+        /**
+         * remove callback
+         * @param id
+         */
+        removeCallback(id) {
+            this._callbacks.delete(id);
+        }
+
+        /**
+         * dispatch change
+         * @param obj
+         * @param name
+         * @param value
+         */
+        dispatchChange(obj, name, value) {
+            this._callbacks.forEach(cb => {
+                cb.apply(this, [obj, name, value]);
+            });
+        }
+    }
+
+    class Binding {
+        /**
+         * constructor
+         */
+        constructor(callbacks) {
+            this._destinations = new Map();
+            this._sources = new Map();
+            this._namedCallbacks = {};
+
+            if (!callbacks) {
+                this._callbacks = [];
+            }
+            if (callbacks && !Array.isArray(callbacks)) {
+                this._callbacks = [callbacks];
+            }
+        }
+
+        addCallback(cb, name) {
+            if (!name) {
+                this._callbacks.push(cb);
+            } else {
+                if (!this._namedCallbacks[name]) {
+                    this._namedCallbacks[name] = [];
+                }
+                this._namedCallbacks[name].push(cb);
+            }
+        }
+
+        /**
+         * add binding
+         * @param {AbstractObservable} obj
+         * @param {Boolean} isSrc is a binding source
+         * @param {Boolean} isDest is a binding destination
+         */
+        add(obj, isSrc, isDest) {
+            if (obj instanceof AbstractObservable === false) {
+                console.error('Adding binding for non-observable object', obj);
+                return;
+            }
+            if (isSrc) {
+                const cbID = obj.addCallback( (obj, key, value) => this._onDataChange(obj, key, value));
+                this._sources.set(obj.id, { observable: obj, callback: cbID });
+            }
+            if (isDest) {
+                this._destinations.set(obj.id, { observable: obj });
+            }
+        }
+
+        /**
+         * remove binding for object
+         * @param {AbstractObservable} obj
+         */
+        remove(obj) {
+            const dest = this._destinations.get(obj.id);
+            dest.observable.removeCallback(dest.observable.callback);
+            this._destinations.delete(obj.id);
+            this._sources.delete(obj.id);
+        }
+
+        /**
+         * on data changed from source
+         * @param {AbstractObservable} obj
+         * @param {String} key name of changed attribute
+         * @param value value of changed attribute
+         * @private
+         */
+        _onDataChange(obj, key, value) {
+            for (const dest of this._destinations.entries()){
+                if (obj.id !== dest[1].observable.id) {
+                    dest[1].observable.setKey(key, value, true);
+                }
+            }
+            for (let c = 0; c < this._callbacks.length; c++) {
+                this._callbacks[c].apply(this, [obj, key, value]);
+            }
+
+            if (this._namedCallbacks[key]) {
+                for (let c = 0; c < this._namedCallbacks[key].length; c++) {
+                    this._namedCallbacks[key][c].apply(this, [obj, key, value]);
+                }
+
+            }
+        }
+    }
+
     class MapDOM {
         /**
          * defaults
@@ -189,83 +351,6 @@
             }
             return domcache;
         };
-    }
-
-    class AbstractObservable {
-        /**
-         * constructor
-         * @param obj
-         * @param {Function} cb
-         */
-        constructor(obj, cb) {
-            this._model = obj;
-            this._id = Symbol();
-            this._callbacks = new Map();
-
-            if (cb) {
-                this.addCallback(cb);
-            }
-        }
-
-        /**
-         * stop observation
-         */
-        stop() {}
-
-        /**
-         * get ID
-         * @returns {symbol | *}
-         */
-        get id() { return this._id; }
-
-        /**
-         * get data
-         * @returns {*}
-         */
-        get data() { return this._model; }
-
-        /**
-         * add multiple callbacks
-         * @param cb
-         */
-        addCallbacks(cb) { this.addCallback(cb); }
-
-        /**
-         * add callback
-         * @param cb
-         * @returns {symbol}
-         */
-        addCallback(cb) {
-            if (Array.isArray(cb)) {
-                for (let c = 0; c < cb.length; c++) {
-                    this.addCallback(cb[c]);
-                }
-                return;
-            }
-            const id = Symbol();
-            this._callbacks.set(id, cb);
-            return id;
-        }
-
-        /**
-         * remove callback
-         * @param id
-         */
-        removeCallback(id) {
-            this._callbacks.delete(id);
-        }
-
-        /**
-         * dispatch change
-         * @param obj
-         * @param name
-         * @param value
-         */
-        dispatchChange(obj, name, value) {
-            this._callbacks.forEach(cb => {
-                cb.apply(this, [obj, name, value]);
-            });
-        }
     }
 
     class ObservableElement extends AbstractObservable {
@@ -422,95 +507,11 @@
         }
     }
 
-    class Binding {
-        /**
-         * constructor
-         */
-        constructor(callbacks) {
-            this._destinations = new Map();
-            this._sources = new Map();
-            this._namedCallbacks = {};
-
-            if (!callbacks) {
-                this._callbacks = [];
-            }
-            if (callbacks && !Array.isArray(callbacks)) {
-                this._callbacks = [callbacks];
-            }
-        }
-
-        addCallback(cb, name) {
-            if (!name) {
-                this._callbacks.push(cb);
-            } else {
-                if (!this._namedCallbacks[name]) {
-                    this._namedCallbacks[name] = [];
-                }
-                this._namedCallbacks[name].push(cb);
-            }
-        }
-
-        /**
-         * add binding
-         * @param {AbstractObservable} obj
-         * @param {Boolean} isSrc is a binding source
-         * @param {Boolean} isDest is a binding destination
-         */
-        add(obj, isSrc, isDest) {
-            if (obj instanceof AbstractObservable === false) {
-                console.error('Adding binding for non-observable object', obj);
-                return;
-            }
-            if (isSrc) {
-                const cbID = obj.addCallback( (obj, key, value) => this._onDataChange(obj, key, value));
-                this._sources.set(obj.id, { observable: obj, callback: cbID });
-            }
-            if (isDest) {
-                this._destinations.set(obj.id, { observable: obj });
-            }
-        }
-
-        /**
-         * remove binding for object
-         * @param {AbstractObservable} obj
-         */
-        remove(obj) {
-            const dest = this._destinations.get(obj.id);
-            dest.observable.removeCallback(dest.observable.callback);
-            this._destinations.delete(obj.id);
-            this._sources.delete(obj.id);
-        }
-
-        /**
-         * on data changed from source
-         * @param {AbstractObservable} obj
-         * @param {String} key name of changed attribute
-         * @param value value of changed attribute
-         * @private
-         */
-        _onDataChange(obj, key, value) {
-            for (const dest of this._destinations.entries()){
-                if (obj.id !== dest[1].observable.id) {
-                    dest[1].observable.setKey(key, value, true);
-                }
-            }
-            for (let c = 0; c < this._callbacks.length; c++) {
-                this._callbacks[c].apply(this, [obj, key, value]);
-            }
-
-            if (this._namedCallbacks[key]) {
-                for (let c = 0; c < this._namedCallbacks[key].length; c++) {
-                    this._namedCallbacks[key][c].apply(this, [obj, key, value]);
-                }
-
-            }
-        }
-    }
-
     class CastingRules {
         static defaultRule(value) {
             if (value === 'true') { return true; }
             if (value === 'false') { return false; }
+            if (typeof value === 'boolean') { return value; }
             if (!isNaN(Number(value))) { return Number(value); }
             return value;
         }
@@ -603,6 +604,7 @@
                     || !this.__attrocity.getObservable('customelement')._observing ) { return; }
                     this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
                 }
+                this.__attrocity.getObservable('customelement').ignoreNextChange = false;
             };
             return clazz;
         }
@@ -661,6 +663,12 @@
     }
 
     class Main {
+        /**
+         * Bind
+         * @returns {Convert}
+         * @constructor
+         */
+        static get Bind() { return Binding; }
 
         /**
          * Convert

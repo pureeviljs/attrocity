@@ -2,6 +2,7 @@ export default class CastingRules {
     static defaultRule(value) {
         if (value === 'true') { return true; }
         if (value === 'false') { return false; }
+        if (typeof value === 'boolean') { return value; }
         if (!isNaN(Number(value))) { return Number(value); }
         return value;
     }

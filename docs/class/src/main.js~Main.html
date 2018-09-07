@@ -30,10 +30,14 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/bind.js~Binding.html">Binding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/castingrules.js~CastingRules.html">CastingRules</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/convert.js~Convert.html">Convert</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/customelementbindingmanager.js~CustomElementBindingManager.html">CustomElementBindingManager</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Main.html">Main</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/mapdom.js~MapDOM.html">MapDOM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/reflect.js~Reflect.html">Reflect</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#observables">observables</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/abstractobservable.js~AbstractObservable.html">AbstractObservable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/customelement.js~ObservableCustomElement.html">ObservableCustomElement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/element.js~ObservableElement.html">ObservableElement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/observables/object.js~ObservableObject.html">ObservableObject</a></span></span></li>
 </ul>
@@ -41,13 +45,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Main from &apos;<span><a href="file/src/main.js.html#lineNumber6">attrocity/src/main.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Main from &apos;<span><a href="file/src/main.js.html#lineNumber7">attrocity/src/main.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/main.js.html#lineNumber6">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/main.js.html#lineNumber7">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -155,7 +159,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/main.js~Main.html#static-get-Observables">Observables</a></span></span><span class="code" data-ice="signature">: {Element: <span><a href="class/src/observables/element.js~ObservableElement.html">ObservableElement</a></span>, Object: <span><a href="class/src/observables/object.js~ObservableObject.html">ObservableObject</a></span>}: {&quot;Element&quot;: <span>*</span>, &quot;Object&quot;: <span>*</span>}</span>
+          <span class="code" data-ice="name"><span><a href="class/src/main.js~Main.html#static-get-Observables">Observables</a></span></span><span class="code" data-ice="signature">: {Element: <span><a href="class/src/observables/element.js~ObservableElement.html">ObservableElement</a></span>, Object: <span><a href="class/src/observables/object.js~ObservableObject.html">ObservableObject</a></span>}: {&quot;Element&quot;: <span>*</span>, &quot;CustomElement&quot;: <span>*</span>, &quot;Object&quot;: <span>*</span>}</span>
         </p>
       </div>
       <div>
@@ -194,7 +198,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber13">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber14">source</a></span></span>
     </span>
   </h3>
 
@@ -250,7 +254,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber20">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber21">source</a></span></span>
     </span>
   </h3>
 
@@ -302,11 +306,11 @@
     
     
     
-    <span class="code" data-ice="name">Observables</span><span class="code" data-ice="signature">: {Element: <span><a href="class/src/observables/element.js~ObservableElement.html">ObservableElement</a></span>, Object: <span><a href="class/src/observables/object.js~ObservableObject.html">ObservableObject</a></span>}: {&quot;Element&quot;: <span>*</span>, &quot;Object&quot;: <span>*</span>}</span>
+    <span class="code" data-ice="name">Observables</span><span class="code" data-ice="signature">: {Element: <span><a href="class/src/observables/element.js~ObservableElement.html">ObservableElement</a></span>, Object: <span><a href="class/src/observables/object.js~ObservableObject.html">ObservableObject</a></span>}: {&quot;Element&quot;: <span>*</span>, &quot;CustomElement&quot;: <span>*</span>, &quot;Object&quot;: <span>*</span>}</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber27">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber28">source</a></span></span>
     </span>
   </h3>
 

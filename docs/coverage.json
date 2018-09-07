@@ -1,15 +1,30 @@
 {
-  "coverage": "71.11%",
-  "expectCount": 45,
-  "actualCount": 32,
+  "coverage": "51.19%",
+  "expectCount": 84,
+  "actualCount": 43,
   "files": {
     "src/bind.js": {
-      "expectCount": 7,
+      "expectCount": 10,
       "actualCount": 4,
       "undocumentLines": [
         3,
         8,
-        9
+        9,
+        10,
+        13,
+        20
+      ]
+    },
+    "src/castingrules.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        9,
+        10,
+        15,
+        27
       ]
     },
     "src/convert.js": {
@@ -17,11 +32,28 @@
       "actualCount": 6,
       "undocumentLines": []
     },
+    "src/customelementbindingmanager.js": {
+      "expectCount": 11,
+      "actualCount": 0,
+      "undocumentLines": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        11,
+        15,
+        19,
+        23,
+        35,
+        40
+      ]
+    },
     "src/main.js": {
       "expectCount": 4,
       "actualCount": 3,
       "undocumentLines": [
-        6
+        7
       ]
     },
     "src/mapdom.js": {
@@ -32,8 +64,8 @@
       ]
     },
     "src/observables/abstractobservable.js": {
-      "expectCount": 11,
-      "actualCount": 7,
+      "expectCount": 12,
+      "actualCount": 8,
       "undocumentLines": [
         1,
         8,
@@ -41,20 +73,40 @@
         10
       ]
     },
+    "src/observables/customelement.js": {
+      "expectCount": 9,
+      "actualCount": 6,
+      "undocumentLines": [
+        4,
+        42,
+        60
+      ]
+    },
     "src/observables/element.js": {
-      "expectCount": 7,
-      "actualCount": 4,
+      "expectCount": 9,
+      "actualCount": 5,
       "undocumentLines": [
         3,
+        12,
         14,
-        25
+        32
       ]
     },
     "src/observables/object.js": {
-      "expectCount": 6,
-      "actualCount": 5,
+      "expectCount": 10,
+      "actualCount": 7,
       "undocumentLines": [
-        3
+        3,
+        12,
+        13
+      ]
+    },
+    "src/reflect.js": {
+      "expectCount": 3,
+      "actualCount": 1,
+      "undocumentLines": [
+        5,
+        24
       ]
     }
   }

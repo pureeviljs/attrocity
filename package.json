@@ -16,7 +16,7 @@
   "scripts": {
     "test": "npm run componenttest && npm run unittest",
     "componenttest": "./node_modules/.bin/wct --npm test/componenttest",
-    "unittest": "./node_modules/.bin/tap test/unittests/tests/*.js unittests/tests/**/*.js",
+    "unittest": "./node_modules/.bin/tap test/unittests/tests/*.js unittests/tests/**/*.js --coverage",
     "build": "./node_modules/.bin/rollup src/main.js --file attrocity.js --format umd --name attrocity",
     "doc": "./node_modules/.bin/esdoc -c esdoc.json"
   }
