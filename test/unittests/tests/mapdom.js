@@ -21,7 +21,7 @@ const dom = new JSDOM(`<div class="example">
                         <div class="example2">
                             <ul>
                                 <li cache="items" secondarycache="items"></li>
-                                <li cache="items" thirdcache="items" cachetype="array"></li>
+                                <li cache="items" thirdcache="items"></li>
                                 <li cache="items"></li>
                                 <li cache="items"></li>
                                 <li cache="items"></li>
@@ -47,7 +47,7 @@ test('map dom with default settings', function (t) {
 test('map dom with non-default settings', function (t) {
     t.plan(1);
 
-    const dom = MapDOM.map(el, { attribute: 'map', root: null });
+    const dom = MapDOM.map(el, null, { attribute: 'map', root: null });
     t.equal(dom['more-text-span'].getAttribute('cache'), 'shouldnotgetpickedup');
 
 });
@@ -64,7 +64,7 @@ test('map dom with multiple named items being coerced to array', function (t) {
 test('map dom with one named item not being coerced to array', function (t) {
     t.plan(1);
 
-    const dom = MapDOM.map(el2, { attribute: 'secondarycache' });
+    const dom = MapDOM.map(el2, null, { attribute: 'secondarycache' });
     t.equal(Array.isArray(dom.items), false);
 });
 
@@ -72,8 +72,17 @@ test('map dom with one named item not being coerced to array', function (t) {
 test('map dom with one named item specified as array', function (t) {
     t.plan(2);
 
-    const dom = MapDOM.map(el2, { attribute: 'thirdcache' });
+    const dom = MapDOM.map(el2, { items: [] }, { attribute: 'thirdcache' });
     t.equal(Array.isArray(dom.items), true);
     t.equal(dom.items.length, 1);
+
+});
+
+test('map dom starting with one item, adding more from DOM', function (t) {
+    t.plan(2);
+
+    const dom = MapDOM.map(el2, { items: ['test'] }, { attribute: 'thirdcache' });
+    t.equal(Array.isArray(dom.items), true);
+    t.equal(dom.items.length, 2);
 
 });

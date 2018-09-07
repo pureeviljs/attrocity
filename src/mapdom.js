@@ -7,7 +7,6 @@ export default class MapDOM {
         return {
             attribute: 'cache',
             root: 'cacheroot',
-            type: 'cachetype'
         }
     };
 
@@ -21,13 +20,14 @@ export default class MapDOM {
     /**
      * map dom elements with desired attribute to object
      * @param node
+     * @param startingObj
      * @param opts
      */
-    static map(node, opts) {
+    static map(node, startingObj, opts) {
         opts = Object.assign(this.defaults, opts ? opts : {} );
         const selector = this.attributeSelector(opts.attribute);
 
-        let domcache = {};
+        let domcache = startingObj ? startingObj : {};
         let els = node.querySelectorAll(selector);
         let rootlevelEls = node.querySelectorAll(this.attributeSelector(opts.root));
 
@@ -48,8 +48,6 @@ export default class MapDOM {
         // map to object
         for (let c = 0; c < nondeepEls.length; c++) {
             let props = nondeepEls[c].getAttribute(opts.attribute);
-            let type = nondeepEls[c].getAttribute(opts.type);
-
             let level = domcache;
             props = props.split('.');
             props = props.reverse();
@@ -60,17 +58,12 @@ export default class MapDOM {
                 if (!level[prop]) {
                     if (props.length === 0) {
                         level[prop] = nondeepEls[c];
-                        if (type === 'array') {
-                            level[prop] = [ nondeepEls[c] ];
-                        } else {
-                            level[prop] = nondeepEls[c];
-                        }
                     } else {
                         level[prop] = {}
                     }
                     level = level[prop];
                 } else {
-                    // already populated and wasn't marked as cachetype=array, turn key/value into key/array
+                    // already populated, turn key/value into key/array
                     if (!Array.isArray(level[prop])) {
                         level[prop] = [ level[prop] ];
                     }
