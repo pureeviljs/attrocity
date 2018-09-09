@@ -1,3 +1,5 @@
+// TODO: Finish implementing dot notation for nested properties
+
 export default class MapDOM {
     /**
      * defaults

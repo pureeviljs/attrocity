@@ -16,7 +16,7 @@
                 super();
                 this.binding = Reflect.createBindings(this);
                 this.binding.addCallback( (name, value) => {
-                    //console.log(name, value)
+                    console.log('callback', name, value)
                 });
             }
         }

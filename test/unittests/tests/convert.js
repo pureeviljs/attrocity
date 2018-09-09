@@ -29,12 +29,13 @@ test('attributes to object', function (t) {
 });
 
 test('attributes to string', function (t) {
-    t.plan(3);
+    t.plan(4);
 
     // convert to object, type convert values, ignore typical HTML attributes
     let obj = Convert.fromAttrs(el);
 
     t.equal(Convert.toAttrString(obj), 'one="1" two="2" three="3"');
+    t.equal(Convert.toAttrString(el), 'one="1" two="2" three="3"');
 
     // convert to object, DO NOT type convert values, allow all attributes
     t.equal(Convert.toAttrString(Convert.fromAttrs(el, { typeConvert: false, allowAllAttributes: true }), { allowAllAttributes: true }), 'one="1" two="2" three="3" class="someclass"');

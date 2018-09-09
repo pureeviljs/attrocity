@@ -12,7 +12,8 @@
                 return ['test', 'anothertest'];
             }
 
-            connectedCallback() {
+            constructor() {
+                super();
                 this.binding = Reflect.createBindings(this);
                 this.binding.addCallback( (name, value) => {
                     console.log(name, value)

@@ -13,10 +13,12 @@ export default class Reflect {
     static attach(clazz) {
         clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
             if (this.__attrocity) {
-                if (this.__attrocity.getObservable('customelement').ignoreNextChange) { return; }
+                if (this.__attrocity.getObservable('customelement')._ignoreNextChange) { return; }
+
                 this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
+
+                this.__attrocity.getObservable('customelement')._ignoreNextChange = false;
             }
-            this.__attrocity.getObservable('customelement').ignoreNextChange = false;
         };
         return clazz;
     }
@@ -33,10 +35,10 @@ export default class Reflect {
                 obj[attributes[c]] = scope.getAttribute(attributes[c]);
                 Object.defineProperty(scope, attributes[c], {
                     set: function(val) {
-                        return scope.__attrocity.getObservable('datamodel').setKey(attributes[c], val)
+                        return scope.__attrocity.getObservable('datamodel').data[attributes[c]] = val;
                     },
                     get: function() {
-                        let val = scope.__attrocity.getObservable('datamodel').getKey(attributes[c]);
+                        let val = scope.__attrocity.getObservable('datamodel').data[attributes[c]];
                         if (scope.__attrocity.castingRules) {
                             val = scope.__attrocity.castingRules.cast(attributes[c], val);
                         }

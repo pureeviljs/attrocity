@@ -10,11 +10,12 @@ export default class ObservableCustomElement extends AbstractObservable {
     static attach(clazz) {
         clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
             if (this.__attrocity) {
-                if (this.__attrocity.getObservable('customelement').ignoreNextChange
+                if (this.__attrocity.getObservable('customelement')._ignoreNextChange
                 || !this.__attrocity.getObservable('customelement')._observing ) { return; }
                 this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
+
+                this.__attrocity.getObservable('customelement')._ignoreNextChange = false;
             }
-            this.__attrocity.getObservable('customelement').ignoreNextChange = false;
         };
         return clazz;
     }
@@ -40,6 +41,21 @@ export default class ObservableCustomElement extends AbstractObservable {
     constructor(el, cb) {
         super(el, cb);
         this._observing = true;
+
+        this._element = el;
+
+        const scope = this;
+        this._model = new Proxy({}, {
+            get: function(target, name) {
+                return scope._element.getAttribute(name);
+            },
+            set: function(target, prop, value) {
+                // should this be more resrictive in what allows setting by user pref?
+                // observedAttribute list is too limiting i think here
+                scope._element.setAttribute(prop, value);
+                return true;
+            }
+        });
     }
 
     /**
@@ -47,27 +63,5 @@ export default class ObservableCustomElement extends AbstractObservable {
      */
     stop() {
         this._observing = false;
-    }
-
-    /**
-     * set attribute value by name
-     * @param attr
-     * @param value
-     * @param donotdispatch
-     */
-    setKey(attr, value, donotdispatch) {
-        if (donotdispatch) {
-            this.ignoreNextChange = true;
-        }
-        this.data.setAttribute(attr, value);
-    }
-
-    /**
-     * get attribute value for key/name
-     * @param attr
-     * @returns {*}
-     */
-    getKey(attr) {
-        return this._data.getAttribute(attr);
     }
 }

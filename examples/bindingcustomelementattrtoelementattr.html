@@ -10,17 +10,21 @@
         import ObservableElement from '../src/observables/element.js';
 
         class SampleComponent extends HTMLElement {
+            static get observedAttributes() {
+                return ['hi'];
+            }
             connectedCallback() {
                 const model = new ObservableElement(document.getElementById('div1'));
                 const bind = new Bind();
+
                 bind.add(model, true, true);
-                bind.add(this.observable, true, true);
+                bind.add(new ObservableCustomElement(this), true, true);
 
                 document.getElementById('div1').setAttribute('test', 'newvalue');
             }
         }
 
-        customElements.define('sample-component', ObservableCustomElement.attach(SampleComponent, ['test']));
+        customElements.define('sample-component', ObservableCustomElement.attach(SampleComponent));
     </script>
 </head>
 <body>

@@ -1,6 +1,7 @@
 import Convert from './convert.js';
 import Bind from './bind.js';
 import MapDOM from './mapdom.js';
+import CastingRules from './castingrules.js';
 import ObservableElement from './observables/element.js';
 import ObservableObject from './observables/object.js';
 import ObservableCustomElement from './observables/customelement.js';
@@ -26,6 +27,13 @@ export default class Main {
      * @constructor
      */
     static get MapDOM() { return MapDOM; }
+
+    /**
+     * Casting
+     * @returns {CastingRules}
+     * @constructor
+     */
+    static get CastingRules() { return CastingRules; }
 
     /**
      * Observables

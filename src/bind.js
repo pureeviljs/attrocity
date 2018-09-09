@@ -4,16 +4,14 @@ export default class Binding {
     /**
      * constructor
      */
-    constructor(callbacks) {
+    constructor(cb) {
         this._destinations = new Map();
         this._sources = new Map();
         this._namedCallbacks = {};
+        this._callbacks = [];
 
-        if (!callbacks) {
-            this._callbacks = [];
-        }
-        if (callbacks && !Array.isArray(callbacks)) {
-            this._callbacks = [callbacks];
+        if (cb) {
+            this.addCallback(cb);
         }
     }
 
@@ -53,8 +51,8 @@ export default class Binding {
      * @param {AbstractObservable} obj
      */
     remove(obj) {
-        const dest = this._destinations.get(obj.id);
-        dest.observable.removeCallback(dest.observable.callback);
+        const src = this._sources.get(obj.id);
+        src.observable.removeCallback(src.callback);
         this._destinations.delete(obj.id);
         this._sources.delete(obj.id);
     }
@@ -69,7 +67,8 @@ export default class Binding {
     _onDataChange(obj, key, value) {
         for (const dest of this._destinations.entries()){
             if (obj.id !== dest[1].observable.id) {
-                dest[1].observable.setKey(key, value, true);
+                dest[1].observable.ignoreNextChange();
+                dest[1].observable.data[key] = value;
             }
         }
         for (let c = 0; c < this._callbacks.length; c++) {

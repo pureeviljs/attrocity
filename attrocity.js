@@ -107,18 +107,45 @@
     }
 
     class AbstractObservable {
+        static get WATCH_ANY() { return 'watch-any'; }
+        static get WATCH_CURRENT_ONLY() { return 'watch-current-only'; }
+
         /**
          * constructor
          * @param obj
          * @param {Function} cb
          */
-        constructor(obj, cb) {
+        constructor(obj, cb, watchlist) {
             this._model = obj;
             this._id = Symbol();
             this._callbacks = new Map();
 
             if (cb) {
-                this.addCallback(cb);
+                this._primaryCallback = this.addCallback(cb);
+            }
+
+            this._watchList = [];
+
+            if (watchlist) {
+                if (Array.isArray(watchlist)) {
+                    this._watchList = watchlist.slice();
+
+                } else {
+                    switch(watchlist) {
+                        case AbstractObservable.WATCH_ANY:
+                            // already a blank array, allow all
+                            break;
+
+                        case AbstractObservable.WATCH_CURRENT_ONLY:
+                            if (obj instanceof Element) {
+                                let wl = Array.from(obj.attributes);
+                                this._watchList = wl.map( i => { return i.name });
+                            } else {
+                                this._watchList = Object.keys(obj);
+                            }
+                            break;
+                    }
+                }
             }
         }
 
@@ -140,10 +167,11 @@
         get data() { return this._model; }
 
         /**
-         * add multiple callbacks
-         * @param cb
+         * do not dispatch event for next change
          */
-        addCallbacks(cb) { this.addCallback(cb); }
+        ignoreNextChange() {
+            this._ignoreNextChange = true;
+        }
 
         /**
          * add callback
@@ -151,12 +179,6 @@
          * @returns {symbol}
          */
         addCallback(cb) {
-            if (Array.isArray(cb)) {
-                for (let c = 0; c < cb.length; c++) {
-                    this.addCallback(cb[c]);
-                }
-                return;
-            }
             const id = Symbol();
             this._callbacks.set(id, cb);
             return id;
@@ -167,6 +189,9 @@
          * @param id
          */
         removeCallback(id) {
+            if (!id) {
+                id = this._primaryCallback;
+            }
             this._callbacks.delete(id);
         }
 
@@ -187,16 +212,14 @@
         /**
          * constructor
          */
-        constructor(callbacks) {
+        constructor(cb) {
             this._destinations = new Map();
             this._sources = new Map();
             this._namedCallbacks = {};
+            this._callbacks = [];
 
-            if (!callbacks) {
-                this._callbacks = [];
-            }
-            if (callbacks && !Array.isArray(callbacks)) {
-                this._callbacks = [callbacks];
+            if (cb) {
+                this.addCallback(cb);
             }
         }
 
@@ -236,8 +259,8 @@
          * @param {AbstractObservable} obj
          */
         remove(obj) {
-            const dest = this._destinations.get(obj.id);
-            dest.observable.removeCallback(dest.observable.callback);
+            const src = this._sources.get(obj.id);
+            src.observable.removeCallback(src.callback);
             this._destinations.delete(obj.id);
             this._sources.delete(obj.id);
         }
@@ -252,7 +275,8 @@
         _onDataChange(obj, key, value) {
             for (const dest of this._destinations.entries()){
                 if (obj.id !== dest[1].observable.id) {
-                    dest[1].observable.setKey(key, value, true);
+                    dest[1].observable.ignoreNextChange();
+                    dest[1].observable.data[key] = value;
                 }
             }
             for (let c = 0; c < this._callbacks.length; c++) {
@@ -267,6 +291,8 @@
             }
         }
     }
+
+    // TODO: Finish implementing dot notation for nested properties
 
     class MapDOM {
         /**
@@ -346,160 +372,6 @@
         };
     }
 
-    class ObservableElement extends AbstractObservable {
-        /**
-         * constructor
-         * @param {HTMLElement} el element to watch
-         * @param {Function} cb callback
-         * @param {Array} watchlist list of attributes to watch on element (if null, watch them all)
-         */
-        constructor(el, cb, watchlist) {
-            super(el, cb);
-            this.observer = new MutationObserver(e => this.onMutationChange(e));
-            this.observer.observe(el, { attributes: true });
-            this._watchlist = watchlist;
-        }
-
-        /**
-         * stop observation
-         */
-        stop() {
-            this.observer.disconnect();
-        }
-
-        /**
-         * set attribute value by name
-         * @param attr
-         * @param value
-         * @param donotdispatch
-         */
-        setKey(attr, value, donotdispatch) {
-            if (donotdispatch) {
-                this._ignoreNextMutationChange = true;
-            }
-            this.data.setAttribute(attr, value);
-        }
-
-        /**
-         * get attribute value for key/name
-         * @param attr
-         * @returns {*}
-         */
-        getKey(attr) {
-            return this._data.getAttribute(attr);
-        }
-
-        /**
-         * mutation change handler
-         * @param e
-         */
-        onMutationChange(e) {
-            if (this._ignoreNextMutationChange) {
-                this._ignoreNextMutationChange = false;
-                return;
-            }
-
-            if (this._watchlist && this._watchlist.indexOf(e[c].attributeName) !== -1) {
-                return;
-            }
-
-            for (let c = 0; c < e.length; c++) {
-                this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName));
-            }
-        }
-    }
-
-    class ObservableObject extends AbstractObservable {
-        /**
-         * constructor
-         * @param object to watch
-         * @param {Function} cb callback
-         * @param {Array} watchlist list of attributes to watch on element (if null, watch them all)
-         */
-        constructor(obj, cb, watchlist) {
-            super(obj, cb);
-            this._propertyAccessors = {};
-            this._observing = true;
-            if (!watchlist) {
-                this.autoWire();
-            } else {
-                for (let c = 0; c < watchlist.length; c++) {
-                    this.addProperty(watchlist[c]);
-                }
-            }
-        }
-
-        /**
-         * stop observation
-         */
-        stop() {
-            this._observing = false;
-        }
-
-
-        /**
-         * get data
-         * @returns {*}
-         */
-        get data() {
-            return this._propertyAccessors;
-        }
-
-
-        /**
-         * automatically detect all property keys and add listeners
-         */
-        autoWire() {
-            const keys = Object.keys(this._model);
-            for (let c = 0; c < keys.length; c++) {
-                this.addProperty(keys[c]);
-            }
-        }
-
-        /**
-         * set key value by name
-         * @param {String} name
-         * @param value to set
-         * @param {Boolean} donotdispatch - set key, but don't cause change event
-         */
-        setKey(name, value, donotdispatch) {
-            if (this._model[name] === value) {
-                return;
-            }
-            this._model[name] = value;
-            if (!donotdispatch && this._observing) {
-                this.dispatchChange(this, name, value);
-            }
-        }
-
-        /**
-         * get value for key
-         * @param {String} name
-         * @returns {*}
-         */
-        getKey(name) {
-            return this._model[name];
-        }
-
-        /**
-         * add listener for property
-         * @param {String} name
-         */
-        addProperty(name) {
-            let scope = this;
-            Object.defineProperty(this._propertyAccessors, name, {
-                configurable: false,
-                enumerable: true,
-                set: function (v) {
-                    scope.setKey(name, v);
-                },
-                get: function () {
-                    return scope.getKey(name);
-                }
-            });
-        }
-    }
-
     class CastingRules {
         static defaultRule(value) {
             if (value === 'true') { return true; }
@@ -541,6 +413,112 @@
             }
         }
 
+    }
+
+    class ObservableElement extends AbstractObservable {
+        /**
+         * constructor
+         * @param {HTMLElement} el element to watch
+         * @param {Function} cb callback
+         * @param {Array} watchlist list of attributes to watch on element (if null, watch them all)
+         */
+        constructor(el, cb, watchlist) {
+            super(el, cb, watchlist);
+            this.observer = new MutationObserver(e => this.onMutationChange(e));
+            this.observer.observe(el, { attributes: true });
+
+            this._element = el;
+
+            const scope = this;
+            this._model = new Proxy({}, {
+                get: function(target, name) {
+                    return scope._element.getAttribute(name);
+                },
+                set: function(target, prop, value) {
+                    if (scope._watchList.length === 0 ||
+                        scope._watchList.indexOf(prop) !== -1) {
+                        scope._element.setAttribute(prop, value);
+                    }
+                    return true;
+                }
+            });
+        }
+
+        /**
+         * stop observation
+         */
+        stop() {
+            this.observer.disconnect();
+        }
+
+        /**
+         * mutation change handler
+         * @param e
+         */
+        onMutationChange(e) {
+            if (this._ignoreNextChange) {
+                this._ignoreNextChange = false;
+                return;
+            }
+
+            for (let c = 0; c < e.length; c++) {
+                if (this._watchList.length === 0 || this._watchList.indexOf(e[c].attributeName) !== -1) {
+                    this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName));
+                }
+            }
+        }
+    }
+
+    class ObservableObject extends AbstractObservable {
+        /**
+         * constructor
+         * @param {Object} object to watch
+         * @param {Function} cb callback
+         * @param {Array | String} watchlist list of attributes to watch on element (if null, watch them all)
+         */
+        constructor(obj, cb, watchlist) {
+            super(obj, cb, watchlist);
+
+            const scope = this;
+            this._model = new Proxy(obj, {
+                get: function(target, name) {
+                    return target[name];
+                },
+                set: function(target, prop, value) {
+                    if (scope._watchList.length === 0 ||
+                        scope._watchList.indexOf(prop) !== -1) {
+                        target[prop] = value;
+
+                        if (!scope._ignoreNextChange && scope._observing) {
+                            scope.dispatchChange(scope, prop, value);
+                        }
+                        scope._ignoreNextChange = false;
+                        return true;
+                    }
+
+                    scope._ignoreNextChange = false;
+                    return true;
+
+                }
+            });
+            this._observing = true;
+        }
+
+        /**
+         * stop observation
+         */
+        stop() {
+            this._observing = false;
+        }
+
+
+        /**
+         * get data
+         * @returns {*}
+         */
+        get data() {
+            return this._model;
+        }
     }
 
     class CustomElementBindingManager {
@@ -593,11 +571,12 @@
         static attach(clazz) {
             clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
                 if (this.__attrocity) {
-                    if (this.__attrocity.getObservable('customelement').ignoreNextChange
+                    if (this.__attrocity.getObservable('customelement')._ignoreNextChange
                     || !this.__attrocity.getObservable('customelement')._observing ) { return; }
                     this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
+
+                    this.__attrocity.getObservable('customelement')._ignoreNextChange = false;
                 }
-                this.__attrocity.getObservable('customelement').ignoreNextChange = false;
             };
             return clazz;
         }
@@ -623,6 +602,21 @@
         constructor(el, cb) {
             super(el, cb);
             this._observing = true;
+
+            this._element = el;
+
+            const scope = this;
+            this._model = new Proxy({}, {
+                get: function(target, name) {
+                    return scope._element.getAttribute(name);
+                },
+                set: function(target, prop, value) {
+                    // should this be more resrictive in what allows setting by user pref?
+                    // observedAttribute list is too limiting i think here
+                    scope._element.setAttribute(prop, value);
+                    return true;
+                }
+            });
         }
 
         /**
@@ -630,28 +624,6 @@
          */
         stop() {
             this._observing = false;
-        }
-
-        /**
-         * set attribute value by name
-         * @param attr
-         * @param value
-         * @param donotdispatch
-         */
-        setKey(attr, value, donotdispatch) {
-            if (donotdispatch) {
-                this.ignoreNextChange = true;
-            }
-            this.data.setAttribute(attr, value);
-        }
-
-        /**
-         * get attribute value for key/name
-         * @param attr
-         * @returns {*}
-         */
-        getKey(attr) {
-            return this._data.getAttribute(attr);
         }
     }
 
@@ -678,6 +650,13 @@
         static get MapDOM() { return MapDOM; }
 
         /**
+         * Casting
+         * @returns {CastingRules}
+         * @constructor
+         */
+        static get CastingRules() { return CastingRules; }
+
+        /**
          * Observables
          * @returns {{Element: ObservableElement, Object: ObservableObject}}
          * @constructor
@@ -694,3 +673,4 @@
     return Main;
 
 })));
+//# sourceMappingURL=attrocity.js.map

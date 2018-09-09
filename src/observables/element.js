@@ -8,10 +8,25 @@ export default class ObservableElement extends AbstractObservable {
      * @param {Array} watchlist list of attributes to watch on element (if null, watch them all)
      */
     constructor(el, cb, watchlist) {
-        super(el, cb);
+        super(el, cb, watchlist);
         this.observer = new MutationObserver(e => this.onMutationChange(e));
         this.observer.observe(el, { attributes: true });
-        this._watchlist = watchlist;
+
+        this._element = el;
+
+        const scope = this;
+        this._model = new Proxy({}, {
+            get: function(target, name) {
+                return scope._element.getAttribute(name);
+            },
+            set: function(target, prop, value) {
+                if (scope._watchList.length === 0 ||
+                    scope._watchList.indexOf(prop) !== -1) {
+                    scope._element.setAttribute(prop, value);
+                }
+                return true;
+            }
+        });
     }
 
     /**
@@ -22,43 +37,19 @@ export default class ObservableElement extends AbstractObservable {
     }
 
     /**
-     * set attribute value by name
-     * @param attr
-     * @param value
-     * @param donotdispatch
-     */
-    setKey(attr, value, donotdispatch) {
-        if (donotdispatch) {
-            this._ignoreNextMutationChange = true;
-        }
-        this.data.setAttribute(attr, value);
-    }
-
-    /**
-     * get attribute value for key/name
-     * @param attr
-     * @returns {*}
-     */
-    getKey(attr) {
-        return this._data.getAttribute(attr);
-    }
-
-    /**
      * mutation change handler
      * @param e
      */
     onMutationChange(e) {
-        if (this._ignoreNextMutationChange) {
-            this._ignoreNextMutationChange = false;
-            return;
-        }
-
-        if (this._watchlist && this._watchlist.indexOf(e[c].attributeName) !== -1) {
+        if (this._ignoreNextChange) {
+            this._ignoreNextChange = false;
             return;
         }
 
         for (let c = 0; c < e.length; c++) {
-            this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName));
+            if (this._watchList.length === 0 || this._watchList.indexOf(e[c].attributeName) !== -1) {
+                this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName));
+            }
         }
     }
 }

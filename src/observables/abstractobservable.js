@@ -1,16 +1,43 @@
 export default class AbstractObservable {
+    static get WATCH_ANY() { return 'watch-any'; }
+    static get WATCH_CURRENT_ONLY() { return 'watch-current-only'; }
+
     /**
      * constructor
      * @param obj
      * @param {Function} cb
      */
-    constructor(obj, cb) {
+    constructor(obj, cb, watchlist) {
         this._model = obj;
         this._id = Symbol();
         this._callbacks = new Map();
 
         if (cb) {
-            this.addCallback(cb);
+            this._primaryCallback = this.addCallback(cb);
+        }
+
+        this._watchList = [];
+
+        if (watchlist) {
+            if (Array.isArray(watchlist)) {
+                this._watchList = watchlist.slice();
+
+            } else {
+                switch(watchlist) {
+                    case AbstractObservable.WATCH_ANY:
+                        // already a blank array, allow all
+                        break;
+
+                    case AbstractObservable.WATCH_CURRENT_ONLY:
+                        if (obj instanceof Element) {
+                            let wl = Array.from(obj.attributes);
+                            this._watchList = wl.map( i => { return i.name });
+                        } else {
+                            this._watchList = Object.keys(obj);
+                        }
+                        break;
+                }
+            }
         }
     }
 
@@ -32,10 +59,11 @@ export default class AbstractObservable {
     get data() { return this._model; }
 
     /**
-     * add multiple callbacks
-     * @param cb
+     * do not dispatch event for next change
      */
-    addCallbacks(cb) { this.addCallback(cb); }
+    ignoreNextChange() {
+        this._ignoreNextChange = true;
+    }
 
     /**
      * add callback
@@ -43,12 +71,6 @@ export default class AbstractObservable {
      * @returns {symbol}
      */
     addCallback(cb) {
-        if (Array.isArray(cb)) {
-            for (let c = 0; c < cb.length; c++) {
-                this.addCallback(cb[c]);
-            }
-            return;
-        }
         const id = Symbol();
         this._callbacks.set(id, cb);
         return id;
@@ -59,6 +81,9 @@ export default class AbstractObservable {
      * @param id
      */
     removeCallback(id) {
+        if (!id) {
+            id = this._primaryCallback;
+        }
         this._callbacks.delete(id);
     }
 

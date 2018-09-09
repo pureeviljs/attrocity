@@ -8,7 +8,7 @@
 
         const observableAttr = new ObservableElement(document.querySelector('div'), function(object, name, value) {
             console.log('change', name, value);
-        });
+        }, ObservableElement.WATCH_CURRENT_ONLY);
 
         document.querySelector('div').setAttribute('test', 'bye');
     </script>
