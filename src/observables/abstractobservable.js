@@ -92,10 +92,12 @@ export default class AbstractObservable {
      * @param obj
      * @param name
      * @param value
+     * @param oldValue
      */
-    dispatchChange(obj, name, value) {
+    dispatchChange(obj, name, value, oldValue) {
+        if (value === oldValue) { return; }
         this._callbacks.forEach(cb => {
-            cb.apply(this, [obj, name, value]);
+            cb.apply(this, [obj, name, value, oldValue]);
         });
     }
 }

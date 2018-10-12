@@ -18,10 +18,11 @@ export default class ObservableObject extends AbstractObservable {
             set: function(target, prop, value) {
                 if (scope._watchList.length === 0 ||
                     scope._watchList.indexOf(prop) !== -1) {
+                    const oldvalue = target[prop];
                     target[prop] = value;
 
                     if (!scope._ignoreNextChange && scope._observing) {
-                        scope.dispatchChange(scope, prop, value);
+                        scope.dispatchChange(scope, prop, value, oldvalue);
                     }
                     scope._ignoreNextChange = false;
                     return true;

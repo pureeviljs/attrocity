@@ -200,10 +200,12 @@
          * @param obj
          * @param name
          * @param value
+         * @param oldValue
          */
-        dispatchChange(obj, name, value) {
+        dispatchChange(obj, name, value, oldValue) {
+            if (value === oldValue) { return; }
             this._callbacks.forEach(cb => {
-                cb.apply(this, [obj, name, value]);
+                cb.apply(this, [obj, name, value, oldValue]);
             });
         }
     }
@@ -425,7 +427,7 @@
         constructor(el, cb, watchlist) {
             super(el, cb, watchlist);
             this.observer = new MutationObserver(e => this.onMutationChange(e));
-            this.observer.observe(el, { attributes: true });
+            this.observer.observe(el, { attributes: true, attributeOldValue: true });
 
             this._element = el;
 
@@ -463,7 +465,7 @@
 
             for (let c = 0; c < e.length; c++) {
                 if (this._watchList.length === 0 || this._watchList.indexOf(e[c].attributeName) !== -1) {
-                    this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName));
+                    this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName), e[c].oldValue);
                 }
             }
         }
@@ -487,10 +489,11 @@
                 set: function(target, prop, value) {
                     if (scope._watchList.length === 0 ||
                         scope._watchList.indexOf(prop) !== -1) {
+                        const oldvalue = target[prop];
                         target[prop] = value;
 
                         if (!scope._ignoreNextChange && scope._observing) {
-                            scope.dispatchChange(scope, prop, value);
+                            scope.dispatchChange(scope, prop, value, oldvalue);
                         }
                         scope._ignoreNextChange = false;
                         return true;
@@ -573,7 +576,7 @@
                 if (this.__attrocity) {
                     if (this.__attrocity.getObservable('customelement')._ignoreNextChange
                     || !this.__attrocity.getObservable('customelement')._observing ) { return; }
-                    this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
+                    this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue, oldValue);
 
                     this.__attrocity.getObservable('customelement')._ignoreNextChange = false;
                 }

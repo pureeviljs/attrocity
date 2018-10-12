@@ -10,7 +10,7 @@ export default class ObservableElement extends AbstractObservable {
     constructor(el, cb, watchlist) {
         super(el, cb, watchlist);
         this.observer = new MutationObserver(e => this.onMutationChange(e));
-        this.observer.observe(el, { attributes: true });
+        this.observer.observe(el, { attributes: true, attributeOldValue: true });
 
         this._element = el;
 
@@ -48,7 +48,7 @@ export default class ObservableElement extends AbstractObservable {
 
         for (let c = 0; c < e.length; c++) {
             if (this._watchList.length === 0 || this._watchList.indexOf(e[c].attributeName) !== -1) {
-                this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName));
+                this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName), e[c].oldValue);
             }
         }
     }

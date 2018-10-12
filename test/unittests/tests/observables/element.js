@@ -37,12 +37,12 @@ test('observe element', function (t) {
     t.equal(observableModel.data.test, 'bye');
 });
 
-/*test('observe element change property to identical value', function (t) {
+test('observe element change property to identical value', function (t) {
     resetEl();
     el.setAttribute('test', 'hi');
     t.plan(1);
 
-    const observableModel = new ObservableElement(el, (object, name, value) => {
+    const observableModel = new ObservableElement(el, (object, name, value, oldValue) => {
         observableModel.stop();
         t.fail('Change callback should not be fired when setting to the exact same value');
     });
@@ -51,9 +51,9 @@ test('observe element', function (t) {
 
     setTimeout( function() {
         t.pass();
+        observableModel.stop();
     }, 50);
-});*/
-
+});
 
 test('observe element ignoring first change', function (t) {
     resetEl();

@@ -27,6 +27,32 @@ test('observe object', function (t) {
     observableModel.data.property1 = 'hello1';
 });
 
+test('observe object changing value to same thing', function (t) {
+    t.plan(1);
+
+    const model = {
+        property1: 'test1',
+        property2: 'test2',
+        property3: 'test3',
+        property4: 'test4',
+    };
+
+    const observableModel = new ObservableObject(model, function(object, name, value) {
+        t.fail();
+    });
+
+    observableModel.data.property1 = 'test1';
+    observableModel.data.property2 = 'test2';
+    observableModel.data.property3 = 'test3';
+    observableModel.data.property4 = 'test4';
+
+    setTimeout( function() {
+        t.pass();
+        observableModel.stop();
+    }, 50);
+});
+
+
 test('remove callback', function (t) {
     t.plan(1);
 
