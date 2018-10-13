@@ -7,10 +7,14 @@
         import MapDOM from '../src/mapdom.js';
 
         const el = document.querySelector('.example');
+        const el2 = document.querySelector('.example2');
         console.log( MapDOM.map(el) );
 
         // use different attribute name for selector, and don't use a root
-        console.log( MapDOM.map(el, { attribute: 'map', root: null}) );
+        console.log( MapDOM.map(el, null, { attribute: 'map', root: null}) );
+
+
+        console.log(MapDOM.map(el2));
 
     </script>
 </head>
@@ -29,6 +33,15 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="example2">
+        <ul>
+            <li cache="items" secondarycache="items"></li>
+            <li cache="items" thirdcache="items"></li>
+            <li cache="items"></li>
+            <li cache="items"></li>
+            <li cache="items"></li>
+        </ul>
     </div>
 </body>
 </html>

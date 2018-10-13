@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MapDOM</title>
+    <script type="module">
+        import MapDOM from '../src/mapdom.js';
+
+        const el = document.querySelector('.example');
+        console.log( MapDOM.map(el) );
+
+    </script>
+</head>
+<body>
+    <div class="example">
+        <h1 cache="header">a header</h1>
+        <h2 cache="header">another header</h2>
+        <h3 cache="header">another header</h3>
+        <h4 cache="header">another header</h4>
+
+        <button cache="demo.button.a">a button</button>
+        <button cache="demo.button.b">b button</button>
+        <button cache="demo.button.c">c button</button>
+        <button cache="demo.button.d">d button</button>
+        <button cache="demo.button.e">e button</button>
+
+        <span cache="demo.span">span</span>
+        <span cache="demo.span.f">f span</span>
+        <span cache="demo.span.g">g span</span>
+        <span cache="demo.span.h">h span</span>
+        <span cache="demo.span.i">i button</span>
+
+
+        <span cache="text.someText">some text</span>
+        <div>
+            <div>
+                <label cache="text.inputLabel">text input label</label>
+                <input cache="text.input" type="text" />
+                <div>
+                    <div>
+                        <span cache="text.moreText">more text</span>
+                        <span cache="text">object level text</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

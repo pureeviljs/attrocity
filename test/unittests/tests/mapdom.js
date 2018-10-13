@@ -1,6 +1,7 @@
 const MapDOM = require('../../../attrocity.js').MapDOM;
 const test = require('tape');
 const jsdom = require('jsdom');
+require('jsdom-global')();
 const { JSDOM } = jsdom;
 
 const dom = new JSDOM(`<div class="example">
@@ -30,7 +31,6 @@ const dom = new JSDOM(`<div class="example">
 const el = dom.window.document.querySelector('.example');
 const el2 = dom.window.document.querySelector('.example2');
 
-
 test('map dom with default settings', function (t) {
     t.plan(4);
 
@@ -55,9 +55,9 @@ test('map dom with non-default settings', function (t) {
 test('map dom with multiple named items being coerced to array', function (t) {
     t.plan(2);
 
-    const dom = MapDOM.map(el2);
-    t.equal(Array.isArray(dom.items), true);
-    t.equal(dom.items.length, 5);
+    const map = MapDOM.map(el2);
+    t.equal(Array.isArray(map.items), true);
+    t.equal(map.items.length, 5);
 
 });
 
