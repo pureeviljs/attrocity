@@ -11,7 +11,7 @@
         console.log( MapDOM.map(el) );
 
         // use different attribute name for selector, and don't use a root
-        console.log( MapDOM.map(el, null, { attribute: 'map', root: null}) );
+        console.log( MapDOM.map(el, null, { attribute: 'cache', root: null}) );
 
 
         console.log(MapDOM.map(el2));
@@ -20,15 +20,15 @@
 </head>
 <body>
     <div class="example">
-        <h1 cache="header">a header</h1>
-        <span cache="text" map="text-span">some text</span>
+        <h1 map="header">a header</h1>
+        <span map="text" cache="text-span">some text</span>
         <div>
             <div>
-                <label cache="textInputLabel">text input label</label>
-                <input cache="textInput" type="text" />
-                <div cacheroot>
+                <label map="textInputLabel">text input label</label>
+                <input map="textInput" type="text" />
+                <div maproot>
                     <div>
-                        <span cache="shouldnotgetpickedup" map="more-text-span">more text</span>
+                        <span map="shouldnotgetpickedup" cache="more-text-span">more text</span>
                     </div>
                 </div>
             </div>
@@ -36,11 +36,11 @@
     </div>
     <div class="example2">
         <ul>
-            <li cache="items" secondarycache="items"></li>
-            <li cache="items" thirdcache="items"></li>
-            <li cache="items"></li>
-            <li cache="items"></li>
-            <li cache="items"></li>
+            <li map="items" secondarycache="items"></li>
+            <li map="items" thirdcache="items"></li>
+            <li map="items"></li>
+            <li map="items"></li>
+            <li map="items"></li>
         </ul>
     </div>
 </body>

@@ -5,15 +5,15 @@ require('jsdom-global')();
 const { JSDOM } = jsdom;
 
 const dom = new JSDOM(`<div class="example">
-                            <h1 cache="header">a header</h1>
-                            <span cache="text" map="text-span">some text</span>
+                            <h1 map="header">a header</h1>
+                            <span map="text" map="text-span">some text</span>
                             <div>
                                 <div>
-                                    <label class="aclass" cache="textInputLabel">text input label</label>
-                                    <input cache="textInput" type="text" value="some text value"/>
-                                    <div cacheroot>
+                                    <label class="aclass" map="textInputLabel">text input label</label>
+                                    <input map="textInput" type="text" value="some text value"/>
+                                    <div maproot>
                                         <div>
-                                            <span cache="shouldnotgetpickedup" map="more-text-span">more text</span>
+                                            <span map="shouldnotgetpickedup" cache="more-text-span">more text</span>
                                         </div>
                                     </div>
                                 </div>
@@ -21,11 +21,11 @@ const dom = new JSDOM(`<div class="example">
                         </div>
                         <div class="example2">
                             <ul>
-                                <li cache="items" secondarycache="items"></li>
-                                <li cache="items" thirdcache="items"></li>
-                                <li cache="items"></li>
-                                <li cache="items"></li>
-                                <li cache="items"></li>
+                                <li map="items" secondarycache="items"></li>
+                                <li map="items" thirdcache="items"></li>
+                                <li map="items"></li>
+                                <li map="items"></li>
+                                <li map="items"></li>
                             </ul>
                         </div>`);
 const el = dom.window.document.querySelector('.example');
@@ -47,8 +47,8 @@ test('map dom with default settings', function (t) {
 test('map dom with non-default settings', function (t) {
     t.plan(1);
 
-    const dom = MapDOM.map(el, null, { attribute: 'map', root: null });
-    t.equal(dom['more-text-span'].getAttribute('cache'), 'shouldnotgetpickedup');
+    const dom = MapDOM.map(el, null, { attribute: 'cache', root: null });
+    t.equal(dom['more-text-span'].getAttribute('map'), 'shouldnotgetpickedup');
 
 });
 

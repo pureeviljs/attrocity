@@ -299,10 +299,21 @@
          * defaults
          * @returns {{attribute: string, root: string}}
          */
-        static get defaults() {
+        static get mapdefaults() {
             return {
-                attribute: 'cache',
-                root: 'cacheroot',
+                attribute: 'map',
+                root: 'maproot'
+            }
+        };
+
+        /**
+         * defaults
+         * @returns {{attribute: string, root: string}}
+         */
+        static get wiredefaults() {
+            return {
+                attribute: 'wire',
+                root: 'maproot'
             }
         };
 
@@ -320,7 +331,7 @@
          * @param opts
          */
         static map(node, startingObj, opts) {
-            opts = Object.assign(this.defaults, opts ? opts : {} );
+            opts = Object.assign(this.mapdefaults, opts ? opts : {} );
             const selector = this._attributeSelector(opts.attribute);
 
             let domcache = startingObj ? startingObj : {};
@@ -338,6 +349,19 @@
             }
             return domcache;
         };
+
+        static wire(node, callback, scope, opts) {
+            opts = Object.assign(this.wiredefaults, opts ? opts : {} );
+            const selector = this._attributeSelector(opts.attribute);
+            let els = node.querySelectorAll(selector);
+            let rootlevelEls = node.querySelectorAll(this._attributeSelector(opts.root));
+
+            els = this._filterElementsContainedByRoot(els, rootlevelEls);
+            for (let e = 0; e < els.length; e++) {
+                const eventtype = els[e].getAttribute(opts.attribute);
+                els[e].addEventListener(eventtype, e => { callback.apply(scope, [e]); });
+            }
+        }
 
         /**
          * ensure deep or shallow path exists on object
@@ -366,7 +390,6 @@
          * @param obj
          * @param prop
          * @param val
-         * @param isRoot
          * @private
          */
         static _setProperty(obj, prop, val) {
