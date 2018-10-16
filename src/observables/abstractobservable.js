@@ -11,32 +11,35 @@ export default class AbstractObservable {
         this._model = obj;
         this._id = Symbol();
         this._callbacks = new Map();
+        this._allowAllKeys = false;
 
         if (cb) {
             this._primaryCallback = this.addCallback(cb);
         }
 
-        this._watchList = [];
+        if (Array.isArray(watchlist)) {
+            this._keys = watchlist.slice();
 
-        if (watchlist) {
-            if (Array.isArray(watchlist)) {
-                this._watchList = watchlist.slice();
+        } else {
+            switch(watchlist) {
+                case AbstractObservable.WATCH_ANY:
+                    this._allowAllKeys = true;
+                    break;
 
-            } else {
-                switch(watchlist) {
-                    case AbstractObservable.WATCH_ANY:
-                        // already a blank array, allow all
-                        break;
+                case AbstractObservable.WATCH_CURRENT_ONLY:
+                    if (obj instanceof Element) {
+                        let wl = Array.from(obj.attributes);
+                        this._keys = wl.map( i => { return i.name });
+                    } else {
+                        this._keys = Object.keys(obj);
+                    }
+                    break;
 
-                    case AbstractObservable.WATCH_CURRENT_ONLY:
-                        if (obj instanceof Element) {
-                            let wl = Array.from(obj.attributes);
-                            this._watchList = wl.map( i => { return i.name });
-                        } else {
-                            this._watchList = Object.keys(obj);
-                        }
-                        break;
-                }
+                default:
+                    // default to watch any and all
+                    this._allowAllKeys = true;
+                    break;
+
             }
         }
     }
@@ -57,6 +60,26 @@ export default class AbstractObservable {
      * @returns {*}
      */
     get data() { return this._model; }
+
+    /**
+     * get allowAllKeys bool
+     * @returns {boolean}
+     */
+    get allowAllKeys() {
+        return this._allowAllKeys;
+    }
+
+    /**
+     * get keys
+     * @returns {string[] | *}
+     */
+    get keys() {
+        if (this._keys) {
+            return this._keys;
+        } else {
+            return Object.keys(this._model);
+        }
+    }
 
     /**
      * do not dispatch event for next change

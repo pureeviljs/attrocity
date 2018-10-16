@@ -119,32 +119,35 @@
             this._model = obj;
             this._id = Symbol();
             this._callbacks = new Map();
+            this._allowAllKeys = false;
 
             if (cb) {
                 this._primaryCallback = this.addCallback(cb);
             }
 
-            this._watchList = [];
+            if (Array.isArray(watchlist)) {
+                this._keys = watchlist.slice();
 
-            if (watchlist) {
-                if (Array.isArray(watchlist)) {
-                    this._watchList = watchlist.slice();
+            } else {
+                switch(watchlist) {
+                    case AbstractObservable.WATCH_ANY:
+                        this._allowAllKeys = true;
+                        break;
 
-                } else {
-                    switch(watchlist) {
-                        case AbstractObservable.WATCH_ANY:
-                            // already a blank array, allow all
-                            break;
+                    case AbstractObservable.WATCH_CURRENT_ONLY:
+                        if (obj instanceof Element) {
+                            let wl = Array.from(obj.attributes);
+                            this._keys = wl.map( i => { return i.name });
+                        } else {
+                            this._keys = Object.keys(obj);
+                        }
+                        break;
 
-                        case AbstractObservable.WATCH_CURRENT_ONLY:
-                            if (obj instanceof Element) {
-                                let wl = Array.from(obj.attributes);
-                                this._watchList = wl.map( i => { return i.name });
-                            } else {
-                                this._watchList = Object.keys(obj);
-                            }
-                            break;
-                    }
+                    default:
+                        // default to watch any and all
+                        this._allowAllKeys = true;
+                        break;
+
                 }
             }
         }
@@ -165,6 +168,26 @@
          * @returns {*}
          */
         get data() { return this._model; }
+
+        /**
+         * get allowAllKeys bool
+         * @returns {boolean}
+         */
+        get allowAllKeys() {
+            return this._allowAllKeys;
+        }
+
+        /**
+         * get keys
+         * @returns {string[] | *}
+         */
+        get keys() {
+            if (this._keys) {
+                return this._keys;
+            } else {
+                return Object.keys(this._model);
+            }
+        }
 
         /**
          * do not dispatch event for next change
@@ -218,6 +241,7 @@
             this._destinations = new Map();
             this._sources = new Map();
             this._namedCallbacks = {};
+            this._aggregateValues = {};
             this._callbacks = [];
 
             if (cb) {
@@ -257,6 +281,40 @@
         }
 
         /**
+         * sync current values and add binding
+         * @param {AbstractObservable} obj
+         * @param {Boolean} isSrc is a binding source
+         * @param {Boolean} isDest is a binding destination
+         */
+        sync(obj, isSrc, isDest) {
+            this.add(obj, isSrc, isDest);
+            if (isSrc) {
+                this.pushAllValues(obj);
+            }
+
+            if (isDest) {
+                this.pullAllValues(obj);
+            }
+
+        }
+
+        pushAllValues(src) {
+            for (let c = 0; c < src.keys.length; c++) {
+                if (src.data[src.keys[c]] !== undefined) {
+                    this._onDataChange(src, src.keys[c], src.data[src.keys[c]]);
+                }
+            }
+        }
+
+        pullAllValues(dest) {
+            for (let c in this._aggregateValues) {
+                if (this._aggregateValues[c] !== undefined) {
+                    dest.data[c] = this._aggregateValues[c];
+                }
+            }
+        }
+
+        /**
          * remove binding for object
          * @param {AbstractObservable} obj
          */
@@ -275,6 +333,7 @@
          * @private
          */
         _onDataChange(obj, key, value) {
+            this._aggregateValues[key] = value;
             for (const dest of this._destinations.entries()){
                 if (obj.id !== dest[1].observable.id) {
                     dest[1].observable.ignoreNextChange();
@@ -501,11 +560,16 @@
             const scope = this;
             this._model = new Proxy({}, {
                 get: function(target, name) {
-                    return scope._element.getAttribute(name);
+                    if (scope.allowAllKeys ||
+                        scope.keys.indexOf(name) !== -1) {
+                        return scope._element.getAttribute(name);
+                    } else {
+                        return undefined;
+                    }
                 },
                 set: function(target, prop, value) {
-                    if (scope._watchList.length === 0 ||
-                        scope._watchList.indexOf(prop) !== -1) {
+                    if (scope.allowAllKeys ||
+                        scope.keys.indexOf(prop) !== -1) {
                         scope._element.setAttribute(prop, value);
                     }
                     return true;
@@ -531,7 +595,7 @@
             }
 
             for (let c = 0; c < e.length; c++) {
-                if (this._watchList.length === 0 || this._watchList.indexOf(e[c].attributeName) !== -1) {
+                if (this.keys.length === 0 || this.keys.indexOf(e[c].attributeName) !== -1) {
                     this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName), e[c].oldValue);
                 }
             }
@@ -551,11 +615,16 @@
             const scope = this;
             this._model = new Proxy(obj, {
                 get: function(target, name) {
-                    return target[name];
+                    if (scope.allowAllKeys ||
+                        scope.keys.indexOf(name) !== -1) {
+                        return target[name];
+                    } else {
+                        return undefined;
+                    }
                 },
                 set: function(target, prop, value) {
-                    if (scope._watchList.length === 0 ||
-                        scope._watchList.indexOf(prop) !== -1) {
+                    if (scope.allowAllKeys ||
+                        scope.keys.indexOf(prop) !== -1) {
                         const oldvalue = target[prop];
                         target[prop] = value;
 
@@ -565,7 +634,6 @@
                         scope._ignoreNextChange = false;
                         return true;
                     }
-
                     scope._ignoreNextChange = false;
                     return true;
 
@@ -580,7 +648,6 @@
         stop() {
             this._observing = false;
         }
-
 
         /**
          * get data
@@ -627,6 +694,11 @@
             this._binding.add(observable, isSrc, isDest);
         }
 
+        sync(name, observable, isSrc, isDest) {
+            this._observables[name] = observable;
+            this._binding.sync(observable, isSrc, isDest);
+        }
+
         getObservable(name) {
             return this._observables[name];
         }
@@ -659,7 +731,7 @@
          */
         static createBindings(scope, opts) {
             scope.__attrocity = new CustomElementBindingManager();
-            scope.__attrocity.add('customelement', new ObservableCustomElement(scope), true, true);
+            scope.__attrocity.sync('customelement', new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), true, true);
             return scope.__attrocity;
         }
 
@@ -678,12 +750,18 @@
             const scope = this;
             this._model = new Proxy({}, {
                 get: function(target, name) {
-                    return scope._element.getAttribute(name);
+                    if (scope.allowAllKeys ||
+                        scope.keys.indexOf(name) !== -1) {
+                        return scope._element.getAttribute(name);
+                    } else {
+                        return undefined;
+                    }
                 },
                 set: function(target, prop, value) {
-                    // should this be more resrictive in what allows setting by user pref?
-                    // observedAttribute list is too limiting i think here
-                    scope._element.setAttribute(prop, value);
+                    if (scope.allowAllKeys ||
+                        scope.keys.indexOf(prop) !== -1) {
+                        scope._element.setAttribute(prop, value);
+                    }
                     return true;
                 }
             });

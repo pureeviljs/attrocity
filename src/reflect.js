@@ -26,8 +26,8 @@ export default class Reflect {
     static createBindings(scope) {
         const obj = {};
         scope.__attrocity = new CustomElementBindingManager();
-        scope.__attrocity.add('datamodel', new ObservableObject(obj), true, true);
-        scope.__attrocity.add('customelement', new ObservableCustomElement(scope), true, true);
+        scope.__attrocity.add('datamodel', new ObservableObject(obj, null, scope.constructor.observedAttributes), true, true);
+        scope.__attrocity.add('customelement', new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), true, true);
 
         const attributes = scope.constructor.observedAttributes;
         if (attributes) {
@@ -49,7 +49,6 @@ export default class Reflect {
         } else {
             console.warn('No observedAttributes specified for class', scope.constructor);
         }
-
 
         return scope.__attrocity;
     }

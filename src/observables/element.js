@@ -17,11 +17,16 @@ export default class ObservableElement extends AbstractObservable {
         const scope = this;
         this._model = new Proxy({}, {
             get: function(target, name) {
-                return scope._element.getAttribute(name);
+                if (scope.allowAllKeys ||
+                    scope.keys.indexOf(name) !== -1) {
+                    return scope._element.getAttribute(name);
+                } else {
+                    return undefined;
+                }
             },
             set: function(target, prop, value) {
-                if (scope._watchList.length === 0 ||
-                    scope._watchList.indexOf(prop) !== -1) {
+                if (scope.allowAllKeys ||
+                    scope.keys.indexOf(prop) !== -1) {
                     scope._element.setAttribute(prop, value);
                 }
                 return true;
@@ -47,7 +52,7 @@ export default class ObservableElement extends AbstractObservable {
         }
 
         for (let c = 0; c < e.length; c++) {
-            if (this._watchList.length === 0 || this._watchList.indexOf(e[c].attributeName) !== -1) {
+            if (this.keys.length === 0 || this.keys.indexOf(e[c].attributeName) !== -1) {
                 this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName), e[c].oldValue);
             }
         }

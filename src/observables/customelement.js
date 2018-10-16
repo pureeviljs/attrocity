@@ -28,7 +28,7 @@ export default class ObservableCustomElement extends AbstractObservable {
      */
     static createBindings(scope, opts) {
         scope.__attrocity = new CustomElementBindingManager();
-        scope.__attrocity.add('customelement', new ObservableCustomElement(scope), true, true);
+        scope.__attrocity.sync('customelement', new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), true, true);
         return scope.__attrocity;
     }
 
@@ -47,12 +47,18 @@ export default class ObservableCustomElement extends AbstractObservable {
         const scope = this;
         this._model = new Proxy({}, {
             get: function(target, name) {
-                return scope._element.getAttribute(name);
+                if (scope.allowAllKeys ||
+                    scope.keys.indexOf(name) !== -1) {
+                    return scope._element.getAttribute(name);
+                } else {
+                    return undefined;
+                }
             },
             set: function(target, prop, value) {
-                // should this be more resrictive in what allows setting by user pref?
-                // observedAttribute list is too limiting i think here
-                scope._element.setAttribute(prop, value);
+                if (scope.allowAllKeys ||
+                    scope.keys.indexOf(prop) !== -1) {
+                    scope._element.setAttribute(prop, value);
+                }
                 return true;
             }
         });

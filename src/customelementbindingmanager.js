@@ -37,6 +37,11 @@ export default class CustomElementBindingManager {
         this._binding.add(observable, isSrc, isDest);
     }
 
+    sync(name, observable, isSrc, isDest) {
+        this._observables[name] = observable;
+        this._binding.sync(observable, isSrc, isDest);
+    }
+
     getObservable(name) {
         return this._observables[name];
     }

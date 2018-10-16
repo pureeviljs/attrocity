@@ -170,7 +170,7 @@ test('allow change for watched property', function (t) {
 });
 
 
-test('disallow change for non-watched property', function (t) {
+test('disallow getting non-watched property', function (t) {
     t.plan(1);
 
     const model = {
@@ -181,9 +181,7 @@ test('disallow change for non-watched property', function (t) {
     };
 
     const observableModel = new ObservableObject(model, null, ['property5']);
-
-    observableModel.data.property4 = 'hello';
-    t.equal(observableModel.data.property4, 'test4');
+    t.equal(observableModel.data.property4, undefined);
 });
 
 test('change property that was not present at start', function (t) {

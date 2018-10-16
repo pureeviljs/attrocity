@@ -13,11 +13,16 @@ export default class ObservableObject extends AbstractObservable {
         const scope = this;
         this._model = new Proxy(obj, {
             get: function(target, name) {
-                return target[name];
+                if (scope.allowAllKeys ||
+                    scope.keys.indexOf(name) !== -1) {
+                    return target[name];
+                } else {
+                    return undefined;
+                }
             },
             set: function(target, prop, value) {
-                if (scope._watchList.length === 0 ||
-                    scope._watchList.indexOf(prop) !== -1) {
+                if (scope.allowAllKeys ||
+                    scope.keys.indexOf(prop) !== -1) {
                     const oldvalue = target[prop];
                     target[prop] = value;
 
@@ -27,7 +32,6 @@ export default class ObservableObject extends AbstractObservable {
                     scope._ignoreNextChange = false;
                     return true;
                 }
-
                 scope._ignoreNextChange = false;
                 return true;
 
@@ -42,7 +46,6 @@ export default class ObservableObject extends AbstractObservable {
     stop() {
         this._observing = false;
     }
-
 
     /**
      * get data
