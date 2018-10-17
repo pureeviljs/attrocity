@@ -234,6 +234,9 @@
     }
 
     class Binding {
+        static get PUSH() { return 'push'; }
+        static get PULL() { return 'pull'; }
+        static get TWOWAY() { return 'twoway'; }
         /**
          * constructor
          */
@@ -263,19 +266,18 @@
         /**
          * add binding
          * @param {AbstractObservable} obj
-         * @param {Boolean} isSrc is a binding source
-         * @param {Boolean} isDest is a binding destination
+         * @param {String} direction binding direction
          */
-        add(obj, isSrc, isDest) {
+        add(obj, direction) {
             if (obj instanceof AbstractObservable === false) {
                 console.error('Adding binding for non-observable object', obj);
                 return;
             }
-            if (isSrc) {
+            if (!direction || direction === Binding.PUSH || direction === Binding.TWOWAY) {
                 const cbID = obj.addCallback( (obj, key, value) => this._onDataChange(obj, key, value));
                 this._sources.set(obj.id, { observable: obj, callback: cbID });
             }
-            if (isDest) {
+            if (!direction || direction === Binding.PULL || direction === Binding.TWOWAY) {
                 this._destinations.set(obj.id, { observable: obj });
             }
         }
@@ -283,16 +285,15 @@
         /**
          * sync current values and add binding
          * @param {AbstractObservable} obj
-         * @param {Boolean} isSrc is a binding source
-         * @param {Boolean} isDest is a binding destination
+         * @param {String} direction binding direction
          */
-        sync(obj, isSrc, isDest) {
-            this.add(obj, isSrc, isDest);
-            if (isSrc) {
+        sync(obj, direction) {
+            this.add(obj, direction);
+            if (!direction || direction === Binding.PUSH || direction === Binding.TWOWAY) {
                 this.pushAllValues(obj);
             }
 
-            if (isDest) {
+            if (!direction || direction === Binding.PULL || direction === Binding.TWOWAY) {
                 this.pullAllValues(obj);
             }
 
@@ -689,14 +690,22 @@
             }
         }
 
-        add(name, observable, isSrc, isDest) {
+        add(observable, bindingdirection, name) {
+            if (!name) {
+                name = observable.constructor.name;
+            }
             this._observables[name] = observable;
-            this._binding.add(observable, isSrc, isDest);
+            this._binding.add(observable, bindingdirection);
+            return this._binding;
         }
 
-        sync(name, observable, isSrc, isDest) {
+        sync(observable, bindingdirection, name) {
+            if (!name) {
+                name = observable.constructor.name;
+            }
             this._observables[name] = observable;
-            this._binding.sync(observable, isSrc, isDest);
+            this._binding.sync(observable, bindingdirection);
+            return this._binding;
         }
 
         getObservable(name) {
@@ -731,7 +740,7 @@
          */
         static createBindings(scope, opts) {
             scope.__attrocity = new CustomElementBindingManager();
-            scope.__attrocity.sync('customelement', new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), true, true);
+            scope.__attrocity.sync(new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), Binding.TWOWAY, 'customelement');
             return scope.__attrocity;
         }
 

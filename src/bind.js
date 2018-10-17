@@ -1,6 +1,9 @@
 import AbstractObservable from './observables/abstractobservable.js';
 
 export default class Binding {
+    static get PUSH() { return 'push'; }
+    static get PULL() { return 'pull'; }
+    static get TWOWAY() { return 'twoway'; }
     /**
      * constructor
      */
@@ -30,19 +33,18 @@ export default class Binding {
     /**
      * add binding
      * @param {AbstractObservable} obj
-     * @param {Boolean} isSrc is a binding source
-     * @param {Boolean} isDest is a binding destination
+     * @param {String} direction binding direction
      */
-    add(obj, isSrc, isDest) {
+    add(obj, direction) {
         if (obj instanceof AbstractObservable === false) {
             console.error('Adding binding for non-observable object', obj);
             return;
         }
-        if (isSrc) {
+        if (!direction || direction === Binding.PUSH || direction === Binding.TWOWAY) {
             const cbID = obj.addCallback( (obj, key, value) => this._onDataChange(obj, key, value));
             this._sources.set(obj.id, { observable: obj, callback: cbID });
         }
-        if (isDest) {
+        if (!direction || direction === Binding.PULL || direction === Binding.TWOWAY) {
             this._destinations.set(obj.id, { observable: obj });
         }
     }
@@ -50,16 +52,15 @@ export default class Binding {
     /**
      * sync current values and add binding
      * @param {AbstractObservable} obj
-     * @param {Boolean} isSrc is a binding source
-     * @param {Boolean} isDest is a binding destination
+     * @param {String} direction binding direction
      */
-    sync(obj, isSrc, isDest) {
-        this.add(obj, isSrc, isDest);
-        if (isSrc) {
+    sync(obj, direction) {
+        this.add(obj, direction);
+        if (!direction || direction === Binding.PUSH || direction === Binding.TWOWAY) {
             this.pushAllValues(obj)
         }
 
-        if (isDest) {
+        if (!direction || direction === Binding.PULL || direction === Binding.TWOWAY) {
             this.pullAllValues(obj);
         }
 

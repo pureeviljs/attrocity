@@ -14,8 +14,8 @@ test('bind property not defined on object to another object', function (t) {
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3});
     const observableB = new ObservableObject({ z: 100, x: 101, y: 102 });
     const binding = new Bind();
-    binding.add(observableA, true, true);
-    binding.add(observableB, true, true);
+    binding.add(observableA);
+    binding.add(observableB);
 
     observableA.data.a = 10;
     t.equal(observableB.data.a, 10);
@@ -27,8 +27,8 @@ test('fail to bind property not defined on object to another object', function (
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3});
     const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, ObservableObject.WATCH_CURRENT_ONLY);
     const binding = new Bind();
-    binding.add(observableA, true, true);
-    binding.add(observableB, true, true);
+    binding.add(observableA);
+    binding.add(observableB);
 
     observableA.data.a = 10;
     t.equal(observableB.data.a, undefined);
@@ -45,8 +45,8 @@ test('bind callback', function (t) {
         t.equal(name, 'a');
         t.equal(value, 10);
     });
-    binding.add(observableA, true, true);
-    binding.add(observableB, true, true);
+    binding.add(observableA);
+    binding.add(observableB);
 
     observableA.data.a = 10;
 });
@@ -61,8 +61,8 @@ test('bind callback added from constructor', function (t) {
         t.equal(name, 'a');
         t.equal(value, 10);
     });
-    binding.add(observableA, true, true);
-    binding.add(observableB, true, true);
+    binding.add(observableA);
+    binding.add(observableB);
 
     observableA.data.a = 10;
 });
@@ -78,8 +78,8 @@ test('bind callback to watch single value', function (t) {
         t.equal(name, 'b');
         t.equal(value, 13);
     }, 'b');
-    binding.add(observableA, true, true);
-    binding.add(observableB, true, true);
+    binding.add(observableA);
+    binding.add(observableB);
 
     observableA.data.a = 10; // not watched in callback
     observableA.data.b = 13;
@@ -94,8 +94,8 @@ test('remove binding callback', function (t) {
     binding.addCallback( (obj, name, value) => {
         t.fail('Binding was removed, so this should not be called')
     });
-    binding.add(observableA, true, true);
-    binding.add(observableB, true, true);
+    binding.add(observableA);
+    binding.add(observableB);
     binding.remove(observableA);
     observableA.data.a = 10;
 
@@ -111,8 +111,8 @@ test('sync binding values when added (explicit keys)', function (t) {
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3}, null, ['a', 'b', 'c', 'z', 'x', 'y']);
     const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, ['a', 'b', 'c', 'z', 'x', 'y']);
     const binding = new Bind();
-    binding.sync(observableA, true, true);
-    binding.sync(observableB, true, true);
+    binding.sync(observableA);
+    binding.sync(observableB);
     t.equal(observableA.data.z, 100);
     t.equal(observableA.data.x, 101);
     t.equal(observableA.data.y, 102);
@@ -128,8 +128,8 @@ test('sync binding values when added (allow all keys by not specifying)', functi
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3});
     const observableB = new ObservableObject({ z: 100, x: 101, y: 102 });
     const binding = new Bind();
-    binding.sync(observableA, true, true);
-    binding.sync(observableB, true, true);
+    binding.sync(observableA);
+    binding.sync(observableB);
     t.equal(observableA.data.z, 100);
     t.equal(observableA.data.x, 101);
     t.equal(observableA.data.y, 102);
@@ -146,8 +146,8 @@ test('dont sync non watched properties (default keys are ones already present)',
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3}, null, []);
     const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, []);
     const binding = new Bind();
-    binding.sync(observableA, true, true);
-    binding.sync(observableB, true, true);
+    binding.sync(observableA);
+    binding.sync(observableB);
     t.equal(observableA.data.z, undefined);
     t.equal(observableA.data.x, undefined);
     t.equal(observableA.data.y, undefined);

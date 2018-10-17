@@ -32,14 +32,22 @@ export default class CustomElementBindingManager {
         }
     }
 
-    add(name, observable, isSrc, isDest) {
+    add(observable, bindingdirection, name) {
+        if (!name) {
+            name = observable.constructor.name;
+        }
         this._observables[name] = observable;
-        this._binding.add(observable, isSrc, isDest);
+        this._binding.add(observable, bindingdirection);
+        return this._binding;
     }
 
-    sync(name, observable, isSrc, isDest) {
+    sync(observable, bindingdirection, name) {
+        if (!name) {
+            name = observable.constructor.name;
+        }
         this._observables[name] = observable;
-        this._binding.sync(observable, isSrc, isDest);
+        this._binding.sync(observable, bindingdirection);
+        return this._binding;
     }
 
     getObservable(name) {

@@ -1,6 +1,7 @@
 import ObservableCustomElement from './observables/customelement.js';
 import CustomElementBindingManager from './customelementbindingmanager.js';
 import ObservableObject from "./observables/object.js";
+import Bind from './bind.js';
 
 export default class Reflect {
     /**
@@ -26,8 +27,8 @@ export default class Reflect {
     static createBindings(scope) {
         const obj = {};
         scope.__attrocity = new CustomElementBindingManager();
-        scope.__attrocity.add('datamodel', new ObservableObject(obj, null, scope.constructor.observedAttributes), true, true);
-        scope.__attrocity.add('customelement', new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), true, true);
+        scope.__attrocity.add(new ObservableObject(obj, null, scope.constructor.observedAttributes), Bind.TWOWAY, 'datamodel',);
+        scope.__attrocity.add(new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), Bind.TWOWAY, 'customelement');
 
         const attributes = scope.constructor.observedAttributes;
         if (attributes) {

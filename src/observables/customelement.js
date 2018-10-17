@@ -1,5 +1,6 @@
 import AbstractObservable from './abstractobservable.js';
 import CustomElementBindingManager from '../customelementbindingmanager.js';
+import Bind from '../bind.js';
 
 export default class ObservableCustomElement extends AbstractObservable {
     /**
@@ -28,7 +29,7 @@ export default class ObservableCustomElement extends AbstractObservable {
      */
     static createBindings(scope, opts) {
         scope.__attrocity = new CustomElementBindingManager();
-        scope.__attrocity.sync('customelement', new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), true, true);
+        scope.__attrocity.sync(new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), Bind.TWOWAY, 'customelement');
         return scope.__attrocity;
     }
 
