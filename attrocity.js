@@ -118,6 +118,7 @@
         constructor(obj, cb, watchlist) {
             this._model = obj;
             this._id = Symbol();
+            this._name = '';
             this._callbacks = new Map();
             this._allowAllKeys = false;
 
@@ -153,6 +154,12 @@
         }
 
         /**
+         * getter for isObservable to check if we inherit from this class
+         * @returns {boolean}
+         */
+        get isObservable() { return true; }
+
+        /**
          * stop observation
          */
         stop() {}
@@ -162,6 +169,18 @@
          * @returns {symbol | *}
          */
         get id() { return this._id; }
+
+        /**
+         * get name
+         * @returns string
+         */
+        get name() { return this._name; }
+
+        /**
+         * set name
+         * @param string
+         */
+        set name(val) { this._name = val; }
 
         /**
          * get data
@@ -190,20 +209,14 @@
         }
 
         /**
-         * do not dispatch event for next change
-         */
-        ignoreNextChange() {
-            this._ignoreNextChange = true;
-        }
-
-        /**
          * add callback
          * @param cb
+         * @param scope
          * @returns {symbol}
          */
-        addCallback(cb) {
+        addCallback(cb, scope) {
             const id = Symbol();
-            this._callbacks.set(id, cb);
+            this._callbacks.set(id, { callback: cb, scope: scope });
             return id;
         }
 
@@ -225,11 +238,66 @@
          * @param value
          * @param oldValue
          */
-        dispatchChange(obj, name, value, oldValue) {
+        dispatchChange(obj, name, value, oldValue, originchain) {
             if (value === oldValue) { return; }
+            if (!originchain) { originchain = [obj]; }
             this._callbacks.forEach(cb => {
-                cb.apply(this, [obj, name, value, oldValue]);
+                if (originchain.indexOf(cb.scope) === -1) {
+                    Binding.log({action: 'observablechange', target: cb.scope, source: obj, origin: originchain, key: name, value: value, old: oldValue });
+                    cb.callback.apply(this, [obj, name, value, oldValue, originchain]);
+                }
             });
+        }
+
+        _createProxy() {
+            const scope = this;
+            return new Proxy(this._rawdata, {
+                get: function(target, name) {
+                    return scope._getKey(name);
+                },
+                set: function(target, prop, value) {
+                    scope._setKey(prop, value);
+                    return true;
+
+                }
+            });
+        }
+
+        _keyAllowed(key) {
+            return this.allowAllKeys || this.keys.indexOf(key) !== -1;
+        }
+
+        _setRawValue(key, value) {
+            this._rawdata[key] = value;
+        }
+
+        _getRawValue(key) {
+            return this._rawdata[key];
+        }
+
+        _getKey(prop) {
+            if (this._keyAllowed(prop)) {
+                Binding.log({action: 'getvalue', key: prop, source: this });
+                return this._getRawValue(prop);
+            } else {
+                return undefined;
+            }
+        }
+
+        _setKey(prop, value, originchain) {
+            if (!originchain) { originchain = []; }
+            originchain.push(this);
+
+            if (this._keyAllowed(prop)) {
+                const oldvalue = this._getRawValue(prop);
+                this._setRawValue(prop, value);
+
+                Binding.log({action: 'setvalue', key: prop, target: this, origin: originchain });
+
+                if (this._observing) {
+                    this.dispatchChange(this, prop, value, oldvalue, originchain);
+                }
+            }
         }
     }
 
@@ -237,6 +305,7 @@
         static get PUSH() { return 'push'; }
         static get PULL() { return 'pull'; }
         static get TWOWAY() { return 'twoway'; }
+
         /**
          * constructor
          */
@@ -246,20 +315,29 @@
             this._namedCallbacks = {};
             this._aggregateValues = {};
             this._callbacks = [];
+            this._name = '';
 
             if (cb) {
                 this.addCallback(cb);
             }
         }
 
+        get name() {
+            return this._name;
+        }
+
+        set name(val) {
+            this._name = val;
+        }
+
         addCallback(cb, name) {
             if (!name) {
-                this._callbacks.push(cb);
+                this._callbacks.push({ callback: cb  });
             } else {
                 if (!this._namedCallbacks[name]) {
                     this._namedCallbacks[name] = [];
                 }
-                this._namedCallbacks[name].push(cb);
+                this._namedCallbacks[name].push({ callback: cb });
             }
         }
 
@@ -269,12 +347,17 @@
          * @param {String} direction binding direction
          */
         add(obj, direction) {
-            if (obj instanceof AbstractObservable === false) {
+            direction = direction ? direction : Binding.TWOWAY;
+            this._name += '|' + obj.name + '@' + direction + '|';
+            if (obj.isObservable === false) {
                 console.error('Adding binding for non-observable object', obj);
                 return;
             }
+
+            Binding.log({action: 'add', target: obj });
+
             if (!direction || direction === Binding.PUSH || direction === Binding.TWOWAY) {
-                const cbID = obj.addCallback( (obj, key, value) => this._onDataChange(obj, key, value));
+                const cbID = obj.addCallback((obj, key, value, oldvalue, originchain) => this._onDataChange(obj, key, value, oldvalue, originchain), this);
                 this._sources.set(obj.id, { observable: obj, callback: cbID });
             }
             if (!direction || direction === Binding.PULL || direction === Binding.TWOWAY) {
@@ -310,6 +393,7 @@
         pullAllValues(dest) {
             for (let c in this._aggregateValues) {
                 if (this._aggregateValues[c] !== undefined) {
+                    Binding.log({action: 'pull', target: dest, source: this });
                     dest.data[c] = this._aggregateValues[c];
                 }
             }
@@ -333,25 +417,60 @@
          * @param value value of changed attribute
          * @private
          */
-        _onDataChange(obj, key, value) {
+        _onDataChange(obj, key, value, oldvalue, originchain) {
+            if (!originchain) { originchain = []; }
+            originchain.push(this);
+
             this._aggregateValues[key] = value;
             for (const dest of this._destinations.entries()){
-                if (obj.id !== dest[1].observable.id) {
-                    dest[1].observable.ignoreNextChange();
-                    dest[1].observable.data[key] = value;
+                if (obj.id !== dest[1].observable.id && originchain.indexOf(dest[1].observable) === -1) {
+                    Binding.log({action: 'push', source: this, target: dest[1].observable, origin: originchain });
+                    dest[1].observable._setKey(key, value, originchain);
                 }
             }
+
             for (let c = 0; c < this._callbacks.length; c++) {
-                this._callbacks[c].apply(this, [obj, key, value]);
+                if (!this._callbacks[c].scope || originchain.indexOf(this._callbacks[c].scope) === -1) {
+                    Binding.log({action: 'bindingchange', source: obj, target: this._callbacks[c].scope, origin: originchain });
+                    this._callbacks[c].callback.apply(this, [obj, key, value, oldvalue, originchain]);
+                }
             }
 
             if (this._namedCallbacks[key]) {
                 for (let c = 0; c < this._namedCallbacks[key].length; c++) {
-                    this._namedCallbacks[key][c].apply(this, [obj, key, value]);
+                    if (!this._namedCallbacks[key][c].scope || originchain.indexOf(this._namedCallbacks[key][c].scope) === -1) {
+                        Binding.log({action: 'bindingchange', source: this, target: this._namedCallbacks[key][c].scope, origin: originchain });
+                        this._namedCallbacks[key][c].callback.apply(this, [obj, key, value, oldvalue, originchain]);
+                    }
                 }
 
             }
         }
+
+        static log(o) {
+            if (Binding.debugMode || this.debugMode) {
+                console.log('----------');
+                console.log('* ' + o.action);
+
+                let src, dest;
+                if (o.source) { src = o.source.name; }
+                if (o.target) { dest = o.target.name; }
+                if (src === undefined) { src = ''; }
+                if (dest === undefined) { dest = ''; }
+                if (src || dest) {
+                    console.log(src + ' -> ' + dest);
+                }
+
+                if (o.origin && o.origin.length > 0) {
+                    console.log('origins:', o.origin.map( i => { return i.name } ).join(','));
+                }
+
+                if (o.key) {        console.log( ' - key -       :', o.key );}
+                if (o.value) {      console.log( ' - value -     :', o.value );}
+                if (o.oldValue) {   console.log( ' - old value - :', o.value );}
+            }
+        }
+
     }
 
     class MapDOM {
@@ -556,26 +675,22 @@
             this.observer = new MutationObserver(e => this.onMutationChange(e));
             this.observer.observe(el, { attributes: true, attributeOldValue: true });
 
-            this._element = el;
+            this._rawdata = el;
+            this.name = el.tagName;
 
-            const scope = this;
-            this._model = new Proxy({}, {
-                get: function(target, name) {
-                    if (scope.allowAllKeys ||
-                        scope.keys.indexOf(name) !== -1) {
-                        return scope._element.getAttribute(name);
-                    } else {
-                        return undefined;
-                    }
-                },
-                set: function(target, prop, value) {
-                    if (scope.allowAllKeys ||
-                        scope.keys.indexOf(prop) !== -1) {
-                        scope._element.setAttribute(prop, value);
-                    }
-                    return true;
-                }
-            });
+            this._model = this._createProxy();
+        }
+
+        _setRawValue(key, value) {
+            this._rawdata.setAttribute(key, value);
+        }
+
+        _getRawValue(key) {
+            if (this._rawdata.getAttribute(key)) {
+                return this._rawdata.getAttribute(key);
+            } else {
+                return undefined;
+            }
         }
 
         /**
@@ -590,14 +705,9 @@
          * @param e
          */
         onMutationChange(e) {
-            if (this._ignoreNextChange) {
-                this._ignoreNextChange = false;
-                return;
-            }
-
             for (let c = 0; c < e.length; c++) {
                 if (this.keys.length === 0 || this.keys.indexOf(e[c].attributeName) !== -1) {
-                    this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName), e[c].oldValue);
+                    this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName), e[c].oldValue, [this]);
                 }
             }
         }
@@ -610,36 +720,11 @@
          * @param {Function} cb callback
          * @param {Array | String} watchlist list of attributes to watch on element (if null, watch them all)
          */
-        constructor(obj, cb, watchlist) {
+        constructor(obj, cb, watchlist, name) {
             super(obj, cb, watchlist);
-
-            const scope = this;
-            this._model = new Proxy(obj, {
-                get: function(target, name) {
-                    if (scope.allowAllKeys ||
-                        scope.keys.indexOf(name) !== -1) {
-                        return target[name];
-                    } else {
-                        return undefined;
-                    }
-                },
-                set: function(target, prop, value) {
-                    if (scope.allowAllKeys ||
-                        scope.keys.indexOf(prop) !== -1) {
-                        const oldvalue = target[prop];
-                        target[prop] = value;
-
-                        if (!scope._ignoreNextChange && scope._observing) {
-                            scope.dispatchChange(scope, prop, value, oldvalue);
-                        }
-                        scope._ignoreNextChange = false;
-                        return true;
-                    }
-                    scope._ignoreNextChange = false;
-                    return true;
-
-                }
-            });
+            if (name) { this._name = name; }
+            this._rawdata = obj;
+            this._model = this._createProxy();
             this._observing = true;
         }
 
@@ -664,6 +749,7 @@
             this._observables = {};
             this._binding = new Binding();
             this._rules = new CastingRules();
+            this._name = ['CustomElementBindingManager'];
         }
 
         get binding() {
@@ -674,18 +760,30 @@
             return this._rules;
         }
 
+        get name() {
+            return this._name.join('*');
+        }
+
         addRule(key, rule) {
             this._rules.addRule(key, rule);
         }
 
         addCallback(cb, name) {
             if (!name) {
-                this.binding.addCallback( (object, name, value) => {
-                    cb(name, this._rules.cast(name, value));
+                this.binding.addCallback((object, name, value, oldvalue, originchain) => {
+                    if (!originchain) {
+                        originchain = [];
+                    }
+                    originchain.push(this);
+                    cb(object, name, this._rules.cast(name, value), oldvalue, originchain);
                 });
             } else {
-                this.binding.addCallback( (object, name, value) => {
-                    cb(this._rules.cast(name, value));
+                this.binding.addCallback((object, name, value, oldvalue, originchain) => {
+                    if (!originchain) {
+                        originchain = [];
+                    }
+                    originchain.push(this);
+                    cb(object, name, this._rules.cast(name, value), oldvalue, originchain);
                 }, name);
             }
         }
@@ -696,6 +794,7 @@
             }
             this._observables[name] = observable;
             this._binding.add(observable, bindingdirection);
+            this._name.push(observable.name);
             return this._binding;
         }
 
@@ -705,6 +804,7 @@
             }
             this._observables[name] = observable;
             this._binding.sync(observable, bindingdirection);
+            this._name.push(observable.name);
             return this._binding;
         }
 
@@ -722,11 +822,14 @@
         static attach(clazz) {
             clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
                 if (this.__attrocity) {
-                    if (this.__attrocity.getObservable('customelement')._ignoreNextChange
-                    || !this.__attrocity.getObservable('customelement')._observing ) { return; }
-                    this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue, oldValue);
-
-                    this.__attrocity.getObservable('customelement')._ignoreNextChange = false;
+                    let originchain = [];
+                    if (this.__attrocity.originChainContinuity) {
+                        originchain = this.__attrocity.originChainContinuity;
+                    }
+                    this.__attrocity.originChainContinuity = [];
+                    if (!this.__attrocity.getObservable('customelement')._observing ) { return; }
+                    const ce = this.__attrocity.getObservable('customelement');
+                    ce.dispatchChange(ce, name, newValue, oldValue, originchain);
                 }
             };
             return clazz;
@@ -740,7 +843,10 @@
          */
         static createBindings(scope, opts) {
             scope.__attrocity = new CustomElementBindingManager();
-            scope.__attrocity.sync(new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), Binding.TWOWAY, 'customelement');
+            scope.__attrocity.sync(new ObservableCustomElement(scope,
+                (o, name, val, old, originchain) => { scope.__attrocity.originChainContinuity = originchain; },
+                scope.constructor.observedAttributes),
+                Binding.TWOWAY, 'customelement');
             return scope.__attrocity;
         }
 
@@ -751,29 +857,38 @@
          * @param {Function} cb callback
          */
         constructor(el, cb) {
-            super(el, cb);
+            super(el, cb, el.constructor.observedAttributes);
+
             this._observing = true;
 
-            this._element = el;
+            this._rawdata = el;
+            this.name = el.tagName;
+            this._model = this._createProxy();
 
-            const scope = this;
-            this._model = new Proxy({}, {
-                get: function(target, name) {
-                    if (scope.allowAllKeys ||
-                        scope.keys.indexOf(name) !== -1) {
-                        return scope._element.getAttribute(name);
-                    } else {
-                        return undefined;
-                    }
-                },
-                set: function(target, prop, value) {
-                    if (scope.allowAllKeys ||
-                        scope.keys.indexOf(prop) !== -1) {
-                        scope._element.setAttribute(prop, value);
-                    }
-                    return true;
-                }
-            });
+        }
+
+        _setRawValue(key, value) {
+            this._rawdata.setAttribute(key, value);
+        }
+
+        _getRawValue(key) {
+            if (this._rawdata.getAttribute(key)) {
+                return this._rawdata.getAttribute(key);
+            } else {
+                return undefined;
+            }
+        }
+
+        _setKey(prop, value, originchain) {
+            if (!originchain) { originchain = []; }
+            originchain.push(this);
+
+            if (this._keyAllowed(prop)) {
+                const oldvalue = this._getRawValue(prop);
+                this._setRawValue(prop, value);
+
+                Binding.log({action: 'setvalue', key: prop, target: this, origin: originchain });
+            }
         }
 
         /**

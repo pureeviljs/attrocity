@@ -51,24 +51,6 @@ test('observe element change property to identical value', function (t) {
     }, 50);
 });
 
-test('observe element ignoring first change', function (t) {
-    resetEl();
-    t.plan(2);
-
-    const observableModel = new ObservableElement(el, (object, name, value) => {
-        observableModel.stop();
-        t.equal(name, 'test');
-        t.equal(value, 'byebye');
-    });
-
-    observableModel.ignoreNextChange();
-    el.setAttribute('test', 'bye');
-
-    setTimeout( function() {
-        el.setAttribute('test', 'byebye');
-    }, 50);
-});
-
 test('observe attribute that was not present at start', function (t) {
     resetEl();
     t.plan(2);

@@ -21,7 +21,7 @@
                 assert.equal(el.testvalue.join(','), 'test,hi,test,bye,anothertest,a value');
                 assert.equal(el.getAttribute('test'), 'bye');
                 assert.equal(el.getAttribute('anothertest'), 'a value');
-            }, 10);
+            }, 100);
         });
 
         test('can support change observation and ignoring change to same value (from attribute)', function () {

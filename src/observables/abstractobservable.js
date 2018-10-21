@@ -1,3 +1,5 @@
+import Binding from '../bind.js';
+
 export default class AbstractObservable {
     static get WATCH_ANY() { return 'watch-any'; }
     static get WATCH_CURRENT_ONLY() { return 'watch-current-only'; }
@@ -10,6 +12,7 @@ export default class AbstractObservable {
     constructor(obj, cb, watchlist) {
         this._model = obj;
         this._id = Symbol();
+        this._name = '';
         this._callbacks = new Map();
         this._allowAllKeys = false;
 
@@ -45,6 +48,12 @@ export default class AbstractObservable {
     }
 
     /**
+     * getter for isObservable to check if we inherit from this class
+     * @returns {boolean}
+     */
+    get isObservable() { return true; }
+
+    /**
      * stop observation
      */
     stop() {}
@@ -54,6 +63,18 @@ export default class AbstractObservable {
      * @returns {symbol | *}
      */
     get id() { return this._id; }
+
+    /**
+     * get name
+     * @returns string
+     */
+    get name() { return this._name; }
+
+    /**
+     * set name
+     * @param string
+     */
+    set name(val) { this._name = val; }
 
     /**
      * get data
@@ -82,20 +103,14 @@ export default class AbstractObservable {
     }
 
     /**
-     * do not dispatch event for next change
-     */
-    ignoreNextChange() {
-        this._ignoreNextChange = true;
-    }
-
-    /**
      * add callback
      * @param cb
+     * @param scope
      * @returns {symbol}
      */
-    addCallback(cb) {
+    addCallback(cb, scope) {
         const id = Symbol();
-        this._callbacks.set(id, cb);
+        this._callbacks.set(id, { callback: cb, scope: scope });
         return id;
     }
 
@@ -117,10 +132,65 @@ export default class AbstractObservable {
      * @param value
      * @param oldValue
      */
-    dispatchChange(obj, name, value, oldValue) {
+    dispatchChange(obj, name, value, oldValue, originchain) {
         if (value === oldValue) { return; }
+        if (!originchain) { originchain = [obj]; }
         this._callbacks.forEach(cb => {
-            cb.apply(this, [obj, name, value, oldValue]);
+            if (originchain.indexOf(cb.scope) === -1) {
+                Binding.log({action: 'observablechange', target: cb.scope, source: obj, origin: originchain, key: name, value: value, old: oldValue });
+                cb.callback.apply(this, [obj, name, value, oldValue, originchain]);
+            }
         });
+    }
+
+    _createProxy() {
+        const scope = this;
+        return new Proxy(this._rawdata, {
+            get: function(target, name) {
+                return scope._getKey(name);
+            },
+            set: function(target, prop, value) {
+                scope._setKey(prop, value);
+                return true;
+
+            }
+        });
+    }
+
+    _keyAllowed(key) {
+        return this.allowAllKeys || this.keys.indexOf(key) !== -1;
+    }
+
+    _setRawValue(key, value) {
+        this._rawdata[key] = value;
+    }
+
+    _getRawValue(key) {
+        return this._rawdata[key];
+    }
+
+    _getKey(prop) {
+        if (this._keyAllowed(prop)) {
+            Binding.log({action: 'getvalue', key: prop, source: this });
+            return this._getRawValue(prop);
+        } else {
+            return undefined;
+        }
+    }
+
+    _setKey(prop, value, originchain) {
+        if (!originchain) { originchain = []; }
+        originchain.push(this);
+
+        if (this._keyAllowed(prop)) {
+            const oldvalue = this._getRawValue(prop);
+            this._setRawValue(prop, value);
+
+            Binding.log({action: 'setvalue', key: prop, target: this, origin: originchain });
+
+            if (this._observing) {
+                this.dispatchChange(this, prop, value, oldvalue, originchain);
+            }
+        }
     }
 }

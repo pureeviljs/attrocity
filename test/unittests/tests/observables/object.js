@@ -97,26 +97,6 @@ test('stop observing', function (t) {
 });
 
 
-test('observe object ignoring first change', function (t) {
-    t.plan(2);
-
-    const model = {
-        property1: 'test1',
-        property2: 'test2',
-        property3: 'test3',
-        property4: 'test4',
-    };
-
-    const observableModel = new ObservableObject(model, function(object, name, value) {
-        t.equal(name, 'property2');
-        t.equal(value, 'hello2');
-    });
-
-    observableModel.ignoreNextChange();
-    observableModel.data.property1 = 'hello1';
-    observableModel.data.property2 = 'hello2';
-});
-
 test('observe property that was not present at start', function (t) {
     t.plan(2);
 

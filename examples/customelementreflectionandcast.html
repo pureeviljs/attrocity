@@ -6,6 +6,10 @@
 
     <script type="module">
         import Reflect from '../src/reflect.js';
+        import Binding from '../src/bind.js';
+
+
+        //Binding.debugMode = true;
 
         class SampleComponent extends HTMLElement {
             static get observedAttributes() {
@@ -17,13 +21,13 @@
                 this.binding.addRule(['test', 'anothertest'], function(val) {
                     return val + ' is the message I have today';
                 });
-                this.binding.addCallback( (name, value) => {
-                    console.log('name', name, 'value', value)
+                this.binding.addCallback( (object, name, value, oldvalue, originchain) => {
+                    console.log('name', name, 'value', value);//, oldvalue, originchain)
                 });
-                console.log(this.test);
+
                 this.test = 'bye';
                 this.anothertest = 'something';
-                console.log(this.test);
+
             }
         }
 

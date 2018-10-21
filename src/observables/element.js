@@ -1,4 +1,5 @@
 import AbstractObservable from "./abstractobservable.js";
+import Binding from "../bind.js";
 
 export default class ObservableElement extends AbstractObservable {
     /**
@@ -12,26 +13,22 @@ export default class ObservableElement extends AbstractObservable {
         this.observer = new MutationObserver(e => this.onMutationChange(e));
         this.observer.observe(el, { attributes: true, attributeOldValue: true });
 
-        this._element = el;
+        this._rawdata = el;
+        this.name = el.tagName;
 
-        const scope = this;
-        this._model = new Proxy({}, {
-            get: function(target, name) {
-                if (scope.allowAllKeys ||
-                    scope.keys.indexOf(name) !== -1) {
-                    return scope._element.getAttribute(name);
-                } else {
-                    return undefined;
-                }
-            },
-            set: function(target, prop, value) {
-                if (scope.allowAllKeys ||
-                    scope.keys.indexOf(prop) !== -1) {
-                    scope._element.setAttribute(prop, value);
-                }
-                return true;
-            }
-        });
+        this._model = this._createProxy();
+    }
+
+    _setRawValue(key, value) {
+        this._rawdata.setAttribute(key, value);
+    }
+
+    _getRawValue(key) {
+        if (this._rawdata.getAttribute(key)) {
+            return this._rawdata.getAttribute(key);
+        } else {
+            return undefined;
+        }
     }
 
     /**
@@ -46,14 +43,9 @@ export default class ObservableElement extends AbstractObservable {
      * @param e
      */
     onMutationChange(e) {
-        if (this._ignoreNextChange) {
-            this._ignoreNextChange = false;
-            return;
-        }
-
         for (let c = 0; c < e.length; c++) {
             if (this.keys.length === 0 || this.keys.indexOf(e[c].attributeName) !== -1) {
-                this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName), e[c].oldValue);
+                this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName), e[c].oldValue, [this]);
             }
         }
     }

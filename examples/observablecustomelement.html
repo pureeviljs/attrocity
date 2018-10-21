@@ -14,7 +14,7 @@
             constructor() {
                 super();
                 this.binding = Observable.createBindings(this);
-                this.binding.addCallback((name, value) => this.onAttributeChanged(name, value));
+                this.binding.addCallback((obj, name, value) => this.onAttributeChanged(name, value));
             }
 
             onAttributeChanged(name, value) {

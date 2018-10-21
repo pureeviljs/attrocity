@@ -15,7 +15,7 @@
             constructor() {
                 super();
                 this.binding = Reflect.createBindings(this);
-                this.binding.addCallback( (name, value) => {
+                this.binding.addCallback( (obj, name, value) => {
                     console.log(name, value)
                 });
             }
@@ -28,8 +28,12 @@
     <sample-component test="hi"></sample-component>
 
     <script>
-        document.querySelector('sample-component').setAttribute('test', 'set from attribute');
-        console.log(document.querySelector('sample-component').getAttribute('test'))
+        setTimeout(
+            function() {
+                document.querySelector('sample-component').setAttribute('test', 'set from attribute');
+                console.log(document.querySelector('sample-component').getAttribute('test'))
+            }, 100)
+
     </script>
 </body>
 </html>

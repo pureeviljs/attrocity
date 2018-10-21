@@ -12,8 +12,8 @@
         const model2 = new ObservableElement(document.getElementById('div2'));
 
         const bind = new Bind();
-        bind.add(model1, true, true);
-        bind.add(model2, true, true);
+        bind.add(model1);
+        bind.add(model2);
 
         document.getElementById('div1').setAttribute('test', 'newvalue');
 

@@ -14,11 +14,13 @@ export default class Reflect {
     static attach(clazz) {
         clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
             if (this.__attrocity) {
-                if (this.__attrocity.getObservable('customelement')._ignoreNextChange) { return; }
-
-                this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue);
-
-                this.__attrocity.getObservable('customelement')._ignoreNextChange = false;
+                let originchain = [];
+                if (this.__attrocity.originChainContinuity) {
+                    originchain = this.__attrocity.originChainContinuity;
+                }
+                this.__attrocity.originChainContinuity = [];
+                const ce = this.__attrocity.getObservable('customelement');
+                ce.dispatchChange(ce, name, newValue, oldValue, originchain);
             }
         };
         return clazz;
@@ -27,8 +29,15 @@ export default class Reflect {
     static createBindings(scope) {
         const obj = {};
         scope.__attrocity = new CustomElementBindingManager();
-        scope.__attrocity.add(new ObservableObject(obj, null, scope.constructor.observedAttributes), Bind.TWOWAY, 'datamodel',);
-        scope.__attrocity.add(new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), Bind.TWOWAY, 'customelement');
+
+        const oo = new ObservableObject(obj,
+            (o, name, val, old, originchain) => { scope.__attrocity.originChainContinuity = originchain },
+            scope.constructor.observedAttributes,
+            scope.tagName + '-backingobject');
+        scope.__attrocity.sync(oo, Bind.TWOWAY, 'datamodel');
+
+        const ce = new ObservableCustomElement(scope);
+        scope.__attrocity.sync(ce, Bind.TWOWAY, 'customelement');
 
         const attributes = scope.constructor.observedAttributes;
         if (attributes) {

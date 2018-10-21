@@ -15,7 +15,7 @@
             constructor() {
                 super();
                 this.binding = Reflect.createBindings(this);
-                this.binding.addCallback( (name, value) => {
+                this.binding.addCallback( (obj, name, value) => {
                     console.log('callback', name, value)
                 });
             }

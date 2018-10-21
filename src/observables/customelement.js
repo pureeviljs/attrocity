@@ -1,6 +1,6 @@
 import AbstractObservable from './abstractobservable.js';
 import CustomElementBindingManager from '../customelementbindingmanager.js';
-import Bind from '../bind.js';
+import Binding from '../bind.js';
 
 export default class ObservableCustomElement extends AbstractObservable {
     /**
@@ -11,11 +11,14 @@ export default class ObservableCustomElement extends AbstractObservable {
     static attach(clazz) {
         clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
             if (this.__attrocity) {
-                if (this.__attrocity.getObservable('customelement')._ignoreNextChange
-                || !this.__attrocity.getObservable('customelement')._observing ) { return; }
-                this.__attrocity.getObservable('customelement').dispatchChange(this, name, newValue, oldValue);
-
-                this.__attrocity.getObservable('customelement')._ignoreNextChange = false;
+                let originchain = [];
+                if (this.__attrocity.originChainContinuity) {
+                    originchain = this.__attrocity.originChainContinuity;
+                }
+                this.__attrocity.originChainContinuity = [];
+                if (!this.__attrocity.getObservable('customelement')._observing ) { return; }
+                const ce = this.__attrocity.getObservable('customelement');
+                ce.dispatchChange(ce, name, newValue, oldValue, originchain);
             }
         };
         return clazz;
@@ -29,7 +32,10 @@ export default class ObservableCustomElement extends AbstractObservable {
      */
     static createBindings(scope, opts) {
         scope.__attrocity = new CustomElementBindingManager();
-        scope.__attrocity.sync(new ObservableCustomElement(scope, null, scope.constructor.observedAttributes), Bind.TWOWAY, 'customelement');
+        scope.__attrocity.sync(new ObservableCustomElement(scope,
+            (o, name, val, old, originchain) => { scope.__attrocity.originChainContinuity = originchain },
+            scope.constructor.observedAttributes),
+            Binding.TWOWAY, 'customelement');
         return scope.__attrocity;
     }
 
@@ -40,29 +46,40 @@ export default class ObservableCustomElement extends AbstractObservable {
      * @param {Function} cb callback
      */
     constructor(el, cb) {
-        super(el, cb);
+        super(el, cb, el.constructor.observedAttributes);
+
         this._observing = true;
 
-        this._element = el;
+        this._rawdata = el;
+        this.name = el.tagName;
 
         const scope = this;
-        this._model = new Proxy({}, {
-            get: function(target, name) {
-                if (scope.allowAllKeys ||
-                    scope.keys.indexOf(name) !== -1) {
-                    return scope._element.getAttribute(name);
-                } else {
-                    return undefined;
-                }
-            },
-            set: function(target, prop, value) {
-                if (scope.allowAllKeys ||
-                    scope.keys.indexOf(prop) !== -1) {
-                    scope._element.setAttribute(prop, value);
-                }
-                return true;
-            }
-        });
+        this._model = this._createProxy();
+
+    }
+
+    _setRawValue(key, value) {
+        this._rawdata.setAttribute(key, value);
+    }
+
+    _getRawValue(key) {
+        if (this._rawdata.getAttribute(key)) {
+            return this._rawdata.getAttribute(key);
+        } else {
+            return undefined;
+        }
+    }
+
+    _setKey(prop, value, originchain) {
+        if (!originchain) { originchain = []; }
+        originchain.push(this);
+
+        if (this._keyAllowed(prop)) {
+            const oldvalue = this._getRawValue(prop);
+            this._setRawValue(prop, value);
+
+            Binding.log({action: 'setvalue', key: prop, target: this, origin: originchain });
+        }
     }
 
     /**

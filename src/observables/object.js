@@ -1,4 +1,5 @@
 import AbstractObservable from "./abstractobservable.js";
+import Binding from '../bind.js';
 
 export default class ObservableObject extends AbstractObservable {
     /**
@@ -7,36 +8,11 @@ export default class ObservableObject extends AbstractObservable {
      * @param {Function} cb callback
      * @param {Array | String} watchlist list of attributes to watch on element (if null, watch them all)
      */
-    constructor(obj, cb, watchlist) {
+    constructor(obj, cb, watchlist, name) {
         super(obj, cb, watchlist);
-
-        const scope = this;
-        this._model = new Proxy(obj, {
-            get: function(target, name) {
-                if (scope.allowAllKeys ||
-                    scope.keys.indexOf(name) !== -1) {
-                    return target[name];
-                } else {
-                    return undefined;
-                }
-            },
-            set: function(target, prop, value) {
-                if (scope.allowAllKeys ||
-                    scope.keys.indexOf(prop) !== -1) {
-                    const oldvalue = target[prop];
-                    target[prop] = value;
-
-                    if (!scope._ignoreNextChange && scope._observing) {
-                        scope.dispatchChange(scope, prop, value, oldvalue);
-                    }
-                    scope._ignoreNextChange = false;
-                    return true;
-                }
-                scope._ignoreNextChange = false;
-                return true;
-
-            }
-        });
+        if (name) { this._name = name; }
+        this._rawdata = obj;
+        this._model = this._createProxy();
         this._observing = true;
     }
 

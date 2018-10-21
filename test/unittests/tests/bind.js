@@ -38,7 +38,7 @@ test('bind callback', function (t) {
     t.plan(3);
 
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3});
-    const observableB = new ObservableObject({ z: 100, x: 101, y: 102 });
+    const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, null);
     const binding = new Bind();
     binding.addCallback( (obj, name, value) => {
         t.equal(observableA, obj);
@@ -50,6 +50,7 @@ test('bind callback', function (t) {
 
     observableA.data.a = 10;
 });
+
 
 test('bind callback added from constructor', function (t) {
     t.plan(3);
@@ -156,3 +157,4 @@ test('dont sync non watched properties (default keys are ones already present)',
     t.equal(observableB.data.b, undefined);
     t.equal(observableB.data.c, undefined);
 });
+
