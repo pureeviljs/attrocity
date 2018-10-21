@@ -27,20 +27,20 @@ export default class CustomElementBindingManager {
 
     addCallback(cb, name) {
         if (!name) {
-            this.binding.addCallback((object, name, value, oldvalue, originchain) => {
-                if (!originchain) {
-                    originchain = [];
+            this.binding.addCallback((name, value, details) => {
+                if (!details.originChain) {
+                    details.originChain = [];
                 }
-                originchain.push(this);
-                cb(object, name, this._rules.cast(name, value), oldvalue, originchain);
+                details.originChain.push(this);
+                cb(name, this._rules.cast(name, value), { oldValue: details.oldvalue, originChain: details.originChain, scope: details.scope });
             });
         } else {
-            this.binding.addCallback((object, name, value, oldvalue, originchain) => {
-                if (!originchain) {
-                    originchain = [];
+            this.binding.addCallback((name, value, details) => {
+                if (!details.originChain) {
+                    details.originChain = [];
                 }
-                originchain.push(this);
-                cb(object, name, this._rules.cast(name, value), oldvalue, originchain);
+                details.originChain.push(this);
+                cb(name, this._rules.cast(name, value), { oldValue: details.oldvalue, originChain: details.originChain, scope: details.scope });
             }, name);
         }
     }

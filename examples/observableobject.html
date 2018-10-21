@@ -13,7 +13,7 @@
             property4: 'test4',
         };
 
-        const observableModel = new Object(model, function(object, name, value) {
+        const observableModel = new Object(model, function(name, value) {
             console.log('change', name, value);
         });
 

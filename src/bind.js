@@ -56,7 +56,8 @@ export default class Binding {
         Binding.log({action: 'add', target: obj });
 
         if (!direction || direction === Binding.PUSH || direction === Binding.TWOWAY) {
-            const cbID = obj.addCallback((obj, key, value, oldvalue, originchain) => this._onDataChange(obj, key, value, oldvalue, originchain), this);
+            const cbID = obj.addCallback((key, value, details) =>
+                    this._onDataChange(key, value, { oldValue: details.oldValue, originChain: details.originChain, scope: details.scope }), this);
             this._sources.set(obj.id, { observable: obj, callback: cbID });
         }
         if (!direction || direction === Binding.PULL || direction === Binding.TWOWAY) {
@@ -84,7 +85,7 @@ export default class Binding {
     pushAllValues(src) {
         for (let c = 0; c < src.keys.length; c++) {
             if (src.data[src.keys[c]] !== undefined) {
-                this._onDataChange(src, src.keys[c], src.data[src.keys[c]]);
+                this._onDataChange(src.keys[c], src.data[src.keys[c]], { scope: src });
             }
         }
     }
@@ -116,30 +117,30 @@ export default class Binding {
      * @param value value of changed attribute
      * @private
      */
-    _onDataChange(obj, key, value, oldvalue, originchain) {
-        if (!originchain) { originchain = []; }
-        originchain.push(this);
+    _onDataChange(key, value, details) {
+        if (!details.originChain) { details.originChain = []; }
+        details.originChain.push(this);
 
         this._aggregateValues[key] = value;
         for (const dest of this._destinations.entries()){
-            if (obj.id !== dest[1].observable.id && originchain.indexOf(dest[1].observable) === -1) {
-                Binding.log({action: 'push', source: this, target: dest[1].observable, origin: originchain });
-                dest[1].observable._setKey(key, value, originchain);
+            if (details.scope.id !== dest[1].observable.id && details.originChain.indexOf(dest[1].observable) === -1) {
+                Binding.log({action: 'push', source: this, target: dest[1].observable, origin: details.originChain });
+                dest[1].observable._setKey(key, value, details.originChain);
             }
         }
 
         for (let c = 0; c < this._callbacks.length; c++) {
-            if (!this._callbacks[c].scope || originchain.indexOf(this._callbacks[c].scope) === -1) {
-                Binding.log({action: 'bindingchange', source: obj, target: this._callbacks[c].scope, origin: originchain });
-                this._callbacks[c].callback.apply(this, [obj, key, value, oldvalue, originchain]);
+            if (!this._callbacks[c].scope || details.originChain.indexOf(this._callbacks[c].scope) === -1) {
+                Binding.log({action: 'bindingchange', source: details.scope, target: this._callbacks[c].scope, origin: details.originChain });
+                this._callbacks[c].callback.apply(this, [key, value, { oldValue: details.oldValue, originChain: details.originChain, scope: details.scope }]);
             }
         }
 
         if (this._namedCallbacks[key]) {
             for (let c = 0; c < this._namedCallbacks[key].length; c++) {
-                if (!this._namedCallbacks[key][c].scope || originchain.indexOf(this._namedCallbacks[key][c].scope) === -1) {
-                    Binding.log({action: 'bindingchange', source: this, target: this._namedCallbacks[key][c].scope, origin: originchain });
-                    this._namedCallbacks[key][c].callback.apply(this, [obj, key, value, oldvalue, originchain]);
+                if (!this._namedCallbacks[key][c].scope || details.originChain.indexOf(this._namedCallbacks[key][c].scope) === -1) {
+                    Binding.log({action: 'bindingchange', source: this, target: this._namedCallbacks[key][c].scope, origin: details.originChain });
+                    this._namedCallbacks[key][c].callback.apply(this, [key, value, { oldValue: details.oldValue, originChain: details.originChain, scope: details.scope }]);
                 }
             }
 

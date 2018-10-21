@@ -21,8 +21,8 @@
                 this.binding.addRule(['test', 'anothertest'], function(val) {
                     return val + ' is the message I have today';
                 });
-                this.binding.addCallback( (object, name, value, oldvalue, originchain) => {
-                    console.log('name', name, 'value', value);//, oldvalue, originchain)
+                this.binding.addCallback( (name, value) => {
+                    console.log('name', name, 'value', value);
                 });
 
                 this.test = 'bye';

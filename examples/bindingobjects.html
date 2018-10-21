@@ -25,8 +25,8 @@
         }, null, null, 'ObjectB');
 
 
-        const bind = new Bind( (src, name, val, oldval, originchain)  => {
-            console.log('binding change', src.name, name, val, oldval,  originchain)
+        const bind = new Bind( (name, val, details)  => {
+            console.log('binding change', details.scope.name, name, val)
         });
         bind.add(model1);
         bind.add(model2);

@@ -6,7 +6,7 @@
     <script type="module">
         import ObservableElement from '../src/observables/element.js';
 
-        const observableAttr = new ObservableElement(document.querySelector('div'), function(object, name, value) {
+        const observableAttr = new ObservableElement(document.querySelector('div'), function(name, value) {
             console.log('change', name, value);
         }, ObservableElement.WATCH_CURRENT_ONLY);
 

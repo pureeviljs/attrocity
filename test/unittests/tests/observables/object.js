@@ -19,7 +19,7 @@ test('observe object', function (t) {
         property4: 'test4',
     };
 
-    const observableModel = new ObservableObject(model, function(object, name, value) {
+    const observableModel = new ObservableObject(model, function(name, value) {
         t.equal(name, 'property1');
         t.equal(value, 'hello1');
     });
@@ -37,7 +37,7 @@ test('observe object changing value to same thing', function (t) {
         property4: 'test4',
     };
 
-    const observableModel = new ObservableObject(model, function(object, name, value) {
+    const observableModel = new ObservableObject(model, function(name, value) {
         t.fail();
     });
 
@@ -63,13 +63,13 @@ test('remove callback', function (t) {
         property4: 'test4',
     };
 
-    const observableModel = new ObservableObject(model, function(object, name, value) {
+    const observableModel = new ObservableObject(model, function(name, value) {
         t.fail('Callback was removed, so this should not be called');
     });
 
     observableModel.removeCallback();
     observableModel.data.property1 = 'hello1';
-    observableModel.addCallback(function(object, name, value) {
+    observableModel.addCallback(function(name, value) {
         t.pass();
     });
     observableModel.data.property2 = 'hello1';
@@ -85,7 +85,7 @@ test('stop observing', function (t) {
         property4: 'test4',
     };
 
-    const observableModel = new ObservableObject(model, function(object, name, value) {
+    const observableModel = new ObservableObject(model, function(name, value) {
         t.fail('Callback was stopped, so this should not be called');
     });
 
@@ -107,7 +107,7 @@ test('observe property that was not present at start', function (t) {
         property4: 'test4',
     };
 
-    const observableModel = new ObservableObject(model, function(object, name, value) {
+    const observableModel = new ObservableObject(model, function(name, value) {
         t.equal(name, 'property5');
         t.equal(value, 'hello');
     }, ObservableObject.WATCH_ANY);
@@ -125,7 +125,7 @@ test('change property in watchlist', function (t) {
         property4: 'test4',
     };
 
-    const observableModel = new ObservableObject(model, function(object, name, value) {
+    const observableModel = new ObservableObject(model, function(name, value) {
         t.equal(name, 'property5');
         t.equal(value, 'hello');
     }, ['property5']);
@@ -202,7 +202,7 @@ test('observe array', function (t) {
 
     const model = [0,1,2,3,4,5];
 
-    const observableModel = new ObservableObject(model, function(object, name, value) {
+    const observableModel = new ObservableObject(model, function(name, value) {
         t.equal(name, '1');
         t.equal(value, 3);
     });

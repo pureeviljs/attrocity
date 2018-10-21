@@ -45,7 +45,10 @@ export default class ObservableElement extends AbstractObservable {
     onMutationChange(e) {
         for (let c = 0; c < e.length; c++) {
             if (this.keys.length === 0 || this.keys.indexOf(e[c].attributeName) !== -1) {
-                this.dispatchChange(e[c].target, e[c].attributeName, e[c].target.getAttribute(e[c].attributeName), e[c].oldValue, [this]);
+                this.dispatchChange(
+                    e[c].attributeName,
+                    e[c].target.getAttribute(e[c].attributeName),
+                    { oldValue: e[c].oldValue, originChain: [this], scope: e[c].target });
             }
         }
     }

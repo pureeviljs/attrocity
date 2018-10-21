@@ -20,7 +20,7 @@ export default class Reflect {
                 }
                 this.__attrocity.originChainContinuity = [];
                 const ce = this.__attrocity.getObservable('customelement');
-                ce.dispatchChange(ce, name, newValue, oldValue, originchain);
+                ce.dispatchChange(name, newValue, { oldValue: oldValue, originChain: originchain, scope: ce });
             }
         };
         return clazz;

@@ -132,13 +132,13 @@ export default class AbstractObservable {
      * @param value
      * @param oldValue
      */
-    dispatchChange(obj, name, value, oldValue, originchain) {
-        if (value === oldValue) { return; }
-        if (!originchain) { originchain = [obj]; }
+    dispatchChange(name, value, details) {
+        if (value === details.oldValue) { return; }
+        if (!details.originChain) { details.originChain = [details.scope]; }
         this._callbacks.forEach(cb => {
-            if (originchain.indexOf(cb.scope) === -1) {
-                Binding.log({action: 'observablechange', target: cb.scope, source: obj, origin: originchain, key: name, value: value, old: oldValue });
-                cb.callback.apply(this, [obj, name, value, oldValue, originchain]);
+            if (details.originChain.indexOf(cb.scope) === -1) {
+                Binding.log({action: 'observablechange', target: cb.scope, source: details.scope, origin: details.originChain, key: name, value: value, old: details.oldValue });
+                cb.callback.apply(this, [name, value, { oldValue: details.oldValue, originChain: details.originChain, scope: details.scope }]);
             }
         });
     }
@@ -189,7 +189,7 @@ export default class AbstractObservable {
             Binding.log({action: 'setvalue', key: prop, target: this, origin: originchain });
 
             if (this._observing) {
-                this.dispatchChange(this, prop, value, oldvalue, originchain);
+                this.dispatchChange(prop, value, { oldValue: oldvalue, originChain: originchain, scope: this });
             }
         }
     }

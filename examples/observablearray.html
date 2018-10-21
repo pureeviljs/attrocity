@@ -8,7 +8,7 @@
 
         const model = [0,1,2,3,4,5];
 
-        const observableModel = new ObservableObject(model, function(object, name, value) {
+        const observableModel = new ObservableObject(model, function(name, value) {
             console.log('change', name, value);
         });
 

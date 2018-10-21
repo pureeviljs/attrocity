@@ -22,7 +22,7 @@ test('observe element', function (t) {
     resetEl();
     t.plan(3);
 
-    const observableModel = new ObservableElement(el, (object, name, value) => {
+    const observableModel = new ObservableElement(el, (name, value) => {
         observableModel.stop();
         t.equal(name, 'test');
         t.equal(value, 'bye');
@@ -38,7 +38,7 @@ test('observe element change property to identical value', function (t) {
     el.setAttribute('test', 'hi');
     t.plan(1);
 
-    const observableModel = new ObservableElement(el, (object, name, value, oldValue) => {
+    const observableModel = new ObservableElement(el, (name, value) => {
         observableModel.stop();
         t.fail('Change callback should not be fired when setting to the exact same value');
     });
@@ -55,7 +55,7 @@ test('observe attribute that was not present at start', function (t) {
     resetEl();
     t.plan(2);
 
-    const observableModel = new ObservableElement(el, (object, name, value) => {
+    const observableModel = new ObservableElement(el, (name, value) => {
         observableModel.stop();
         t.equal(name, 'anotherattribute');
         t.equal(value, 'test');
@@ -68,7 +68,7 @@ test('change property in watchlist', function (t) {
     resetEl();
     t.plan(2);
 
-    const observableModel = new ObservableElement(el, function(object, name, value) {
+    const observableModel = new ObservableElement(el, function(name, value) {
         observableModel.stop();
         t.equal(name, 'anattribute');
         t.equal(value, 'hello');

@@ -40,8 +40,8 @@ test('bind callback', function (t) {
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3});
     const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, null);
     const binding = new Bind();
-    binding.addCallback( (obj, name, value) => {
-        t.equal(observableA, obj);
+    binding.addCallback( (name, value, details) => {
+        t.equal(observableA, details.scope);
         t.equal(name, 'a');
         t.equal(value, 10);
     });
@@ -57,8 +57,8 @@ test('bind callback added from constructor', function (t) {
 
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3});
     const observableB = new ObservableObject({ z: 100, x: 101, y: 102 });
-    const binding = new Bind((obj, name, value) => {
-        t.equal(observableA, obj);
+    const binding = new Bind((name, value, details) => {
+        t.equal(observableA, details.scope);
         t.equal(name, 'a');
         t.equal(value, 10);
     });
@@ -74,8 +74,8 @@ test('bind callback to watch single value', function (t) {
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3});
     const observableB = new ObservableObject({ z: 100, x: 101, y: 102 });
     const binding = new Bind();
-    binding.addCallback( (obj, name, value) => {
-        t.equal(observableA, obj);
+    binding.addCallback( (name, value, details) => {
+        t.equal(observableA, details.scope);
         t.equal(name, 'b');
         t.equal(value, 13);
     }, 'b');
@@ -92,7 +92,7 @@ test('remove binding callback', function (t) {
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3});
     const observableB = new ObservableObject({ z: 100, x: 101, y: 102 });
     const binding = new Bind();
-    binding.addCallback( (obj, name, value) => {
+    binding.addCallback( (name, value) => {
         t.fail('Binding was removed, so this should not be called')
     });
     binding.add(observableA);

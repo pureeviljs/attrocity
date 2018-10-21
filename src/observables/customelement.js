@@ -18,7 +18,7 @@ export default class ObservableCustomElement extends AbstractObservable {
                 this.__attrocity.originChainContinuity = [];
                 if (!this.__attrocity.getObservable('customelement')._observing ) { return; }
                 const ce = this.__attrocity.getObservable('customelement');
-                ce.dispatchChange(ce, name, newValue, oldValue, originchain);
+                ce.dispatchChange(name, newValue, { oldValue: oldValue, originChain: originchain, scope: ce });
             }
         };
         return clazz;
@@ -33,7 +33,7 @@ export default class ObservableCustomElement extends AbstractObservable {
     static createBindings(scope, opts) {
         scope.__attrocity = new CustomElementBindingManager();
         scope.__attrocity.sync(new ObservableCustomElement(scope,
-            (o, name, val, old, originchain) => { scope.__attrocity.originChainContinuity = originchain },
+            (name, val, { oldValue: old, originChain: originchain, scope: o }) => { scope.__attrocity.originChainContinuity = originchain },
             scope.constructor.observedAttributes),
             Binding.TWOWAY, 'customelement');
         return scope.__attrocity;
