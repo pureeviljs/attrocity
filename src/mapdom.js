@@ -62,8 +62,25 @@ export default class MapDOM {
 
         els = this._filterElementsContainedByRoot(els, rootlevelEls);
         for (let e = 0; e < els.length; e++) {
-            const eventtype = els[e].getAttribute(opts.attribute);
-            els[e].addEventListener(eventtype, e => { callback.apply(scope, [e]) });
+            const eventtypes = els[e].getAttribute(opts.attribute).split(',');
+            for (let c = 0; c < eventtypes.length; c++) {
+                els[e].addEventListener(eventtypes[c], e => { callback.apply(scope, [e]) });
+            }
+        }
+    }
+
+    static wireElements(els, events, callback, scope) {
+        if (!Array.isArray(els)) {
+            els =  [els];
+        }
+        let eventtypes = events;
+        if (!Array.isArray(events)) {
+            eventtypes = eventtypes.split(',');
+        }
+        for (let d = 0; d < els.length; d++) {
+            for (let c = 0; c < eventtypes.length; c++) {
+                els[d].addEventListener(eventtypes[c].trim(), e => { callback.apply(scope, [e]) });
+            }
         }
     }
 

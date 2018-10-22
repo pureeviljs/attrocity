@@ -33,10 +33,16 @@ export default class Binding {
         if (!name) {
             this._callbacks.push({ callback: cb  });
         } else {
-            if (!this._namedCallbacks[name]) {
-                this._namedCallbacks[name] = [];
+            if (!Array.isArray(name)) {
+                name = [name];
             }
-            this._namedCallbacks[name].push({ callback: cb });
+
+            for (let c = 0; c < name.length; c++) {
+                if (!this._namedCallbacks[name[c]]) {
+                    this._namedCallbacks[name[c]] = [];
+                }
+                this._namedCallbacks[name[c]].push({ callback: cb });
+            }
         }
     }
 
