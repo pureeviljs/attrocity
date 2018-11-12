@@ -30,8 +30,11 @@ test('observe element', function (t) {
 
     el.setAttribute('test', 'bye');
 
-    t.equal(observableModel.data.test, 'bye');
+    setTimeout( function() {
+        t.equal(observableModel.data.test, 'bye');
+    }, 100);
 });
+
 
 test('observe element change property to identical value', function (t) {
     resetEl();
@@ -51,6 +54,7 @@ test('observe element change property to identical value', function (t) {
     }, 50);
 });
 
+
 test('observe attribute that was not present at start', function (t) {
     resetEl();
     t.plan(2);
@@ -64,6 +68,7 @@ test('observe attribute that was not present at start', function (t) {
     el.setAttribute('anotherattribute', 'test');
 });
 
+
 test('change property in watchlist', function (t) {
     resetEl();
     t.plan(2);
@@ -72,7 +77,7 @@ test('change property in watchlist', function (t) {
         observableModel.stop();
         t.equal(name, 'anattribute');
         t.equal(value, 'hello');
-    }, ['anattribute']);
+    }, { watchKeys: ['anattribute'] });
 
     observableModel.data.anattribute = 'hello';
 });
@@ -82,7 +87,7 @@ test('allow change for watched property', function (t) {
     resetEl();
     t.plan(1);
 
-    const observableModel = new ObservableElement(el, null, ['anattribute']);
+    const observableModel = new ObservableElement(el, null, { watchKeys: ['anattribute'] });
 
     observableModel.data.anattribute = 'hello';
     t.equal(el.getAttribute('anattribute'), 'hello');
@@ -93,7 +98,7 @@ test('disallow change for non-watched property', function (t) {
     resetEl();
     t.plan(1);
 
-    const observableModel = new ObservableElement(el, null, ['class']);
+    const observableModel = new ObservableElement(el, null, { watchKeys: ['class'] });
 
     observableModel.data.test = 'bye';
     t.equal(el.getAttribute('test'), 'hi');
@@ -115,7 +120,7 @@ test('disallow property change that was not present at start', function (t) {
     resetEl();
     t.plan(1);
 
-    const observableModel = new ObservableElement(el, null, ObservableElement.WATCH_CURRENT_ONLY);
+    const observableModel = new ObservableElement(el, null, { watchCurrentKeysOnly: true } );
 
     observableModel.data.anotherattribute = 'hello';
     t.equal(el.hasAttribute('anotherattribute'), false);

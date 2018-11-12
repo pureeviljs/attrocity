@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Binding Objects</title>
+
+    <script type="module">
+        import Bind from '../src/bind.js';
+        import ObservableObject from '../src/observables/object.js';
+
+        const observableA = new ObservableObject( { deep: { a: 1 , b: 2, c: 3} });
+        observableA.name = "OA";
+        const observableB = new ObservableObject( { deep: { z: 100, x: 101, y: 102 }} );
+        observableB.name = "OB";
+        const binding = new Bind();
+
+        console.log('--A---')
+        binding.sync(observableA);
+
+        console.log('--B---')
+        binding.sync(observableB);
+
+
+        console.log(observableA, observableB)
+    </script>
+</head>
+<body>
+
+</body>
+</html>

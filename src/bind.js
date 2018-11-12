@@ -1,4 +1,5 @@
 import AbstractObservable from './observables/abstractobservable.js';
+import DotPath from './dotpath.js';
 
 export default class Binding {
     static get PUSH() { return 'push'; }
@@ -59,11 +60,9 @@ export default class Binding {
             return;
         }
 
-        Binding.log({action: 'add', target: obj });
-
         if (!direction || direction === Binding.PUSH || direction === Binding.TWOWAY) {
             const cbID = obj.addCallback((key, value, details) =>
-                    this._onDataChange(key, value, { oldValue: details.oldValue, originChain: details.originChain, scope: details.scope }), this);
+                    this._onDataChange(key, value, details), this);
             this._sources.set(obj.id, { observable: obj, callback: cbID });
         }
         if (!direction || direction === Binding.PULL || direction === Binding.TWOWAY) {
@@ -79,28 +78,67 @@ export default class Binding {
     sync(obj, direction) {
         this.add(obj, direction);
         if (!direction || direction === Binding.PUSH || direction === Binding.TWOWAY) {
-            this.pushAllValues(obj)
+            this.pushAllValues(obj);
         }
 
         if (!direction || direction === Binding.PULL || direction === Binding.TWOWAY) {
-            this.pullAllValues(obj);
+            this.pullAllValues(obj.data);
         }
 
     }
 
-    pushAllValues(src) {
-        for (let c = 0; c < src.keys.length; c++) {
-            if (src.data[src.keys[c]] !== undefined) {
-                this._onDataChange(src.keys[c], src.data[src.keys[c]], { scope: src });
+    /**
+     * recursively iterate through source and dispatch changes for each value
+     * as though it were changed live
+     * @param src
+     * @param level
+     */
+    pushAllValues(src, level, path) {
+        if (!level) {
+            level = src.data;
+        }
+        if (!path) {
+            path = '';
+        }
+
+        const keys = DotPath.getKeysAtLevel(level);
+        for (let key in keys) {
+            const k = keys[key];
+            if (level[k] !== undefined) {
+                // is a simple key/val pair, report value
+                if (DotPath.isValue(level[k])) {
+                    let kpath = DotPath.appendKeyToPath(path, k);
+                    this._onDataChange(k, level[k], {scope: src, keyPath: kpath});
+                }
+
+                if (DotPath.isParent(level[k])) {
+                    this.pushAllValues(src, level[k], path + '.' + k);
+                }
             }
         }
     }
 
-    pullAllValues(dest) {
-        for (let c in this._aggregateValues) {
-            if (this._aggregateValues[c] !== undefined) {
-                Binding.log({action: 'pull', target: dest, source: this });
-                dest.data[c] = this._aggregateValues[c];
+
+    /**
+     * recursively iterate through aggregate values on each model
+     * and change on destination as though it were changed live
+     * @param src
+     * @param level
+     */
+    pullAllValues(nesteddest, level) {
+        if (!level) {
+            level = this._aggregateValues;
+        }
+
+        const keys = DotPath.getKeysAtLevel(level);
+        for (let key in keys) {
+            const k = keys[key];
+            if (level[k] !== undefined) {
+                if (DotPath.isValue(nesteddest[k])) {
+                    nesteddest[k] = level[k];
+                } else  if (DotPath.isParent(nesteddest[k])) {
+                    this.pullAllValues(nesteddest[k], level[k]);
+                }
             }
         }
     }
@@ -127,17 +165,17 @@ export default class Binding {
         if (!details.originChain) { details.originChain = []; }
         details.originChain.push(this);
 
-        this._aggregateValues[key] = value;
+        let valueTarget = DotPath.resolvePath(details.keyPath, this._aggregateValues, { alwaysReturnObject: true });
+        valueTarget[key] = value;
+
         for (const dest of this._destinations.entries()){
             if (details.scope.id !== dest[1].observable.id && details.originChain.indexOf(dest[1].observable) === -1) {
-                Binding.log({action: 'push', source: this, target: dest[1].observable, origin: details.originChain });
-                dest[1].observable._setKey(key, value, details.originChain);
+                dest[1].observable._setKey(details.keyPath, key, value, details.originChain);
             }
         }
 
         for (let c = 0; c < this._callbacks.length; c++) {
             if (!this._callbacks[c].scope || details.originChain.indexOf(this._callbacks[c].scope) === -1) {
-                Binding.log({action: 'bindingchange', source: details.scope, target: this._callbacks[c].scope, origin: details.originChain });
                 this._callbacks[c].callback.apply(this, [key, value, { oldValue: details.oldValue, originChain: details.originChain, scope: details.scope }]);
             }
         }
@@ -145,36 +183,10 @@ export default class Binding {
         if (this._namedCallbacks[key]) {
             for (let c = 0; c < this._namedCallbacks[key].length; c++) {
                 if (!this._namedCallbacks[key][c].scope || details.originChain.indexOf(this._namedCallbacks[key][c].scope) === -1) {
-                    Binding.log({action: 'bindingchange', source: this, target: this._namedCallbacks[key][c].scope, origin: details.originChain });
                     this._namedCallbacks[key][c].callback.apply(this, [key, value, { oldValue: details.oldValue, originChain: details.originChain, scope: details.scope }]);
                 }
             }
 
         }
     }
-
-    static log(o) {
-        if (Binding.debugMode || this.debugMode) {
-            console.log('----------');
-            console.log('* ' + o.action);
-
-            let src, dest;
-            if (o.source) { src = o.source.name; }
-            if (o.target) { dest = o.target.name; }
-            if (src === undefined) { src = ''; }
-            if (dest === undefined) { dest = ''; }
-            if (src || dest) {
-                console.log(src + ' -> ' + dest);
-            }
-
-            if (o.origin && o.origin.length > 0) {
-                console.log('origins:', o.origin.map( i => { return i.name } ).join(','))
-            }
-
-            if (o.key) {        console.log( ' - key -       :', o.key )}
-            if (o.value) {      console.log( ' - value -     :', o.value )}
-            if (o.oldValue) {   console.log( ' - old value - :', o.value )}
-        }
-    }
-
 }

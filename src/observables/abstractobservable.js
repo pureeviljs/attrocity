@@ -1,49 +1,34 @@
-import Binding from '../bind.js';
+import DotPath from '../dotpath.js';
 
 export default class AbstractObservable {
-    static get WATCH_ANY() { return 'watch-any'; }
-    static get WATCH_CURRENT_ONLY() { return 'watch-current-only'; }
-
     /**
      * constructor
      * @param obj
      * @param {Function} cb
+     * @param options
      */
-    constructor(obj, cb, watchlist) {
+    constructor(obj, cb, opts) {
+        this._tree = new Map();
         this._model = obj;
         this._id = Symbol();
         this._name = '';
         this._callbacks = new Map();
-        this._allowAllKeys = false;
+        this._observing = true;
 
         if (cb) {
             this._primaryCallback = this.addCallback(cb);
         }
 
-        if (Array.isArray(watchlist)) {
-            this._keys = watchlist.slice();
-
-        } else {
-            switch(watchlist) {
-                case AbstractObservable.WATCH_ANY:
-                    this._allowAllKeys = true;
-                    break;
-
-                case AbstractObservable.WATCH_CURRENT_ONLY:
-                    if (obj instanceof Element) {
-                        let wl = Array.from(obj.attributes);
-                        this._keys = wl.map( i => { return i.name });
-                    } else {
-                        this._keys = Object.keys(obj);
-                    }
-                    break;
-
-                default:
-                    // default to watch any and all
-                    this._allowAllKeys = true;
-                    break;
-
+        if (opts) {
+            if (Array.isArray(opts.watchKeys)) {
+                this._keys = opts.watchKeys.slice();
+            } else if (opts.watchCurrentKeysOnly) {
+                this._allowCurrentKeysOnly = true;
+            } else {
+                this._allowAllKeys = true;
             }
+        } else {
+            this._allowAllKeys = true;
         }
     }
 
@@ -80,7 +65,9 @@ export default class AbstractObservable {
      * get data
      * @returns {*}
      */
-    get data() { return this._model; }
+    get data() {
+        return this._tree.get(this._rawdata);
+    }
 
     /**
      * get allowAllKeys bool
@@ -88,18 +75,6 @@ export default class AbstractObservable {
      */
     get allowAllKeys() {
         return this._allowAllKeys;
-    }
-
-    /**
-     * get keys
-     * @returns {string[] | *}
-     */
-    get keys() {
-        if (this._keys) {
-            return this._keys;
-        } else {
-            return Object.keys(this._model);
-        }
     }
 
     /**
@@ -137,60 +112,91 @@ export default class AbstractObservable {
         if (!details.originChain) { details.originChain = [details.scope]; }
         this._callbacks.forEach(cb => {
             if (details.originChain.indexOf(cb.scope) === -1) {
-                Binding.log({action: 'observablechange', target: cb.scope, source: details.scope, origin: details.originChain, key: name, value: value, old: details.oldValue });
-                cb.callback.apply(this, [name, value, { oldValue: details.oldValue, originChain: details.originChain, scope: details.scope }]);
+                cb.callback.apply(this, [ name, value, {
+                    target: details.target,
+                    keyPath: details.keyPath,
+                    key: name,
+                    value: value,
+                    oldValue: details.oldValue,
+                    originChain: details.originChain,
+                    scope: details.scope }]);
             }
         });
     }
 
     _createProxy() {
         const scope = this;
-        return new Proxy(this._rawdata, {
-            get: function(target, name) {
-                return scope._getKey(name);
-            },
-            set: function(target, prop, value) {
-                scope._setKey(prop, value);
-                return true;
-
-            }
-        });
+        this._tree.set(this._rawdata, new Proxy(this._rawdata, this.validator));
     }
 
-    _keyAllowed(key) {
-        return this.allowAllKeys || this.keys.indexOf(key) !== -1;
+    _keyAllowed(key, target) {
+        return this.allowAllKeys || (this._keys && this._keys.indexOf(key) !== -1) || (this._allowCurrentKeysOnly && target[key] !== undefined);
     }
 
-    _setRawValue(key, value) {
-        this._rawdata[key] = value;
+    _setRawValue(target, key, value) {
+        target[key] = value;
     }
 
-    _getRawValue(key) {
-        return this._rawdata[key];
+    _getRawValue(target, key) {
+        return target[key];
     }
 
-    _getKey(prop) {
-        if (this._keyAllowed(prop)) {
-            Binding.log({action: 'getvalue', key: prop, source: this });
-            return this._getRawValue(prop);
+    _getKey(target, key) {
+        if (this._keyAllowed(key, target)) {
+            return this._getRawValue(target, key);
         } else {
             return undefined;
         }
     }
 
-    _setKey(prop, value, originchain) {
+    _setKey(target, prop, value, originchain) {
         if (!originchain) { originchain = []; }
         originchain.push(this);
 
-        if (this._keyAllowed(prop)) {
-            const oldvalue = this._getRawValue(prop);
-            this._setRawValue(prop, value);
+        if (typeof target === 'string') {
+            target = DotPath.resolvePath(target, this._rawdata, { alwaysReturnObject: true });
+        }
 
-            Binding.log({action: 'setvalue', key: prop, target: this, origin: originchain });
-
+        if (this._keyAllowed(prop, target)) {
+            const oldvalue = this._getRawValue(target, prop);
+            this._setRawValue(target, prop, value);
             if (this._observing) {
-                this.dispatchChange(prop, value, { oldValue: oldvalue, originChain: originchain, scope: this });
+                this.dispatchChange(prop, value, {
+                    oldValue: oldvalue,
+                    originChain: originchain,
+                    scope: this,
+                    key: prop,
+                    get keyPath() {
+                        let dotpath = prop;
+                        if (target !== this.scope._rawdata) {
+                            dotpath = DotPath.toPath(this.scope._rawdata, target) + '.' + prop;
+                        }
+                        return dotpath;
+                    },
+                    value: value,
+                    target: target });
             }
         }
+    }
+
+    get validator() {
+        const scope = this;
+        return {
+            get: function(target, key) {
+                if (typeof target[key] === 'object' && target[key] !== null) {
+                    if (!scope._tree.has(target[key])) {
+                        scope._tree.set(target[key], new Proxy(target[key], scope.validator));
+                    }
+                    return scope._tree.get(target[key]);
+                } else {
+                    return scope._getKey(target, key);
+                }
+            },
+            set: function(target, prop, value) {
+                scope._setKey(target, prop, value);
+                return true;
+
+            }
+        };
     }
 }

@@ -1,4 +1,5 @@
 import Convert from './convert.js';
+import DotPath from './dotpath.js';
 import Bind from './bind.js';
 import MapDOM from './mapdom.js';
 import CastingRules from './castingrules.js';
@@ -20,6 +21,13 @@ export default class Main {
      * @constructor
      */
     static get Convert() { return Convert; }
+
+    /**
+     * Convert
+     * @returns {Convert}
+     * @constructor
+     */
+    static get DotPath() { return DotPath; }
 
     /**
      * MapDOM

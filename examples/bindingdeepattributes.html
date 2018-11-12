@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Binding Objects</title>
+
+    <script type="module">
+        import Bind from '../src/bind.js';
+        import ObservableElement from "../src/observables/element.js";
+
+        const model1 = new ObservableElement(document.getElementById('div1'), null, { watchSubtree: true });
+        const model2 = new ObservableElement(document.getElementById('div2'), null, { watchSubtree: true });
+
+        const bind = new Bind();
+        bind.sync(model1);
+        bind.sync(model2);
+
+       // document.getElementById('target').setAttribute('test', 'newvalue');
+
+        setTimeout(function() {
+            console.log(document.body.innerHTML);
+        }, 10);
+    </script>
+</head>
+<body>
+
+    <div id="div1" test="firstvalue">
+        <div parent="elA" test="hi"></div>
+        <div parent="elB" test="hi"></div>
+    </div>
+
+    <div id="div2" test="secondvalue">
+        <div parent="elA" test="bye"></div>
+        <div parent="elB" test="bye"></div>
+    </div>
+
+</body>
+</html>

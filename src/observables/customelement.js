@@ -54,7 +54,7 @@ export default class ObservableCustomElement extends AbstractObservable {
         this.name = el.tagName;
 
         const scope = this;
-        this._model = this._createProxy();
+        this._createProxy();
 
     }
 

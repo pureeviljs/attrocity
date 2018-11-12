@@ -10,7 +10,7 @@ const el = dom.window.document.querySelector('div');
 global.Element = el.constructor;
 
 test('observe object', function (t) {
-    t.plan(2);
+    t.plan(3);
 
     const model = {
         property1: 'test1',
@@ -19,9 +19,10 @@ test('observe object', function (t) {
         property4: 'test4',
     };
 
-    const observableModel = new ObservableObject(model, function(name, value) {
+    const observableModel = new ObservableObject(model, function(name, value, details) {
         t.equal(name, 'property1');
         t.equal(value, 'hello1');
+        t.equal(details.keyPath, name);
     });
 
     observableModel.data.property1 = 'hello1';
@@ -110,7 +111,7 @@ test('observe property that was not present at start', function (t) {
     const observableModel = new ObservableObject(model, function(name, value) {
         t.equal(name, 'property5');
         t.equal(value, 'hello');
-    }, ObservableObject.WATCH_ANY);
+    });
 
     observableModel.data.property5 = 'hello';
 });
@@ -143,7 +144,7 @@ test('allow change for watched property', function (t) {
         property4: 'test4',
     };
 
-    const observableModel = new ObservableObject(model, null, ['property4']);
+    const observableModel = new ObservableObject(model, null, { watchKeys: ['property4'] });
 
     observableModel.data.property4 = 'hello';
     t.equal(observableModel.data.property4, 'hello');
@@ -160,7 +161,7 @@ test('disallow getting non-watched property', function (t) {
         property4: 'test4',
     };
 
-    const observableModel = new ObservableObject(model, null, ['property5']);
+    const observableModel = new ObservableObject(model, null, { watchKeys: ['property5'] });
     t.equal(observableModel.data.property4, undefined);
 });
 
@@ -190,7 +191,7 @@ test('disallow property change that was not present at start', function (t) {
         property4: 'test4',
     };
 
-    const observableModel = new ObservableObject(model, null, ObservableObject.WATCH_CURRENT_ONLY);
+    const observableModel = new ObservableObject(model, null, { watchCurrentKeysOnly: true });
 
     observableModel.data.property6 = 'hello';
     t.equal(observableModel.data.property6, undefined);

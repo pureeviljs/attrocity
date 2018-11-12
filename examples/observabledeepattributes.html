@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Observable Attributes</title>
+    <script type="module">
+        import ObservableElement from '../src/observables/element.js';
+
+        /*const observableAttr = new ObservableElement(document.querySelector('div'), function(name, value, details) {
+            console.log('change', name, value, details.keyPath);
+        }, { watchCurrentKeysOnly: true, watchSubtree: true });
+
+        document.querySelector('#root').setAttribute('test', 'bye');
+        console.log(observableAttr.data)
+*/
+
+
+        const observableModel = new ObservableElement(document.querySelector('#root'), function(name, value, detail) {
+            observableModel.stop();
+            t.equal(name, 'anattribute');
+            t.equal(value, 'hello');
+            t.equal(detail.keyPath, 'a.anattribute');
+        }, { watchKeys: ['anattribute'], watchSubtree: true });
+
+        //observableModel.data.a.anattribute = 'hello';
+
+        setTimeout(function() {
+            console.log('hi', observableModel.data);
+        }, 100)
+    </script>
+</head>
+<body>
+    <div id="root" class="someclass" test="hi" level="root" parent>
+        <div id="target" parent="a" test="hi2" level="child"></div>
+    </div>
+</body>
+</html>

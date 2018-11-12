@@ -25,7 +25,7 @@ test('fail to bind property not defined on object to another object', function (
     t.plan(1);
 
     const observableA = new ObservableObject({ a: 1, b: 2, c: 3});
-    const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, ObservableObject.WATCH_CURRENT_ONLY);
+    const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, { watchCurrentKeysOnly: true });
     const binding = new Bind();
     binding.add(observableA);
     binding.add(observableB);
@@ -109,8 +109,8 @@ test('remove binding callback', function (t) {
 test('sync binding values when added (explicit keys)', function (t) {
     t.plan(6);
 
-    const observableA = new ObservableObject({ a: 1, b: 2, c: 3}, null, ['a', 'b', 'c', 'z', 'x', 'y']);
-    const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, ['a', 'b', 'c', 'z', 'x', 'y']);
+    const observableA = new ObservableObject({ a: 1, b: 2, c: 3}, null, { watchKeys: ['a', 'b', 'c', 'z', 'x', 'y'] } );
+    const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, { watchKeys: ['a', 'b', 'c', 'z', 'x', 'y'] });
     const binding = new Bind();
     binding.sync(observableA);
     binding.sync(observableB);
@@ -144,8 +144,8 @@ test('sync binding values when added (allow all keys by not specifying)', functi
 test('dont sync non watched properties (default keys are ones already present)', function (t) {
     t.plan(6);
 
-    const observableA = new ObservableObject({ a: 1, b: 2, c: 3}, null, []);
-    const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, []);
+    const observableA = new ObservableObject({ a: 1, b: 2, c: 3}, null, { watchKeys: [] });
+    const observableB = new ObservableObject({ z: 100, x: 101, y: 102 }, null, { watchKeys: [] });
     const binding = new Bind();
     binding.sync(observableA);
     binding.sync(observableB);

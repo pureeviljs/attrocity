@@ -2,18 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Abstractobservable Object</title>
+    <title>Observable Attributes</title>
     <script type="module">
         import ObservableElement from '../src/observables/element.js';
 
-        const observableAttr = new ObservableElement(document.querySelector('div'), function(name, value) {
+        /*const observableAttr = new ObservableElement(document.querySelector('div'), function(name, value) {
             console.log('change', name, value);
-        }, ObservableElement.WATCH_CURRENT_ONLY);
+        }, { watchCurrentKeysOnly: true });
 
-        document.querySelector('div').setAttribute('test', 'bye');
+        observableAttr.data.test = 'bye';*/
+       // document.querySelector('div').setAttribute('test', 'bye');
+        /*setInterval( function() {
+            console.log(observableAttr.data)
+        }, 1000);*/
+
+
+        const observableModel = new ObservableElement(document.getElementById('target1'), (name, value, detail) => {
+            observableModel.stop();
+            console.log(name, 'test');
+            console.log(value, 'bye');
+            console.log(detail.keyPath, 'test');
+        }, { watchSubtree: true });
+
+        document.getElementById('target1').setAttribute('test', 'bye');
+
+        setTimeout( function() {
+            console.log(observableModel.data.test, 'bye');
+        }, 100);
     </script>
 </head>
 <body>
-    <div class="someclass" test="hi"></div>
+<div class="someclass" id="target1" test="hi" parent>
+    <div id="target2" parent="a" test="hi"></div>
+    <div id="target3" parent="b" test="hi"></div>
+</div>
 </body>
 </html>
