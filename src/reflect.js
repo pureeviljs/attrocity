@@ -4,27 +4,6 @@ import ObservableObject from "./observables/object.js";
 import Bind from './bind.js';
 
 export default class Reflect {
-    /**
-     * attach class to web component as a mixin
-     * @param clazz
-     * @param attributes
-     * @param opts
-     * @returns {*}
-     */
-    static attach(clazz) {
-        clazz.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
-            if (this.__attrocity) {
-                let originchain = [];
-                if (this.__attrocity.originChainContinuity) {
-                    originchain = this.__attrocity.originChainContinuity;
-                }
-                this.__attrocity.originChainContinuity = [];
-                const ce = this.__attrocity.getObservable('customelement');
-                ce.dispatchChange(name, newValue, { oldValue: oldValue, originChain: originchain, scope: ce });
-            }
-        };
-        return clazz;
-    }
 
     static createBindings(scope) {
         const obj = {};
@@ -62,5 +41,6 @@ export default class Reflect {
 
         return scope.__attrocity;
     }
-
 }
+
+Reflect.attach = ObservableCustomElement.attach;

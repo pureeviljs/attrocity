@@ -32,6 +32,9 @@
         const newLabel= document.createElement('label');
         console.log(Convert.setAttrs(newLabel, el, { allowAllAttributes: true }));
 
+        // convert to object, use allow list
+        console.log(Convert.fromAttrs(el, { allow: ['two'] }));
+
     </script>
 </head>
 <body>

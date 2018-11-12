@@ -21,7 +21,7 @@
                 assert.equal(el.testvalue.join(','), 'test,hi,test,bye,anothertest,a value');
                 assert.equal(el.getAttribute('test'), 'bye');
                 assert.equal(el.getAttribute('anothertest'), 'a value');
-            }, 100);
+            }, 500);
         });
 
         test('can support change observation and ignoring change to same value (from attribute)', function () {
@@ -34,7 +34,7 @@
                 assert.equal(el.testvalue.join(','), 'test,hi,test,bye');
                 assert.equal(el.getAttribute('test'), 'bye');
                 assert.equal(el.getAttribute('anothertest'), 'a value');
-            }, 10);
+            }, 20);
         });
 
         test('can support change observation (from API)', function () {
@@ -46,7 +46,7 @@
                 assert.equal(el.testvalue.join(','), 'test,hi,test,bye,anothertest,a value');
                 assert.equal(el.getAttribute('test'), 'bye');
                 assert.equal(el.getAttribute('anothertest'), 'a value');
-            }, 10);
+            }, 20);
         });
     });
 
@@ -59,7 +59,7 @@
 
               assert.equal(el.getAttribute('test'), 'bye');
               assert.equal(el.getAttribute('anothertest'), 'a value');
-            }, 10);
+            }, 20);
         });
 
         test('can support reflection to properties', function() {
@@ -68,7 +68,7 @@
 
             setTimeout(function() {
                 assert.equal(el.finaltest, 'reflect');
-            }, 10);
+            }, 20);
         });
     });
 </script>

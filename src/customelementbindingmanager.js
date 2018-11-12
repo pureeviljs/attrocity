@@ -32,7 +32,7 @@ export default class CustomElementBindingManager {
                     details.originChain = [];
                 }
                 details.originChain.push(this);
-                cb(name, this._rules.cast(name, value), { oldValue: details.oldvalue, originChain: details.originChain, scope: details.scope });
+                cb(name, this._rules.cast(name, value), details);
             });
         } else {
             this.binding.addCallback((name, value, details) => {
@@ -40,7 +40,7 @@ export default class CustomElementBindingManager {
                     details.originChain = [];
                 }
                 details.originChain.push(this);
-                cb(name, this._rules.cast(name, value), { oldValue: details.oldvalue, originChain: details.originChain, scope: details.scope });
+                cb(name, this._rules.cast(name, value), details);
             }, name);
         }
     }

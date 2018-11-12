@@ -24,7 +24,7 @@ export default class DotPath {
      * @returns {boolean}
      */
     static isValue(level) {
-        if (typeof level !== 'object') {
+        if (typeof level !== 'object' || level === null) {
             return true;
         } else {
             return false;
@@ -90,7 +90,9 @@ export default class DotPath {
         for (var i = 0, n = a.length; i < n; ++i) {
             var k = a[i];
             if (DotPath.isParent(o) && k in o) {
-                if (!(opts.alwaysReturnObject && DotPath.isValue(o[k]))) {
+                if (opts.alwaysReturnObject && DotPath.isValue(o[k])) {
+                    //nothing
+                } else {
                     o = o[k];
                 }
             } else if (DotPath.isParent(o)) { // o is not in k, create the object

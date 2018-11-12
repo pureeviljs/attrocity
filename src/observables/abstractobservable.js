@@ -16,7 +16,7 @@ export default class AbstractObservable {
         this._observing = true;
 
         if (cb) {
-            this._primaryCallback = this.addCallback(cb);
+            this._primaryCallback = this.addCallback(cb, this);
         }
 
         if (opts) {
@@ -111,7 +111,8 @@ export default class AbstractObservable {
         if (value === details.oldValue) { return; }
         if (!details.originChain) { details.originChain = [details.scope]; }
         this._callbacks.forEach(cb => {
-            if (details.originChain.indexOf(cb.scope) === -1) {
+            // if this observable wasn't part of the origin chain or it directly occured then allow callback
+            if (details.originChain.indexOf(cb.scope) === -1 || details.originChain.length === 1) {
                 cb.callback.apply(this, [ name, value, {
                     target: details.target,
                     keyPath: details.keyPath,
@@ -152,7 +153,7 @@ export default class AbstractObservable {
     _setKey(target, prop, value, originchain) {
         if (!originchain) { originchain = []; }
         originchain.push(this);
-
+        
         if (typeof target === 'string') {
             target = DotPath.resolvePath(target, this._rawdata, { alwaysReturnObject: true });
         }

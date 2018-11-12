@@ -16,7 +16,8 @@ export default class Convert {
         return {
             allowAllAttributes: false,
             typeConvert: true,
-            ignore: this.ignore
+            ignore: this.ignore,
+            allow: []
         }
     };
 
@@ -31,10 +32,19 @@ export default class Convert {
      */
     static fromAttrs(el, opts) {
         opts = Object.assign(this.defaults, opts ? opts : {} );
+        if (opts.allow.length > 0) { opts.ignore = []; }
+
         const o = {};
         const attributes = el.attributes;
         for (let c = 0; c < attributes.length; c++) {
-            if (opts.ignore.indexOf(attributes[c].nodeName) === -1 || opts.allowAllAttributes) {
+            let allowKey = false;
+            if (opts.ignore.length > 0 && (opts.ignore.indexOf(attributes[c].nodeName) === -1 || opts.allowAllAttributes)) {
+                allowKey = true;
+            } else if (opts.allow.length > 0 && opts.allow.indexOf(attributes[c].nodeName) !== -1) {
+                allowKey = true;
+            }
+
+            if (allowKey) {
                 let val = attributes[c].nodeValue;
                 if (!isNaN(parseFloat(val)) && opts.typeConvert) {
                     val = parseFloat(val);

@@ -28,6 +28,30 @@ test('attributes to object', function (t) {
     t.equal(sum, '123'); // treating values as strings
 });
 
+test('attributes to object (ignore keys)', function (t) {
+    t.plan(1);
+
+    // convert to object, type convert values, ignore based on list
+    let obj = Convert.fromAttrs(el, { ignore: ['two', 'class'] });
+    let sum = 0;
+    for (let c = 0; c < Object.keys(obj).length; c++) {
+        sum += obj[Object.keys(obj)[c]];
+    }
+    t.equal(sum, 4); // treating values as numbers
+});
+
+test('attributes to object (allow keys)', function (t) {
+    t.plan(1);
+
+    // convert to object, type convert values, ignore based on list
+    let obj = Convert.fromAttrs(el, { allow: ['two'] });
+    let sum = 0;
+    for (let c = 0; c < Object.keys(obj).length; c++) {
+        sum += obj[Object.keys(obj)[c]];
+    }
+    t.equal(sum, 2); // treating values as numbers
+});
+
 test('attributes to string', function (t) {
     t.plan(4);
 

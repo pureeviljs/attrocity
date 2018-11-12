@@ -37,14 +37,23 @@ export default class ObservableElement extends AbstractObservable {
                 dotpath = el.getAttribute(this._parentKey);
             }
 
-            const obj = Convert.fromAttrs(el, { ignore: [ this._parentKey ]});
+            let opts = {};
+            if (this._keys && this._keys.length > 0) {
+                opts.allow = this._keys;
+            } else {
+                opts.ignore = this._parentKey;
+            }
+            const obj = Convert.fromAttrs(el, opts);
 
             const level = DotPath.resolvePath(dotpath, data, { alwaysReturnObject: true, lastSegmentIsObject: true });
             Object.assign(level, obj);
         };
 
         let data = {};
-        assign(this.element, data);
+
+        if (this.element instanceof HTMLElement) { // could be a doc fragment
+            assign(this.element, data);
+        }
         let els = this.element.querySelectorAll('[' + this._parentKey + ']');
         for (let c = 0; c < els.length; c++) {
             assign(els[c], data);
@@ -63,11 +72,13 @@ export default class ObservableElement extends AbstractObservable {
                 els[c].setAttribute(key, value);
             }
 
-            // since root level el isn't in the querySelector, see if we should update
-            if (this.element.getAttribute(this._parentKey) === dotpath) {
-                this.element.setAttribute(key, value);
+            if (this.element instanceof HTMLElement) { // could be a doc fragment
+                // since root level el isn't in the querySelector, see if we should update
+                if (this.element.getAttribute(this._parentKey) === dotpath) {
+                    this.element.setAttribute(key, value);
+                }
             }
-        } else {
+        } else if (this.element instanceof HTMLElement) { // could be a doc fragment
             this.element.setAttribute(key, value);
         }
     }

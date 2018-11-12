@@ -14,6 +14,7 @@ export default class DummyComponentAttributeObserve extends HTMLElement {
 
     onAttributeChanged(name, value) {
         this.testvalue.push(name, value);
+        console.log('---', name, value)
     }
 }
 

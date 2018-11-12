@@ -17,12 +17,16 @@
         let dp = DotPath.toPath(obj, obj.a.b.findme.me);
         console.log(dp)*/
 
-        const obj = { a: 1, b: 2, c: { prop1: 3, prop2: 4 }};
+        /*const obj = { a: 1, b: 2, c: { prop1: 3, prop2: 4 }};
 
         let o = DotPath.resolvePath('a.b.c.prop', obj, true);
         console.log(o)
 
-        console.log(obj)
+        console.log(obj)*/
+
+        const obj = { anothertest: null, test: 'testy' };
+        let o = DotPath.resolvePath('anothertest', obj, { alwaysReturnObject: true });
+        console.log(o, obj);
 
     </script>
 </head>

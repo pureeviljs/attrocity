@@ -78,4 +78,10 @@ test('get level at non-existing path', function (t) {
     t.equal(o, obj1.a.b.c);
 });
 
+test('use case that previously failed', function (t) {
+    t.plan(1);
 
+    const obj = { anothertest: null, test: 'testy' };
+    let o = DotPath.resolvePath('anothertest', obj, { alwaysReturnObject: true });
+    t.equal(o, obj);
+});

@@ -22,7 +22,8 @@
             return {
                 allowAllAttributes: false,
                 typeConvert: true,
-                ignore: this.ignore
+                ignore: this.ignore,
+                allow: []
             }
         };
 
@@ -37,10 +38,19 @@
          */
         static fromAttrs(el, opts) {
             opts = Object.assign(this.defaults, opts ? opts : {} );
+            if (opts.allow.length > 0) { opts.ignore = []; }
+
             const o = {};
             const attributes = el.attributes;
             for (let c = 0; c < attributes.length; c++) {
-                if (opts.ignore.indexOf(attributes[c].nodeName) === -1 || opts.allowAllAttributes) {
+                let allowKey = false;
+                if (opts.ignore.length > 0 && (opts.ignore.indexOf(attributes[c].nodeName) === -1 || opts.allowAllAttributes)) {
+                    allowKey = true;
+                } else if (opts.allow.length > 0 && opts.allow.indexOf(attributes[c].nodeName) !== -1) {
+                    allowKey = true;
+                }
+
+                if (allowKey) {
                     let val = attributes[c].nodeValue;
                     if (!isNaN(parseFloat(val)) && opts.typeConvert) {
                         val = parseFloat(val);
@@ -132,7 +142,7 @@
          * @returns {boolean}
          */
         static isValue(level) {
-            if (typeof level !== 'object') {
+            if (typeof level !== 'object' || level === null) {
                 return true;
             } else {
                 return false;
@@ -198,7 +208,7 @@
             for (var i = 0, n = a.length; i < n; ++i) {
                 var k = a[i];
                 if (DotPath.isParent(o) && k in o) {
-                    if (!(opts.alwaysReturnObject && DotPath.isValue(o[k]))) {
+                    if (opts.alwaysReturnObject && DotPath.isValue(o[k])) ; else {
                         o = o[k];
                     }
                 } else if (DotPath.isParent(o)) { // o is not in k, create the object
@@ -232,7 +242,7 @@
             this._observing = true;
 
             if (cb) {
-                this._primaryCallback = this.addCallback(cb);
+                this._primaryCallback = this.addCallback(cb, this);
             }
 
             if (opts) {
@@ -327,7 +337,8 @@
             if (value === details.oldValue) { return; }
             if (!details.originChain) { details.originChain = [details.scope]; }
             this._callbacks.forEach(cb => {
-                if (details.originChain.indexOf(cb.scope) === -1) {
+                // if this observable wasn't part of the origin chain or it directly occured then allow callback
+                if (details.originChain.indexOf(cb.scope) === -1 || details.originChain.length === 1) {
                     cb.callback.apply(this, [ name, value, {
                         target: details.target,
                         keyPath: details.keyPath,
@@ -367,7 +378,7 @@
         _setKey(target, prop, value, originchain) {
             if (!originchain) { originchain = []; }
             originchain.push(this);
-
+            
             if (typeof target === 'string') {
                 target = DotPath.resolvePath(target, this._rawdata, { alwaysReturnObject: true });
             }
@@ -847,14 +858,23 @@
                     dotpath = el.getAttribute(this._parentKey);
                 }
 
-                const obj = Convert.fromAttrs(el, { ignore: [ this._parentKey ]});
+                let opts = {};
+                if (this._keys && this._keys.length > 0) {
+                    opts.allow = this._keys;
+                } else {
+                    opts.ignore = this._parentKey;
+                }
+                const obj = Convert.fromAttrs(el, opts);
 
                 const level = DotPath.resolvePath(dotpath, data, { alwaysReturnObject: true, lastSegmentIsObject: true });
                 Object.assign(level, obj);
             };
 
             let data = {};
-            assign(this.element, data);
+
+            if (this.element instanceof HTMLElement) { // could be a doc fragment
+                assign(this.element, data);
+            }
             let els = this.element.querySelectorAll('[' + this._parentKey + ']');
             for (let c = 0; c < els.length; c++) {
                 assign(els[c], data);
@@ -873,11 +893,13 @@
                     els[c].setAttribute(key, value);
                 }
 
-                // since root level el isn't in the querySelector, see if we should update
-                if (this.element.getAttribute(this._parentKey) === dotpath) {
-                    this.element.setAttribute(key, value);
+                if (this.element instanceof HTMLElement) { // could be a doc fragment
+                    // since root level el isn't in the querySelector, see if we should update
+                    if (this.element.getAttribute(this._parentKey) === dotpath) {
+                        this.element.setAttribute(key, value);
+                    }
                 }
-            } else {
+            } else if (this.element instanceof HTMLElement) { // could be a doc fragment
                 this.element.setAttribute(key, value);
             }
         }
@@ -973,7 +995,7 @@
                         details.originChain = [];
                     }
                     details.originChain.push(this);
-                    cb(name, this._rules.cast(name, value), { oldValue: details.oldvalue, originChain: details.originChain, scope: details.scope });
+                    cb(name, this._rules.cast(name, value), details);
                 });
             } else {
                 this.binding.addCallback((name, value, details) => {
@@ -981,7 +1003,7 @@
                         details.originChain = [];
                     }
                     details.originChain.push(this);
-                    cb(name, this._rules.cast(name, value), { oldValue: details.oldvalue, originChain: details.originChain, scope: details.scope });
+                    cb(name, this._rules.cast(name, value), details);
                 }, name);
             }
         }
@@ -1024,10 +1046,18 @@
                     if (this.__attrocity.originChainContinuity) {
                         originchain = this.__attrocity.originChainContinuity;
                     }
+                    console.log(name, newValue, originchain);
                     this.__attrocity.originChainContinuity = [];
                     if (!this.__attrocity.getObservable('customelement')._observing ) { return; }
                     const ce = this.__attrocity.getObservable('customelement');
-                    ce.dispatchChange(name, newValue, { oldValue: oldValue, originChain: originchain, scope: ce });
+                    ce.dispatchChange(name, newValue, {
+                        keyPath: name,
+                        key: name,
+                        value: newValue,
+                        oldValue: oldValue,
+                        target: this.__attrocity.getObservable('customelement').element,
+                        originChain: originchain,
+                        scope: ce });
                 }
             };
             return clazz;
@@ -1042,7 +1072,7 @@
         static createBindings(scope, opts) {
             scope.__attrocity = new CustomElementBindingManager();
             scope.__attrocity.sync(new ObservableCustomElement(scope,
-                (name, val, { oldValue: old, originChain: originchain, scope: o }) => { scope.__attrocity.originChainContinuity = originchain; },
+                (name, val, details) => { scope.__attrocity.originChainContinuity = details.originchain; },
                 scope.constructor.observedAttributes),
                 Binding.TWOWAY, 'customelement');
             return scope.__attrocity;
@@ -1057,43 +1087,27 @@
         constructor(el, cb) {
             super(el, cb, el.constructor.observedAttributes);
 
-            this._observing = true;
-
+            this.element = el;
             this._rawdata = el;
             this.name = el.tagName;
+            this._rawdata = this._elementsToObject();
             this._createProxy();
 
         }
 
-        _setRawValue(key, value) {
-            this._rawdata.setAttribute(key, value);
-        }
-
-        _getRawValue(key) {
-            if (this._rawdata.getAttribute(key)) {
-                return this._rawdata.getAttribute(key);
-            } else {
-                return undefined;
-            }
-        }
-
-        _setKey(prop, value, originchain) {
-            if (!originchain) { originchain = []; }
-            originchain.push(this);
-
-            if (this._keyAllowed(prop)) {
-                const oldvalue = this._getRawValue(prop);
-                this._setRawValue(prop, value);
-
-                Binding.log({action: 'setvalue', key: prop, target: this, origin: originchain });
-            }
-        }
-
         /**
-         * stop observation
+         * create object from local DOM tree
+         * @private
          */
-        stop() {
-            this._observing = false;
+        _elementsToObject() {
+            let data = {};
+            Object.assign(data, Convert.fromAttrs(this.element));
+            return data;
+        }
+
+        _setRawValue(target, key, value) {
+            super._setRawValue(target, key, value);
+            this.element.setAttribute(key, value);
         }
     }
 
