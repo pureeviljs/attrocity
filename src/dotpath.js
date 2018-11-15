@@ -102,7 +102,7 @@ export default class DotPath {
                     return o;
                 } else {
                     o[k] = {}; // keep going, we didn't find this path seg, so need to create
-                    return o[k];
+                    o = o[k];
                 }
             }
         }

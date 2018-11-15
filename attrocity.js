@@ -218,7 +218,7 @@
                         return o;
                     } else {
                         o[k] = {}; // keep going, we didn't find this path seg, so need to create
-                        return o[k];
+                        o = o[k];
                     }
                 }
             }
@@ -340,6 +340,7 @@
                 // if this observable wasn't part of the origin chain or it directly occured then allow callback
                 if (details.originChain.indexOf(cb.scope) === -1 || details.originChain.length === 1) {
                     cb.callback.apply(this, [ name, value, {
+                        observable: this,
                         target: details.target,
                         keyPath: details.keyPath,
                         key: name,
@@ -378,7 +379,7 @@
         _setKey(target, prop, value, originchain) {
             if (!originchain) { originchain = []; }
             originchain.push(this);
-            
+
             if (typeof target === 'string') {
                 target = DotPath.resolvePath(target, this._rawdata, { alwaysReturnObject: true });
             }
@@ -1046,7 +1047,7 @@
                     if (this.__attrocity.originChainContinuity) {
                         originchain = this.__attrocity.originChainContinuity;
                     }
-                    console.log(name, newValue, originchain);
+
                     this.__attrocity.originChainContinuity = [];
                     if (!this.__attrocity.getObservable('customelement')._observing ) { return; }
                     const ce = this.__attrocity.getObservable('customelement');

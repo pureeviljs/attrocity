@@ -114,6 +114,7 @@ export default class AbstractObservable {
             // if this observable wasn't part of the origin chain or it directly occured then allow callback
             if (details.originChain.indexOf(cb.scope) === -1 || details.originChain.length === 1) {
                 cb.callback.apply(this, [ name, value, {
+                    observable: this,
                     target: details.target,
                     keyPath: details.keyPath,
                     key: name,
@@ -153,7 +154,7 @@ export default class AbstractObservable {
     _setKey(target, prop, value, originchain) {
         if (!originchain) { originchain = []; }
         originchain.push(this);
-        
+
         if (typeof target === 'string') {
             target = DotPath.resolvePath(target, this._rawdata, { alwaysReturnObject: true });
         }

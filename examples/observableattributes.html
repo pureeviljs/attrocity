@@ -24,17 +24,20 @@
             console.log(detail.keyPath, 'test');
         }, { watchSubtree: true });
 
-        document.getElementById('target1').setAttribute('test', 'bye');
+        console.log(observableModel)
+       // document.getElementById('target1').setAttribute('test', 'bye');
 
-        setTimeout( function() {
+       /* setTimeout( function() {
             console.log(observableModel.data.test, 'bye');
-        }, 100);
+        }, 100);*/
     </script>
 </head>
 <body>
-<div class="someclass" id="target1" test="hi" parent>
-    <div id="target2" parent="a" test="hi"></div>
-    <div id="target3" parent="b" test="hi"></div>
+<div id="target1">
+    <label><span>R:</span><input parent="textInput.r" type="number" value="0"></label>
+    <label><span>G:</span><input parent="textInput.g" type="number" thing="dsfs" value="0"></label>
+    <label><span>B:</span><input parent="textInput.b" type="number" value="0"></label>
+    <label><span>A:</span><input parent="textInput.a" type="number" value="0"></label>
 </div>
 </body>
 </html>

@@ -66,7 +66,7 @@ test('level at dot path', function (t) {
     t.equal(o, obj);
 });
 
-test('get level at non-existing path', function (t) {
+test('another variation', function (t) {
     t.plan(2);
 
     const obj = { a: 1, b: 2, c: { prop1: 3, prop2: 4 }};
@@ -76,6 +76,15 @@ test('get level at non-existing path', function (t) {
     const obj1 = { a: { b: { c: { prop1: 3, prop2: 4 }}}};
     o = DotPath.resolvePath('a.b.c', obj1);
     t.equal(o, obj1.a.b.c);
+});
+
+test('get level at non-existing path', function (t) {
+    t.plan(1);
+
+    const obj = {};
+    DotPath.resolvePath('a.b', obj);;
+    obj.a.b = 5;
+    t.equal(obj.a.b, 5);
 });
 
 test('use case that previously failed', function (t) {
