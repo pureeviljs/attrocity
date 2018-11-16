@@ -82,7 +82,7 @@ test('get level at non-existing path', function (t) {
     t.plan(1);
 
     const obj = {};
-    DotPath.resolvePath('a.b', obj);;
+    DotPath.resolvePath('a.b', obj);
     obj.a.b = 5;
     t.equal(obj.a.b, 5);
 });

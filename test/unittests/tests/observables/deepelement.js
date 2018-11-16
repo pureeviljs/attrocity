@@ -10,9 +10,9 @@ require('../../shims/MutationObserver.js');
 global.MutationObserver = window.MutationObserver;
 
 function resetEl() {
-    dom = new JSDOM(`<div class="someclass" id="target1" test="hi" parent>
-                            <div id="target2" parent="a" test="hi"></div>
-                            <div id="target3" parent="b" test="hi"></div>
+    dom = new JSDOM(`<div class="someclass" id="target1" test="hi" bind>
+                            <div id="target2" bind="a" test="hi"></div>
+                            <div id="target3" bind="b" test="hi"></div>
                         </div>`);
     el = dom.window.document.querySelector('div');
 }

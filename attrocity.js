@@ -842,7 +842,7 @@
             this.element = el;
             this.name = el.tagName;
 
-            this._parentKey = opts.parentAttribute ? opts.parentAttribute : 'parent';
+            this._bindKey = opts.bindAttribute ? opts.bindAttribute : 'bind';
             this._watchSubtree = opts.watchSubtree ? opts.watchSubtree : false;
             this._rawdata = this._elementsToObject();
             this._createProxy();
@@ -855,15 +855,15 @@
         _elementsToObject() {
             const assign = (el, data) => {
                 let dotpath = '';
-                if (el.hasAttribute(this._parentKey)) {
-                    dotpath = el.getAttribute(this._parentKey);
+                if (el.hasAttribute(this._bindKey)) {
+                    dotpath = el.getAttribute(this._bindKey);
                 }
 
                 let opts = {};
                 if (this._keys && this._keys.length > 0) {
                     opts.allow = this._keys;
                 } else {
-                    opts.ignore = this._parentKey;
+                    opts.ignore = this._bindKey;
                 }
                 const obj = Convert.fromAttrs(el, opts);
 
@@ -876,7 +876,7 @@
             if (this.element instanceof HTMLElement) { // could be a doc fragment
                 assign(this.element, data);
             }
-            let els = this.element.querySelectorAll('[' + this._parentKey + ']');
+            let els = this.element.querySelectorAll('[' + this._bindKey + ']');
             for (let c = 0; c < els.length; c++) {
                 assign(els[c], data);
             }
@@ -889,14 +889,14 @@
 
             if (this._watchSubtree) {
                 const dotpath = DotPath.toPath(this._rawdata, target);
-                const els = this.element.querySelectorAll(`[${this._parentKey}="${dotpath}"]`);
+                const els = this.element.querySelectorAll(`[${this._bindKey}="${dotpath}"]`);
                 for (let c = 0; c < els.length; c++) {
                     els[c].setAttribute(key, value);
                 }
 
                 if (this.element instanceof HTMLElement) { // could be a doc fragment
                     // since root level el isn't in the querySelector, see if we should update
-                    if (this.element.getAttribute(this._parentKey) === dotpath) {
+                    if (this.element.getAttribute(this._bindKey) === dotpath) {
                         this.element.setAttribute(key, value);
                     }
                 }
@@ -921,8 +921,8 @@
             for (let c = 0; c < e.length; c++) {
                 if (this._keyAllowed(e[c].attributeName, e[c].target.attributes)) {
                     let dotpath = '';
-                    if (e[c].target.hasAttribute(this._parentKey)) {
-                        dotpath = e[c].target.getAttribute(this._parentKey);
+                    if (e[c].target.hasAttribute(this._bindKey)) {
+                        dotpath = e[c].target.getAttribute(this._bindKey);
                     }
                     dotpath = DotPath.appendKeyToPath(dotpath, e[c].attributeName);
 
