@@ -1,23 +1,28 @@
 export default class Reflect {
-    static createBindings(scope) {
-        const attributes = scope.constructor.observedAttributes;
-        if (attributes) {
-            for (let c = 0; c < attributes.length; c++) {
-                Object.defineProperty(scope, attributes[c], {
-                    set: function(val) {
-                        const old = this.getAttribute(attributes[c]);
-                        this.setAttribute(attributes[c], val);
-                        if (this.attributeChangedCallback) {
-                            this.attributeChangedCallback(attributes[c], old, val);
+    static attach(clazz, changeCallbackFnName) {
+        if (!changeCallbackFnName) {
+            changeCallbackFnName = 'propertyChangedCallback';
+        }
+        const props = clazz.observedAttributes;
+        if (props) {
+            for (let c = 0; c < props.length; c++) {
+                Object.defineProperty(clazz.prototype, props[c], {
+                    set: function (val) {
+                        const old = this.getAttribute(props[c]);
+                        this.setAttribute(props[c], val);
+                        if (this[changeCallbackFnName]) {
+                            this[changeCallbackFnName](props[c], old, val);
                         }
                     },
-                    get: function() {
-                        return this.getAttribute(attributes[c]);
+
+                    get: function () {
+                        return this.getAttribute(props[c]);
                     }
                 });
             }
         } else {
-            console.warn('No observedAttributes specified for class', scope.constructor);
+            console.warn( clazz.constructor, 'No attributes for reflection specified in the observedAttributes static getter')
         }
+        return clazz;
     }
 }
