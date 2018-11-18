@@ -30,7 +30,7 @@ export default class ObservableElement extends AbstractObservable {
      * create object from local DOM tree
      * @private
      */
-    _elementsToObject() {
+    elementsToObject() {
         const assign = (el, data) => {
             let dotpath = '';
             if (el.hasAttribute(this._bindKey)) {

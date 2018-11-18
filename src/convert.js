@@ -1,3 +1,5 @@
+import DotPath from "./dotpath.js";
+
 /**
  * Conversion between Objects, Elements, Attributes, and Strings
  */
@@ -20,6 +22,42 @@ export default class Convert {
             allow: []
         }
     };
+
+    static fromElements(el, opts) {
+        const assign = (el, data, opts) => {
+            let dotpath = '';
+            if (el.hasAttribute(opts.mapKey)) {
+                dotpath = el.getAttribute(opts.mapKey);
+            }
+
+            let convertopts = {};
+            if (opts.keys && Array.isArray(opts.keys)) {
+                convertopts.allow = opts.keys;
+            }
+            else if (opts.keys && typeof opts.keys === 'object') {
+                convertopts.allow = opts.keys[dotpath];
+            } else {
+                convertopts.ignore = opts.mapKey;
+            }
+
+            const obj = Convert.fromAttrs(el, convertopts);
+
+            const level = DotPath.resolvePath(dotpath, data, { alwaysReturnObject: true, lastSegmentIsObject: true });
+            Object.assign(level, obj);
+        };
+
+        let data = {};
+
+        if (el instanceof HTMLElement) { // could be a doc fragment
+            assign(el, data);
+        }
+        let els = el.querySelectorAll('[' + opts.mapKey + ']');
+        for (let c = 0; c < els.length; c++) {
+            assign(els[c], data, opts);
+        }
+
+        return data;
+    }
 
     /**
      * object from element attribtues
