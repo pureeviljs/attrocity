@@ -20,6 +20,10 @@ export default class Reflect {
                     }
                 });
             }
+
+            clazz.prototype.attributeChangedCallback = function(name, oldval, newval) {
+                this[changeCallbackFnName](name, oldval, newval);
+            }
         } else {
             console.warn( clazz.constructor, 'No attributes for reflection specified in the observedAttributes static getter')
         }

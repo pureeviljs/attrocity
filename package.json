@@ -1,6 +1,6 @@
 {
   "name": "@pureevil/attrocity",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "dependencies": {},
   "devDependencies": {
     "@webcomponents/custom-elements": "^1.2.0",
@@ -12,7 +12,7 @@
     "tap": "^12.0.1",
     "tape": "^4.9.1",
     "wct-browser-legacy": "^1.0.1",
-    "web-component-tester": "^6.8.0"
+    "web-component-tester": "^6.9.2"
   },
   "scripts": {
     "test": "npm run build && npm run componenttest && npm run unittest",
