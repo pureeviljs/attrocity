@@ -1,4 +1,4 @@
-const MapDOM = require('../../../attrocity.js').MapDOM;
+const MapDOM = require('../../../attrocity.js').Map;
 const test = require('tape');
 const jsdom = require('jsdom');
 require('jsdom-global')();

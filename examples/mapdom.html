@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <title>MapDOM</title>
     <script type="module">
-        import MapDOM from '../src/mapdom.js';
+        import {Map} from '../src/attrocity.js';
 
         const el = document.querySelector('.example');
         const el2 = document.querySelector('.example2');
-        console.log( MapDOM.map(el) );
+        console.log( Map.map(el) );
 
         // use different attribute name for selector, and don't use a root
-        console.log( MapDOM.map(el, null, { attribute: 'cache', root: null}) );
+        console.log( Map.map(el, null, { attribute: 'cache', root: null}) );
 
 
-        console.log(MapDOM.map(el2));
+        console.log(Map.map(el2));
 
     </script>
 </head>

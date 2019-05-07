@@ -1,4 +1,4 @@
-export default class MapDOM {
+export default class Map {
     /**
      * defaults
      * @returns {{attribute: string, root: string}}

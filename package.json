@@ -1,6 +1,6 @@
 {
-  "name": "@pureevil/attrocity",
-  "version": "0.4.1",
+  "name": "attrocity",
+  "version": "0.5.0",
   "dependencies": {},
   "devDependencies": {
     "@webcomponents/custom-elements": "^1.2.0",
@@ -18,7 +18,7 @@
     "test": "npm run build && npm run componenttest && npm run unittest",
     "componenttest": "./node_modules/.bin/wct --npm test/componenttest",
     "unittest": "./node_modules/.bin/tap test/unittests/tests/*.js test/unittests/tests/**/*.js --coverage",
-    "build": "./node_modules/.bin/rollup src/main.js --file attrocity.js --format umd --name attrocity -m",
+    "build": "./node_modules/.bin/rollup src/attrocity.js --file attrocity.js --format umd --name Attrocity -m",
     "doc": "./node_modules/.bin/esdoc -c esdoc.json",
     "buildandunit": "npm run build && npm run unittest",
     "buildandcomponent": "npm run build && npm run componenttest"
