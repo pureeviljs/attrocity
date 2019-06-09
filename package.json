@@ -1,6 +1,6 @@
 {
   "name": "attrocity",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "dependencies": {},
   "devDependencies": {
     "@webcomponents/custom-elements": "^1.2.0",

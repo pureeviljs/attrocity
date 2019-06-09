@@ -9,7 +9,11 @@ export default class Reflect {
                 Object.defineProperty(clazz.prototype, props[c], {
                     set: function (val) {
                         const old = this.getAttribute(props[c]);
-                        this.setAttribute(props[c], val);
+                        if (val === false) {
+                            this.removeAttribute(props[c]);
+                        } else {
+                            this.setAttribute(props[c], val);
+                        }
                         if (this[changeCallbackFnName]) {
                             this[changeCallbackFnName](props[c], old, val);
                         }
@@ -22,7 +26,9 @@ export default class Reflect {
             }
 
             clazz.prototype.attributeChangedCallback = function(name, oldval, newval) {
-                this[changeCallbackFnName](name, oldval, newval);
+                if (this[changeCallbackFnName]) {
+                    this[changeCallbackFnName](name, oldval, newval);
+                }
             }
         } else {
             console.warn( clazz.constructor, 'No attributes for reflection specified in the observedAttributes static getter')
