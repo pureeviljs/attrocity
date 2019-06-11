@@ -1,7 +1,8 @@
 {
   "name": "attrocity",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "main": "src/attrocity.js",
+  "module": "src/attrocity.js",
   "dependencies": {},
   "devDependencies": {
     "@webcomponents/custom-elements": "^1.2.0",
